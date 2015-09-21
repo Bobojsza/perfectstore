@@ -50,7 +50,15 @@
 						
 
 						<div class="checkbox">
-							<label>{!! Form::checkbox('required', '1') !!} Required</label>
+							<label>{!! Form::checkbox('required', '1') !!} Required Form</label>
+						</div>
+
+						<div class="checkbox">
+							<label>{!! Form::checkbox('expected_answer', '1') !!} With Expected Answer</label>
+						</div>
+
+						<div class="checkbox">
+							<label>{!! Form::checkbox('exempt', '1') !!} With Excempt</label>
 						</div>
 
 					</div>

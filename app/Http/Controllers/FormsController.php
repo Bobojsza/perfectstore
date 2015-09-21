@@ -67,6 +67,8 @@ class FormsController extends Controller
 			$form->form_type_id = $request->formtype;
 			$form->prompt = $request->prompt;
 			$form->required = ($request->required == '1') ? 1 : 0;
+			$form->expected_answer = ($request->expected_answer == '1') ? 1 : 0;
+			$form->exempt = ($request->exempt == '1') ? 1 : 0;
 			$form->save();
 
 			if($request->formtype == 9){

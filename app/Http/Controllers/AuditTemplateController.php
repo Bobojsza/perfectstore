@@ -118,7 +118,11 @@ class AuditTemplateController extends Controller
     public function storeform(Request $request, $id){
         // dd($request->all());
         $lastCount = AuditTemplateForm::getLastCount($id);
-        $cnt = $lastCount->order;
+        $cnt = 0;
+        if(!empty($lastCount)){
+             $cnt = $lastCount->order;
+        }
+       
         if ($request->has('forms_id')) {
             $forms = array();
             foreach ($request->forms_id as $form) {

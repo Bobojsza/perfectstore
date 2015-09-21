@@ -33,6 +33,9 @@
 								<th>Group</th>
 								<th>Type</th>
 								<th>Prompt</th>
+								<th>Required</th>
+								<th>With Answer</th>
+								<th>Exempted</th>
 								<th>Action</th>
 							</tr>
 							@foreach($forms as $form)
@@ -41,6 +44,9 @@
 								<td>{{ $form->group->group_desc }}</td>
 								<td>{{ $form->type->form_type }}</td>
 								<td>{{ $form->prompt }}</td>
+								<td>{{ (($form->required == 1) ? 'True':'False') }}</td>
+								<td>{{ (($form->expected_answer == 1) ? 'True':'False') }}</td>
+								<td>{{ (($form->exempt == 1) ? 'True':'False') }}</td>
 								<td></td>
 							</tr>
 							@endforeach
