@@ -9,64 +9,57 @@
 	<div class="row menu pull-right">
 		<div class="col-xs-12">
 			<button type="submit" class="btn btn-success">Update Order</button>
-			{!! link_to_route('audittemplate.addform','Add Form',1,['class' => 'btn btn-primary']) !!}
+			{!! link_to_route('audittemplate.addform','Add Form',$audittemplate->id,['class' => 'btn btn-primary']) !!}
 			{!! link_to_route('audittemplate.index','Back',array(),['class' => 'btn btn-default']) !!}
 		</div>
 	</div>
+	<div id="tempsort">
+	@foreach($forms as $category)
+	<div class="sortable">
+		<div id="cat-{{$category->category_order}}" class="row cat-group">
+			<div class="col-xs-12">
+				<div class="box">
+					<div class="box-header">
+						<h3 class="box-title"> {{$category->category_order }} - {{ $category->category->category }}</h3>
+						{!! Form::hidden('c_id['.$category->category_order.']',$category->category_order,['class' => 'category-hidden']) !!}
+					</div><!-- /.box-header -->
+					<div class="box-body table-responsive no-padding">
+						<table class="table table-hover sort-group">
+							<thead>
+								<tr>
+									<th>Priority</th>
+									<th>Group</th>
+									<th>Type</th>
+									<th>Prompt</th>
+									<th>Expected Answer</th>
+									<th>Action</th>
+								</tr>
+							</thead>
+							<tbody>
+								<?php $cnt = 1;?>
+								@foreach($category->groups as $group)
+								<tr>
+									<td class='priority'>
+										{{ $cnt }}
+										{!! Form::hidden('p_id['.$group ->id.']',$group->order,['class' => 'priority-hidden']) !!}
+									</td>
+									<td>{{ $group->form->group->group_desc }}</td>
+									<td>{{ $group->form->type->form_type }}</td>
+									<td>{{ $group->form->prompt}}</td>
+									<td></td>
+									<td></td>
+								</tr>
+								<?php $cnt++; ?>
+								@endforeach
+							</tbody>
+						</table>
+					</div><!-- /.box-body -->
 
-	<div class="row">
-		<div class="col-xs-12">
-			<div class="box">
-				<div class="box-header">
-					<h3 class="box-title">{{ $audittemplate->template }} Template</h3>
-					<div class="box-tools">
-						<div class="input-group" style="width: 150px;">
-							<input type="text" name="table_search" class="form-control input-sm pull-right" placeholder="Search">
-							<div class="input-group-btn">
-								<button class="btn btn-sm btn-default"><i class="fa fa-search"></i></button>
-							</div>
-						</div>
-					</div>
-				</div><!-- /.box-header -->
-				<div class="box-body table-responsive no-padding">
-					<table class="table table-hover" id="form_list">
-						<thead>
-							<tr>
-								<th>Priority</th>
-								<th>Category</th>
-								<th>Group</th>
-								<th>Type</th>
-								<th>Prompt</th>
-								<th>Expected Answer</th>
-								<th>Action</th>
-							</tr>
-						</thead>
-						<tbody>
-							<?php $cnt = 1;?>
-							@foreach($forms as $form)
-							<tr>
-								<td class='priority'>
-									{{ $cnt }}
-								</td>
-								<td>
-									{{ $form->category->category }}
-									{!! Form::hidden('p_id['.$form->id.']',$form->id,['class' => 'priority-hidden']) !!}
-								</td>
-								<td>{{ $form->form->group->group_desc }}</td>
-								<td>{{ $form->form->type->form_type }}</td>
-								<td>{{ $form->form->prompt }}</td>
-								<td>
-									{!! Form::text('template') !!}
-								</td>
-								<td></td>
-							</tr>
-							<?php $cnt++; ?>
-							@endforeach
-						</tbody>
-					</table>
-				</div><!-- /.box-body -->
-			</div><!-- /.box -->
+				</div><!-- /.box -->
+			</div>
 		</div>
+	</div>
+	@endforeach
 	</div>
 
 	{!! Form::close() !!}
@@ -75,6 +68,32 @@
 @endsection
 
 @section('page-script')
+
+var fixHelperModified2 = function(e, div) {
+	var $originals = div.children();
+	var $helper = div.clone();
+	return $helper;
+}; 
+
+//Make table sortable
+$("#tempsort").sortable({
+	helper: fixHelperModified2,
+	stop: function(event,ui) {
+		renumber_category('#tempsort');
+	}
+
+});
+
+function renumber_category(tableID){
+	$(tableID + " .sortable").each(function(){
+		count = $(this).parent().children().index($(this)) + 1;
+		$(this).find('.category-hidden').val(count);
+		console.log($(this).find('.category-hidden'));
+	}); 
+} 
+
+
+
 //Helper function to keep table row from collapsing when being sorted
 var fixHelperModified = function(e, tr) {
 	var $originals = tr.children();
@@ -86,18 +105,18 @@ var fixHelperModified = function(e, tr) {
 }; 
 
 //Make table sortable
-$("#form_list tbody").sortable({
+$(".sort-group tbody").sortable({
 	helper: fixHelperModified,
 	stop: function(event,ui) {
-		renumber_table('#form_list');
+		renumber_table($(this).closest('.cat-group').attr('id'));
 	}
 });
 
+
 //Renumber table rows 
 function renumber_table(tableID){
-	$(tableID + " tr").each(function(){
+	$("#"+tableID + " .sort-group tr").each(function(){
 		count = $(this).parent().children().index($(this)) + 1;
-		<!-- $(this).find('.priority').html(count); -->
 		$(this).find('.priority-hidden').val(count);
 	}); 
 } 

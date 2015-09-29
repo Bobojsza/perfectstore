@@ -36,19 +36,23 @@
 								<th>Region</th>
 								<th>Distributor</th>
 								<th>Store</th>
+								<th>Audit Template</th>
+								<th>Grade Matrix</th>
 								<th>Action</th>
 							</tr>
 						</thead>
 						<tbody>
-							@foreach($stores as $stores)
+							@foreach($stores as $store)
 							<tr>
-								<td>{{ $stores->id }}</td>
-								<td>{{ $stores->distributor->region->area->customer->account->account }}</td>
-								<td>{{ $stores->distributor->region->area->customer->customer }}</td>
-								<td>{{ $stores->distributor->region->area->area }}</td>
-								<td>{{ $stores->distributor->region->region }}</td>
-								<td>{{ $stores->distributor->distributor }}</td>
-								<td>{{ $stores->store }}</td>
+								<td>{{ $store->id }}</td>
+								<td>{{ $store->distributor->region->area->customer->account->account }}</td>
+								<td>{{ $store->distributor->region->area->customer->customer }}</td>
+								<td>{{ $store->distributor->region->area->area }}</td>
+								<td>{{ $store->distributor->region->region }}</td>
+								<td>{{ $store->distributor->distributor }}</td>
+								<td>{{ $store->store }}</td>
+								<td>{{ $store->store->audittemplate->template }}</td>
+								<td>{{ $store->store->gradematrix->desc }}</td>
 								<td></td>
 							</tr>
 							@endforeach

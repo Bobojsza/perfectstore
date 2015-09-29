@@ -29,6 +29,16 @@
 	                    	{!! Form::text('store',null,['class' => 'form-control','placeholder' => 'Store']) !!}
 						</div>
 
+						<div class="form-group">
+							<label>Audit Template</label>
+							{!! Form::select('template', $audittemplates, null,['class' => 'form-control', 'id' => 'template']) !!}
+						</div>
+
+						<div class="form-group">
+							<label>Grade Matrix (Passing)</label>
+							{!! Form::select('passing', $passings, null,['class' => 'form-control', 'id' => 'passing']) !!}
+						</div>
+
 				  	</div>
 
 				 	<div class="box-footer">

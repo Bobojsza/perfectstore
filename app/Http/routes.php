@@ -46,6 +46,12 @@ Route::resource('distributor', 'DistributorController');
 
 Route::resource('store', 'StoreController');
 
+Route::resource('gradematrix', 'GradeMatrixController');
+
+Route::resource('role', 'RoleController');
+
+Route::resource('user', 'UserController');
+
 Route::group(array('prefix' => 'api'), function()
 {
    Route::get('form/inputs', 'Api\FormsController@inputs');

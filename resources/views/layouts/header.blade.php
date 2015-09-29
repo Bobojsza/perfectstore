@@ -2,7 +2,7 @@
 	<nav class="navbar navbar-static-top">
 	  	<div class="container">
 			<div class="navbar-header">
-			  	<a href="../../index2.html" class="navbar-brand"><b>PS</b> Automation</a>
+			  	<a href="../../index2.html" class="navbar-brand">Trade Check Report</a>
 			  	<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse">
 					<i class="fa fa-bars"></i>
 			  	</button>
@@ -36,6 +36,10 @@
 							<li>{!! link_to_route('region.index','Regions') !!}</li>
 							<li>{!! link_to_route('distributor.index','Distributors') !!}</li>
 							<li>{!! link_to_route('store.index','Stores') !!}</li>
+							<li>{!! link_to_route('gradematrix.index','Grading Matrix') !!}</li>
+							<li>{!! link_to_route('role.index','Roles') !!}</li>
+							<li>{!! link_to_route('user.index','Users') !!}</li>
+
 				  		</ul>
 					</li>
 			  	</ul>

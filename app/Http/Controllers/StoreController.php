@@ -9,6 +9,8 @@ use App\Http\Controllers\Controller;
 use Session;
 use App\Distributor;
 use App\Store;
+use App\AuditTemplate;
+use App\GradeMatrix;
 
 class StoreController extends Controller
 {
@@ -31,7 +33,9 @@ class StoreController extends Controller
     public function create()
     {
         $distributors = Distributor::getLists();
-        return view('store.create',compact('distributors'));
+        $audittemplates = AuditTemplate::getLists();
+        $passings = GradeMatrix::getLists();
+        return view('store.create',compact('distributors', 'audittemplates', 'passings'));
     }
 
     /**

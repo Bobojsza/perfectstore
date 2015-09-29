@@ -17,7 +17,7 @@ class DatabaseSeeder extends Seeder
         $this->call(FormtypesTableSeeder::class);
         $this->call(FormcategoriesTableSeeder::class);
         $this->call(FormgroupsTableSeeder::class);
-        $this->call(AudittemplatesTableSeeder::class);
+        $this->call(RoleTableSeeder::class);
 
         Model::reguard();
     }

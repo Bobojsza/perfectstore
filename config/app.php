@@ -150,6 +150,7 @@ return [
         'yajra\Datatables\DatatablesServiceProvider',
         Barryvdh\Debugbar\ServiceProvider::class,
         'Maatwebsite\Excel\ExcelServiceProvider',
+        'Zizaco\Entrust\EntrustServiceProvider'
 
     ],
 
@@ -204,6 +205,7 @@ return [
         'Datatables' => yajra\Datatables\Datatables::class,
         'Debugbar' => Barryvdh\Debugbar\Facade::class,
         'Excel' => 'Maatwebsite\Excel\Facades\Excel',
+        'Entrust' => 'Zizaco\Entrust\EntrustFacade'
 
     ],
 
