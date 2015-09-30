@@ -11,10 +11,10 @@ class AuthUserController extends Controller
     public function auth(Request $request){
         $email = $request->email;
         $password = $request->pwd;
-        return response()->json(array('email' => $email, 'pwd' => $password));
+        return response()->json($request->all());
 
 
-        
+
         // if (\Auth::attempt(['email' => $email, 'password' => $password]))
         // {
         //     return response()->json(\Auth::user());
