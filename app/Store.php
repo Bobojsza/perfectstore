@@ -8,6 +8,8 @@ class Store extends Model
 {
     public $timestamps = false;
 
+    protected $hidden = array('pivot');
+
     public function distributor()
     {
         return $this->belongsTo('App\Distributor','distributor_id','id');
@@ -22,6 +24,8 @@ class Store extends Model
     {
         return $this->belongsTo('App\GradeMatrix','grade_matrix_id','id');
     }
+
+
 
     public function users()
     {

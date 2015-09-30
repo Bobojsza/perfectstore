@@ -11,7 +11,9 @@ class AuditController extends Controller
 {
     public function stores($id){
         $user = User::find($id);
-
-        return response()->json($user->stores);
+        $storelist = $user->stores()
+        	// ->select('store_code', 'store')
+        	->orderBy('store')->get();
+        return response()->json($storelist);
     }
 }
