@@ -12,6 +12,9 @@ class AuthUserController extends Controller
         $email = $request->email;
         $password = $request->pwd;
         return response()->json(array('email' => $email, 'pwd' => $password));
+
+
+        
         // if (\Auth::attempt(['email' => $email, 'password' => $password]))
         // {
         //     return response()->json(\Auth::user());
