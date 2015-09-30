@@ -4,5 +4,8 @@
 Homestead.yaml
 Homestead.json
 .env
+.env.example
 notes.txt
 test.txt
+*.pem
+*.ppk
