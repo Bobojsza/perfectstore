@@ -15,6 +15,6 @@ class AuditController extends Controller
         $storelist = $user->stores()
         	// ->select('store_code', 'store')
         	->orderBy('store')->get();
-        return response()->json($storelist);
+        return response()->json(['stores' => $storelist]);
     }
 }

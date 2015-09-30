@@ -17,7 +17,9 @@ class AuthUserController extends Controller
 
         if (\Auth::attempt(['email' => $email, 'password' => $password]))
         {
-            return response()->json(\Auth::user());
+            $user = \Auth::user();
+            // return response()->json(['user' => $user, 'stores' => $user->stores()->orderBy('store')->get()]);
+            return response()->json($user);
         }else{
         	return response()->json(array('msg' => 'user not found', 'status' => 0));
         }
