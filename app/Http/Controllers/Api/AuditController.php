@@ -9,7 +9,8 @@ use App\User;
 
 class AuditController extends Controller
 {
-    public function stores($id){
+    public function stores(Request $request){
+    	$id = $request->id;
         $user = User::find($id);
         $storelist = $user->stores()
         	// ->select('store_code', 'store')

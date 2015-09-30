@@ -96,14 +96,25 @@ class ImportFormsTableSeeder extends Seeder
 					$lastCategory = AuditTemplateForm::getLastCategoryCount($template->id);
 					$lastGroupCount = AuditTemplateForm::getLastGroupCount($template->id, $category->id);
 					
-					$catCnt = 0;
+					$catCnt = 1;
 					$grpCnt = 1;
 
 
 					if(!empty($lastCategory)){
-						$catCnt = $lastCategory->category_order;	
-					}else{
-						$catCnt++;
+						if($lastCategory->form_category_id == $category->id){
+							$catCnt = $lastCategory->category_order;
+						}else{
+							$existingCat = AuditTemplateForm::where('form_category_id',$category->id)
+								->where('audit_template_id',$template->id)
+								->first();
+							if(empty($existingCat)){
+								$catCnt = $lastCategory->category_order;
+								$catCnt++;
+							}else{
+								$catCnt = $existingCat->category_order;
+							}
+							
+						}	
 					}
 
 					if(count($lastGroupCount) > 0){
