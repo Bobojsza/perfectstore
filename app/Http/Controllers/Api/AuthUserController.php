@@ -9,9 +9,9 @@ use App\Http\Controllers\Controller;
 class AuthUserController extends Controller
 {
     public function auth(Request $request){
-        $email = $request->email;
-        $password = $request->pwd;
-        return response()->json($request->all());
+        $email = $request->input('email');
+        $password = $request->input('pwd');
+        return response()->json(['email' => $email, 'password' => $password]);
 
 
 
