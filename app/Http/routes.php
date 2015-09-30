@@ -57,4 +57,7 @@ Route::group(array('prefix' => 'api'), function()
    Route::get('form/inputs', 'Api\FormsController@inputs');
    Route::get('forms', 'Api\FormsController@forms');
    Route::get('stores', 'Api\StoreController@stores');
+
+   Route::get('user/{id}/stores', 'Api\AuditController@stores');
+   Route::post('auth', 'Api\AuthUserController@auth');
 });//

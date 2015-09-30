@@ -241,7 +241,7 @@ class ImportMappingTableSeeder extends Seeder
 		});
 
 		DB::table('stores')->truncate();
-
+		DB::table('store_user')->truncate();
 		Excel::selectSheets('Store Mapping')->load('/database/seeds/seed_files/Store Mapping.xlsx', function($reader) {
 			$records = $reader->get();
 			$records->each(function($row) {
