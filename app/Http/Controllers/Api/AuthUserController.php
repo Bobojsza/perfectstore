@@ -9,17 +9,17 @@ use App\Http\Controllers\Controller;
 class AuthUserController extends Controller
 {
     public function auth(Request $request){
-        $email = $request->input('email');
-        $password = $request->input('pwd');
-        return response()->json(['email' => $email, 'password' => $password]);
+        $email = $request->email;
+        $password = $request->pwd;
+        // return response()->json(['email' => $email, 'password' => $password]);
 
 
 
-        // if (\Auth::attempt(['email' => $email, 'password' => $password]))
-        // {
-        //     return response()->json(\Auth::user());
-        // }else{
-        // 	return response()->json(array('msg' => 'user not found', 'status' => 0));
-        // }
+        if (\Auth::attempt(['email' => $email, 'password' => $password]))
+        {
+            return response()->json(\Auth::user());
+        }else{
+        	return response()->json(array('msg' => 'user not found', 'status' => 0));
+        }
     }
 }
