@@ -28,11 +28,7 @@ class AuditTemplateForm extends Model
 			->orderBy('category_order', 'desc')->first();
 	}
 
-	public static function getTemplateCategory($template_id, $category_id){
-		return self::where('form_category_id', $category_id)
-			->where('audit_template_id', $template_id)
-			->first();
-	}
+
 
 	public static function getLastGroupCount($id,$form_category_id){
 		return self::where('audit_template_id',$id)
