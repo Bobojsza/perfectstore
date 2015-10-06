@@ -43,7 +43,7 @@
 										{{ $cnt }}
 										{!! Form::hidden('p_id['.$group ->id.']',$group->order,['class' => 'priority-hidden']) !!}
 									</td>
-									<td>{{ $group->form->group->group_desc }}</td>
+									<td>{{ $group->group->group_desc }}</td>
 									<td>{{ $group->form->type->form_type }}</td>
 									<td>{{ $group->form->prompt}}</td>
 									<td></td>

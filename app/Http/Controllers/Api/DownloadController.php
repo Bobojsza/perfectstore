@@ -8,6 +8,8 @@ use App\Http\Controllers\Controller;
 use App\User;
 use App\AuditTemplateForm;
 use App\Form;
+use App\FormSingleSelect;
+use App\FormMultiSelect;
 
 use Box\Spout\Reader\ReaderFactory;
 use Box\Spout\Common\Type;
@@ -25,6 +27,14 @@ class DownloadController extends Controller
         $list = array();
         foreach ($storelist as $store) {
             $list[] = $store->audit_template_id;
+        }
+
+        $forms = Form::whereIn('forms.audit_template_id',$list)
+                // ->where('form_type_id',10)
+                ->get();
+        $form_ids = array();
+        foreach ($forms as $form) {
+            $form_ids[] = $form->id;
         }
 
         // get store list
@@ -100,15 +110,39 @@ class DownloadController extends Controller
 
         // get single selects
         if($type == 4){
-            $forms = Form::whereIn('forms.audit_template_id',$list)
-                ->where('form_type_id',10)
+            $selections = FormSingleSelect::select('single_selects.id', 'single_selects.option')
+                ->join('single_selects', 'single_selects.id', '=', 'form_single_selects.single_select_id')
+                ->whereIn('form_single_selects.form_id',$form_ids)
+                ->groupBy('single_selects.id')
                 ->get();
-            $form_ids = array();
-            foreach ($forms as $form) {
-                $form_ids[] = $form->id;
+
+            $writer = WriterFactory::create(Type::CSV); 
+            $writer->openToBrowser('single_selects.txt');
+            foreach ($selections as $selection) {
+                $data[0] = $selection->id;
+                $data[1] = $selection->option;
+                $writer->addRow($data); 
             }
 
-            dd($form_ids);
+            $writer->close();
+        }
+
+        // get multiple selects
+        if($type == 5){
+            $selections = FormMultiSelect::select('multi_selects.id', 'multi_selects.option')
+                ->join('multi_selects', 'multi_selects.id', '=', 'form_multi_selects.multi_select_id')
+                ->whereIn('form_multi_selects.form_id',$form_ids)
+                ->groupBy('multi_selects.id')
+                ->get();
+            $writer = WriterFactory::create(Type::CSV); 
+            $writer->openToBrowser('multi_selects.txt');
+            foreach ($selections as $selection) {
+                $data[0] = $selection->id;
+                $data[1] = $selection->option;
+                $writer->addRow($data); 
+            }
+
+            $writer->close();
         }
         
     }
