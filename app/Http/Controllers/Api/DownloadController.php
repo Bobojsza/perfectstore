@@ -29,13 +29,7 @@ class DownloadController extends Controller
             $list[] = $store->audit_template_id;
         }
 
-        $forms = Form::whereIn('forms.audit_template_id',$list)
-                // ->where('form_type_id',10)
-                ->get();
-        $form_ids = array();
-        foreach ($forms as $form) {
-            $form_ids[] = $form->id;
-        }
+        
 
         // get store list
         if($type == 1){
@@ -46,6 +40,7 @@ class DownloadController extends Controller
                 $data[1] = $store->store;
                 $data[2] = $store->grade_matrix_id;
                 $data[3] = $store->audit_template_id;
+                $data[4] = $store->audittemplate->template;
                 $writer->addRow($data); 
             }
 
@@ -110,6 +105,14 @@ class DownloadController extends Controller
 
         // get single selects
         if($type == 4){
+            $forms = Form::whereIn('forms.audit_template_id',$list)
+                ->where('form_type_id',10)
+                ->get();
+            $form_ids = array();
+            foreach ($forms as $form) {
+                $form_ids[] = $form->id;
+            }
+
             $selections = FormSingleSelect::select('single_selects.id', 'single_selects.option')
                 ->join('single_selects', 'single_selects.id', '=', 'form_single_selects.single_select_id')
                 ->whereIn('form_single_selects.form_id',$form_ids)
@@ -129,6 +132,14 @@ class DownloadController extends Controller
 
         // get multiple selects
         if($type == 5){
+            $forms = Form::whereIn('forms.audit_template_id',$list)
+                ->where('form_type_id',9)
+                ->get();
+            $form_ids = array();
+            foreach ($forms as $form) {
+                $form_ids[] = $form->id;
+            }
+
             $selections = FormMultiSelect::select('multi_selects.id', 'multi_selects.option')
                 ->join('multi_selects', 'multi_selects.id', '=', 'form_multi_selects.multi_select_id')
                 ->whereIn('form_multi_selects.form_id',$form_ids)
