@@ -24,11 +24,12 @@ class DownloadController extends Controller
         $user = User::find($user);
         $storelist = $user->stores()->orderBy('store')->get();
 
-        $list = array();
+        $result = array();
         foreach ($storelist as $store) {
-            $list[] = $store->audit_template_id;
+            $result[] = $store->audit_template_id;
         }
 
+        $list = array_unique($result);
         
 
         // get store list
@@ -49,6 +50,7 @@ class DownloadController extends Controller
 
         // get template questions
         if($type == 2){
+            // dd($list);
             $forms = AuditTemplateForm::select('audit_template_forms.id', 'audit_template_forms.category_order', 'audit_template_forms.order',
                 'audit_template_forms.form_category_id', 'form_categories.category', 'audit_template_forms.form_group_id', 'form_groups.group_desc',
                 'audit_template_forms.audit_template_id', 'audit_template_forms.form_id', 'forms.form_type_id', 'forms.prompt', 'forms.required', 
@@ -58,7 +60,7 @@ class DownloadController extends Controller
                 ->join('forms', 'forms.id', '=', 'audit_template_forms.form_id')
                 ->whereIn('audit_template_forms.audit_template_id',$list)
                 ->get();
-            
+            // dd($forms);
             $writer = WriterFactory::create(Type::CSV); 
             $writer->openToBrowser('questions.txt');
             foreach ($forms as $form) {
@@ -76,6 +78,7 @@ class DownloadController extends Controller
                 $data[11] = $form->required;
                 $data[12] = $form->expected_answer;
                 $data[13] = $form->exempt;
+                // var_dump($data);
                 $writer->addRow($data); 
             }
 
