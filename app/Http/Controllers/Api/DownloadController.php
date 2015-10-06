@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\User;
+use App\AuditTemplateForm;
 
 
 use Box\Spout\Reader\ReaderFactory;
@@ -19,19 +20,56 @@ class DownloadController extends Controller
         $type = $request->type;
 
         $user = User::find($user);
-        if($type = 1){
-            $storelist = $user->stores()->orderBy('store')->get();
-            $writer = WriterFactory::create(Type::CSV); // for CSV files
-            $writer->openToBrowser('stores.csv'); // stream data directly to the browser
-            // $header = array('store_code', 'store', 'grade_matrix_id', 'audit_template_id');
-            // $writer->addRow($header); // add multiple rows at a time
+        $storelist = $user->stores()->orderBy('store')->get();
+        // get store list
+        if($type == 1){
+            $writer = WriterFactory::create(Type::CSV); 
+            $writer->openToBrowser('stores.txt');
             foreach ($storelist as $store) {
                 $data[0] = $store->store_code;
                 $data[1] = $store->store;
                 $data[2] = $store->grade_matrix_id;
                 $data[3] = $store->audit_template_id;
+                $writer->addRow($data); 
+            }
+
+            $writer->close();
+        }
+        // get template questions
+        if($type == 2){
+            $list = array();
+            foreach ($storelist as $store) {
+                $list[] = $store->audit_template_id;
+            }
+            $forms = AuditTemplateForm::select('audit_template_forms.id', 'audit_template_forms.category_order', 'audit_template_forms.order',
+                'audit_template_forms.form_category_id', 'form_categories.category', 'audit_template_forms.form_group_id', 'form_groups.group_desc',
+                'audit_template_forms.audit_template_id', 'audit_template_forms.form_id', 'forms.form_type_id', 'forms.prompt', 'forms.required', 
+                'forms.expected_answer', 'forms.exempt')
+                ->join('form_categories', 'form_categories.id', '=', 'audit_template_forms.form_category_id')
+                ->join('form_groups', 'form_groups.id', '=', 'audit_template_forms.form_group_id')
+                ->join('forms', 'forms.id', '=', 'audit_template_forms.form_id')
+                ->whereIn('audit_template_forms.audit_template_id',$list)
+                ->get();
+            
+            $writer = WriterFactory::create(Type::CSV); 
+            $writer->openToBrowser('questions.txt');
+            foreach ($forms as $form) {
+                $data[0] = $form->id;
+                $data[1] = $form->category_order;
+                $data[2] = $form->order;
+                $data[3] = $form->form_category_id;
+                $data[4] = $form->category;
+                $data[5] = $form->form_group_id;
+                $data[6] = $form->group_desc;
+                $data[7] = $form->audit_template_id;
+                $data[8] = $form->form_id;
+                $data[9] = $form->form_type_id;
+                $data[10] = $form->prompt;
+                $data[11] = $form->required;
+                $data[12] = $form->expected_answer;
+                $data[13] = $form->exempt;
                 // dd($data);
-                $writer->addRow($data); // add multiple rows at a time
+                $writer->addRow($data); 
             }
 
             $writer->close();
