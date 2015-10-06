@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class AuditTemplateForm extends Model
 {
+	
 	public $timestamps = false;
 
 	public function category()

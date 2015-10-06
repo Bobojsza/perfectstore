@@ -37,6 +37,7 @@ class ImportFormsTableSeeder extends Seeder
 					}else{
 						$form_type = FormType::where('form_type', strtoupper($row->type))->first();
 					}
+
 					$form_group = FormGroup::where('group_desc',$row->group)->first();
 					
 					
@@ -86,6 +87,13 @@ class ImportFormsTableSeeder extends Seeder
 					    			$sel = SingleSelect::create(array('option' => strtoupper($opt)));
 					    		}
 					    		FormSingleSelect::create(array('form_id' => $form->id, 'single_select_id' => $sel->id));
+					    	}
+					    }
+
+					    if($form_type->id == 12){
+					    	$choices = explode("~", $row->choices);
+					    	foreach ($choices as $choice) {
+					    		preg_match_all('/{(.*?)}/', $choice, $matches);
 					    	}
 					    }
 					}

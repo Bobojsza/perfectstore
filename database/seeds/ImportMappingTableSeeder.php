@@ -291,9 +291,7 @@ class ImportMappingTableSeeder extends Seeder
 											for ($i=0; $i < count($emaillist); $i++) { 
 												$user = User::where('email',$emaillist[$i])->first();
 												$newstore->users()->attach($user->id);
-											}
-
-											
+											}											
 										}
 									}
 								}

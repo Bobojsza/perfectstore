@@ -19,8 +19,8 @@ class Form extends Model
         return $this->belongsTo('App\FormType','form_type_id','id');
     }
 
-    public function group()
+    public function template()
     {
-        return $this->belongsTo('App\FormGroup','form_group_id','id');
+        return $this->belongsTo('App\AuditTemplate','audit_template_id','id');
     }
 }
