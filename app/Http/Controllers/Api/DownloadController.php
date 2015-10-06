@@ -7,7 +7,7 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\User;
 use App\AuditTemplateForm;
-
+use App\Form;
 
 use Box\Spout\Reader\ReaderFactory;
 use Box\Spout\Common\Type;
@@ -21,6 +21,12 @@ class DownloadController extends Controller
 
         $user = User::find($user);
         $storelist = $user->stores()->orderBy('store')->get();
+
+        $list = array();
+        foreach ($storelist as $store) {
+            $list[] = $store->audit_template_id;
+        }
+
         // get store list
         if($type == 1){
             $writer = WriterFactory::create(Type::CSV); 
@@ -35,12 +41,9 @@ class DownloadController extends Controller
 
             $writer->close();
         }
+
         // get template questions
         if($type == 2){
-            $list = array();
-            foreach ($storelist as $store) {
-                $list[] = $store->audit_template_id;
-            }
             $forms = AuditTemplateForm::select('audit_template_forms.id', 'audit_template_forms.category_order', 'audit_template_forms.order',
                 'audit_template_forms.form_category_id', 'form_categories.category', 'audit_template_forms.form_group_id', 'form_groups.group_desc',
                 'audit_template_forms.audit_template_id', 'audit_template_forms.form_id', 'forms.form_type_id', 'forms.prompt', 'forms.required', 
@@ -68,11 +71,44 @@ class DownloadController extends Controller
                 $data[11] = $form->required;
                 $data[12] = $form->expected_answer;
                 $data[13] = $form->exempt;
-                // dd($data);
                 $writer->addRow($data); 
             }
 
             $writer->close();
+        }
+
+        // get template forms
+        if($type == 3){
+            $forms = Form::whereIn('forms.audit_template_id',$list)
+                ->get();
+            
+            $writer = WriterFactory::create(Type::CSV); 
+            $writer->openToBrowser('forms.txt');
+            foreach ($forms as $form) {
+                $data[0] = $form->id;
+                $data[1] = $form->audit_template_id;
+                $data[2] = $form->form_type_id;
+                $data[3] = $form->prompt;
+                $data[4] = $form->required;
+                $data[5] = $form->expected_answer;
+                $data[6] = $form->exempt;
+                $writer->addRow($data); 
+            }
+
+            $writer->close();
+        }
+
+        // get single selects
+        if($type == 4){
+            $forms = Form::whereIn('forms.audit_template_id',$list)
+                ->where('form_type_id',10)
+                ->get();
+            $form_ids = array();
+            foreach ($forms as $form) {
+                $form_ids[] = $form->id;
+            }
+
+            dd($form_ids);
         }
         
     }
