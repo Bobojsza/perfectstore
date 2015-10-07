@@ -39,6 +39,27 @@
 							{!! Form::select('passing', $passings, null,['class' => 'form-control', 'id' => 'passing']) !!}
 						</div>
 
+						<table class="table table-bordered">
+                    <tbody>
+                    	<tr>
+                      <th>Category</th>
+                      <th>CAIP</th>
+                      <th>NON CAIP</th>
+                    </tr>
+                    	@foreach($categories as $category)
+                    <tr>
+                      <td>{{ $category->category }}</td>
+                      <td> <input type="radio" name="optionsRadios" id="optionsRadios1" value="option1" checked="">
+		                         </td>
+                      <td>
+                       <input type="radio" name="optionsRadios" id="optionsRadios2" value="option2">
+		                          
+                      </td>
+                    </tr>
+                    @endforeach
+                  </tbody></table>
+
+						
 				  	</div>
 
 				 	<div class="box-footer">

@@ -30,7 +30,7 @@
 						<tbody>
 							<tr>
 								<th>ID</th>
-								<th>Group</th>
+								<th>Temaplate</th>
 								<th>Type</th>
 								<th>Prompt</th>
 								<th>Required</th>
@@ -41,7 +41,7 @@
 							@foreach($forms as $form)
 							<tr>
 								<td>{{ $form->id }}</td>
-								<td>{{ $form->group->group_desc }}</td>
+								<td>{{ $form->template->template}}</td>
 								<td>{{ $form->type->form_type }}</td>
 								<td>{{ $form->prompt }}</td>
 								<td>{{ (($form->required == 1) ? 'True':'False') }}</td>

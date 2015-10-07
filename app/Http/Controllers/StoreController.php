@@ -11,6 +11,7 @@ use App\Distributor;
 use App\Store;
 use App\AuditTemplate;
 use App\GradeMatrix;
+use App\FormCategory;
 
 class StoreController extends Controller
 {
@@ -35,7 +36,8 @@ class StoreController extends Controller
         $distributors = Distributor::getLists();
         $audittemplates = AuditTemplate::getLists();
         $passings = GradeMatrix::getLists();
-        return view('store.create',compact('distributors', 'audittemplates', 'passings'));
+        $categories = FormCategory::sosTagging();
+        return view('store.create',compact('distributors', 'audittemplates', 'passings', 'categories'));
     }
 
     /**

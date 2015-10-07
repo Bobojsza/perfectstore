@@ -25,9 +25,7 @@ class FormsController extends Controller
 	 */
 	public function index()
 	{
-		$forms = Form::with('type')
-			->with('group')
-			->get();
+		$forms = Form::with('type')->get();
 		return view('form.index',compact('forms'));
 	}
 

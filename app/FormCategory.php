@@ -13,4 +13,8 @@ class FormCategory extends Model
     public static function getLists(){
     	return self::lists('category','id')->all();
     }
+
+    public static function sosTagging(){
+    	return self::where('sos_tagging',1)->get();
+    }
 }

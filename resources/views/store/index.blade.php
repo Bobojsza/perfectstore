@@ -51,8 +51,8 @@
 								<td>{{ $store->distributor->region->region }}</td>
 								<td>{{ $store->distributor->distributor }}</td>
 								<td>{{ $store->store }}</td>
-								<td>{{ $store->store->audittemplate->template }}</td>
-								<td>{{ $store->store->gradematrix->desc }}</td>
+								<td>{{ $store->audittemplate->template }}</td>
+								<td>{{ $store->gradematrix->desc }}</td>
 								<td></td>
 							</tr>
 							@endforeach
