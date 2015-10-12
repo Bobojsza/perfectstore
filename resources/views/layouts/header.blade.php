@@ -2,7 +2,7 @@
 	<nav class="navbar navbar-static-top">
 	  	<div class="container">
 			<div class="navbar-header">
-			  	<a href="../../index2.html" class="navbar-brand">Trade Check Report</a>
+				{!! link_to_route('dashboard.index','Trade Check Report', array(), ['class' => 'navbar-brand']) !!}
 			  	<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse">
 					<i class="fa fa-bars"></i>
 			  	</button>
