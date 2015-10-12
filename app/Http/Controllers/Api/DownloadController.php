@@ -116,17 +116,20 @@ class DownloadController extends Controller
                 $form_ids[] = $form->id;
             }
 
-            $selections = FormSingleSelect::select('single_selects.id', 'single_selects.option')
+            $selections = FormSingleSelect::select('form_single_selects.form_id','single_selects.id', 'single_selects.option')
                 ->join('single_selects', 'single_selects.id', '=', 'form_single_selects.single_select_id')
                 ->whereIn('form_single_selects.form_id',$form_ids)
-                ->groupBy('single_selects.id')
+                ->orderBy('form_single_selects.form_id')
                 ->get();
+
+            // dd($selections);
 
             $writer = WriterFactory::create(Type::CSV); 
             $writer->openToBrowser('single_selects.txt');
             foreach ($selections as $selection) {
-                $data[0] = $selection->id;
-                $data[1] = $selection->option;
+                $data[0] = $selection->form_id;
+                $data[1] = $selection->id;
+                $data[2] = $selection->option;
                 $writer->addRow($data); 
             }
 
@@ -143,16 +146,17 @@ class DownloadController extends Controller
                 $form_ids[] = $form->id;
             }
 
-            $selections = FormMultiSelect::select('multi_selects.id', 'multi_selects.option')
+            $selections = FormMultiSelect::select('form_multi_selects.form_id', 'multi_selects.id', 'multi_selects.option')
                 ->join('multi_selects', 'multi_selects.id', '=', 'form_multi_selects.multi_select_id')
                 ->whereIn('form_multi_selects.form_id',$form_ids)
-                ->groupBy('multi_selects.id')
+                ->orderBy('form_multi_selects.form_id')
                 ->get();
             $writer = WriterFactory::create(Type::CSV); 
             $writer->openToBrowser('multi_selects.txt');
             foreach ($selections as $selection) {
-                $data[0] = $selection->id;
-                $data[1] = $selection->option;
+                $data[0] = $selection->form_id;
+                $data[1] = $selection->id;
+                $data[2] = $selection->option;
                 $writer->addRow($data); 
             }
 
