@@ -11,8 +11,8 @@ class FormCategory extends Model
     public $timestamps = false;
 
     public static function getLists(){
-    	return self::lists('category','id')
-    	->orderBy('category')
+    	return self::orderBy('category')
+    	->lists('category','id')
     	->all();
     }
 
