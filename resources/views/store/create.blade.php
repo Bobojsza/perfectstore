@@ -43,18 +43,19 @@
                     <tbody>
                     	<tr>
                       <th>Category</th>
-                      <th>CAIP</th>
-                      <th>NON CAIP</th>
+                      @foreach($sostags as $tag)
+                      <th>{{ $tag->sos_tag }}</th>
+                      @endforeach
                     </tr>
                     	@foreach($categories as $category)
                     <tr>
-                      <td>{{ $category->category }}</td>
-                      <td> <input type="radio" name="optionsRadios" id="optionsRadios1" value="option1" checked="">
-		                         </td>
-                      <td>
-                       <input type="radio" name="optionsRadios" id="optionsRadios2" value="option2">
-		                          
-                      </td>
+                      	<td>{{ $category->category }}</td>
+                      	@foreach($sostags as $tag)
+                      	<td>
+                      	 	<input type="radio" name="cat_{{ $category->id }}" id="{{ $category->id }}" value="{{ $tag->id}}" checked="">
+		                </td>
+                      	@endforeach
+                      	
                     </tr>
                     @endforeach
                   </tbody></table>

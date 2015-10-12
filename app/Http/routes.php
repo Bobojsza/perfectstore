@@ -52,6 +52,10 @@ Route::resource('role', 'RoleController');
 
 Route::resource('user', 'UserController');
 
+Route::resource('sostag', 'SostaggingController');
+
+Route::resource('soslookup', 'SoslookupController');
+
 
 
 Route::group(array('prefix' => 'api'), function()

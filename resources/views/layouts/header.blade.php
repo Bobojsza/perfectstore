@@ -25,11 +25,15 @@
 				  		<a href="#" class="dropdown-toggle" data-toggle="dropdown">Maintenance <span class="caret"></span></a>
 				  		<ul class="dropdown-menu" role="menu">
 				  			<li>{!! link_to_route('audittemplate.index','Audit Templates') !!}</li>
-				  			<li>{!! link_to_route('form.index','Forms') !!}</li>
+				  			<li>{!! link_to_route('sostag.index', 'SOS Tags') !!}</li>
+				  			<li>{!! link_to_route('soslookup.index','SOS Category Lookup') !!}</li>
+
 				  			<li>{!! link_to_route('formcategory.index','Form Categories') !!}</li>
 				  			<li>{!! link_to_route('formgroup.index','Form Groups') !!}</li>
 							<li>{!! link_to_route('multiselect.index','Multi Selects') !!}</li>
 							<li>{!! link_to_route('singleselect.index','Single Selects') !!}</li>
+				  			<li>{!! link_to_route('form.index','Forms') !!}</li>
+				  			
 							<li>{!! link_to_route('account.index','Accounts') !!}</li>
 							<li>{!! link_to_route('customer.index','Customers') !!}</li>
 							<li>{!! link_to_route('area.index','Areas') !!}</li>

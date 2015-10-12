@@ -12,6 +12,7 @@ use App\Store;
 use App\AuditTemplate;
 use App\GradeMatrix;
 use App\FormCategory;
+use App\SosTagging;
 
 class StoreController extends Controller
 {
@@ -37,7 +38,8 @@ class StoreController extends Controller
         $audittemplates = AuditTemplate::getLists();
         $passings = GradeMatrix::getLists();
         $categories = FormCategory::sosTagging();
-        return view('store.create',compact('distributors', 'audittemplates', 'passings', 'categories'));
+        $sostags = SosTagging::all();
+        return view('store.create',compact('distributors', 'audittemplates', 'passings', 'categories', 'sostags'));
     }
 
     /**
@@ -48,30 +50,31 @@ class StoreController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validate($request, [
-            'store' => 'required|max:100|unique_with:stores, store_code = store_code, distributor = distributor_id',
-            'store_code' => 'required|not_in:0',
-            'distributor' => 'required|not_in:0'
-        ]);
+        dd($request->all());
+        // $this->validate($request, [
+        //     'store' => 'required|max:100|unique_with:stores, store_code = store_code, distributor = distributor_id',
+        //     'store_code' => 'required|not_in:0',
+        //     'distributor' => 'required|not_in:0'
+        // ]);
 
-        \DB::beginTransaction();
+        // \DB::beginTransaction();
 
-        try {
-            $store = new Store;
-            $store->distributor_id = $request->distributor;
-            $store->store_code = $request->store_code;
-            $store->store = $request->store;
-            $store->save();
+        // try {
+        //     $store = new Store;
+        //     $store->distributor_id = $request->distributor;
+        //     $store->store_code = $request->store_code;
+        //     $store->store = $request->store;
+        //     $store->save();
 
-            \DB::commit();
+        //     \DB::commit();
 
-            Session::flash('flash_message', 'Store successfully added!');
-            return redirect()->route("store.index");
+        //     Session::flash('flash_message', 'Store successfully added!');
+        //     return redirect()->route("store.index");
 
-        } catch (Exception $e) {
-            DB::rollBack();
-            return redirect()->back();
-        }
+        // } catch (Exception $e) {
+        //     DB::rollBack();
+        //     return redirect()->back();
+        // }
     }
 
     /**
