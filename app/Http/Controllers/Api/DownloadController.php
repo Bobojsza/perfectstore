@@ -10,6 +10,7 @@ use App\AuditTemplateForm;
 use App\Form;
 use App\FormSingleSelect;
 use App\FormMultiSelect;
+use App\FormFormula;
 
 use Box\Spout\Reader\ReaderFactory;
 use Box\Spout\Common\Type;
@@ -157,6 +158,29 @@ class DownloadController extends Controller
                 $data[0] = $selection->form_id;
                 $data[1] = $selection->id;
                 $data[2] = $selection->option;
+                $writer->addRow($data); 
+            }
+
+            $writer->close();
+        }
+
+        // get formulas
+        if($type == 6){
+            $forms = Form::whereIn('forms.audit_template_id',$list)
+                ->where('form_type_id',11)
+                ->get();
+            $form_ids = array();
+            foreach ($forms as $form) {
+                $form_ids[] = $form->id;
+            }
+
+            $formulas = FormFormula::select('form_formulas.form_id', 'formula')
+                ->get();
+            $writer = WriterFactory::create(Type::CSV); 
+            $writer->openToBrowser('formula.txt');
+            foreach ($formulas as $formula) {
+                $data[0] = $formula->form_id;
+                $data[1] = $formula->formula;
                 $writer->addRow($data); 
             }
 
