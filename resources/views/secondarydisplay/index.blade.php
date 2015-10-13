@@ -7,7 +7,7 @@
 <section class="content">
 	<div class="row menu pull-right">
 		<div class="col-xs-12">
-			{!! link_to_route('formcategory.create','New Category',array(),['class' => 'btn btn-primary']) !!}
+			{!! link_to_route('secondarydisplay.create','New Secondary Display',array(),['class' => 'btn btn-primary']) !!}
 		</div>
 	</div>
 
@@ -15,7 +15,7 @@
 		<div class="col-xs-12">
 			<div class="box">
 				<div class="box-header">
-					<h3 class="box-title">Form Category Lists</h3>
+					<h3 class="box-title">Secondary Display Lists</h3>
 					<div class="box-tools">
 						<div class="input-group" style="width: 150px;">
 							<input type="text" name="table_search" class="form-control input-sm pull-right" placeholder="Search">
@@ -31,24 +31,14 @@
 							<tr>
 								<th>ID</th>
 								<th>Category</th>
-								<th>SOS Tagging</th>
-								<th>Secondary Display</th>
+								<th>Brand</th>
 								<th>Option</th>
 							</tr>
-							@foreach($formcategories as $category)
+							@foreach($secondarydisplays as $brand)
 							<tr>
-								<td>{{ $category->id }}</td>
-								<td>{{ $category->category }}</td>
-								<td>
-									@if($category->sos_tagging == 1)
-									<i class="fa fa-fw fa-check"></i>
-									@endif
-								</td>
-								<td>
-									@if($category->secondary_display == 1)
-									<i class="fa fa-fw fa-check"></i>
-									@endif
-								</td>
+								<td>{{ $brand->id }}</td>
+								<td>{{ $brand->category }}</td>
+								<td>{{ $brand->category }}</td>
 								<td></td>
 							</tr>
 							@endforeach

@@ -56,7 +56,9 @@ Route::resource('sostag', 'SostaggingController');
 
 Route::resource('soslookup', 'SoslookupController');
 
+Route::resource('secondarydisplay', 'SecondarydisplayController');
 
+Route::resource('secondarylookup', 'SecondarylookupController');
 
 Route::group(array('prefix' => 'api'), function()
 {

@@ -31,4 +31,12 @@ class Store extends Model
     {
         return $this->belongsToMany('App\User');
     }
+
+    public static function getLists(){
+        return self::select(DB::raw('CONCAT(store_code, " - ", store) AS store_desc', 'id')
+        ->orderBy('store_desc')
+        ->lists('store_desc','id')
+        ->all();
+    }
+
 }
