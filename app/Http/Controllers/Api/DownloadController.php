@@ -11,6 +11,7 @@ use App\Form;
 use App\FormSingleSelect;
 use App\FormMultiSelect;
 use App\FormFormula;
+use App\FormCondition;
 
 use Box\Spout\Reader\ReaderFactory;
 use Box\Spout\Common\Type;
@@ -186,6 +187,31 @@ class DownloadController extends Controller
 
             $writer->close();
         }
+
+        // get conditions
+        if($type == 7){
+            $forms = Form::whereIn('forms.audit_template_id',$list)
+                ->where('form_type_id',12)
+                ->get();
+            $form_ids = array();
+            foreach ($forms as $form) {
+                $form_ids[] = $form->id;
+            }
+
+            $conditions = FormCondition::select('form_conditions.form_id', 'option', 'condition')->get();
+            $writer = WriterFactory::create(Type::CSV); 
+            $writer->openToBrowser('conditions.txt');
+            foreach ($conditions as $condition) {
+                $data[0] = $condition->form_id;
+                $data[1] = $condition->option;
+                $data[2] = $condition->condition;
+                $writer->addRow($data); 
+            }
+
+            $writer->close();
+
+        }
+
         
     }
 }

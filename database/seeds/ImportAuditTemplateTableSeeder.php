@@ -83,29 +83,44 @@ class ImportAuditTemplateTableSeeder extends Seeder
 									
 								}
 								$form = FormRepository::insertForm($template,$row[10],$row[9],$row[8],$formula1,$formula2);
+								
 							}elseif ($form_type->id == 12) {
-								// preg_match_all('/(.*?){(.*?)}/', $row[11], $matches);
-								// $data_con = array();
-								// $options = explode("~", $row[11]);
-								// foreach ($options as $option) {
-								// 	preg_match('/{(.*?)}/', $option, $match);
-								// 	$codes = explode('^', $match[1]);
-								// 	$x1 = array();
-								// 	$x2 = array();
-								// 	// foreach ($codes as $code) {
-								// 	// 	$other_data = DB::table('temp_forms')->where('code',$code)->first();
-								// 	// 	$other_form = FormRepository::insertForm($template,$other_data->type,$other_data->required,$other_data->prompt,$other_data->choices);
-								// 	// 	$x1[] = $other_form->id;
-								// 	// 	$x2[] = $other_form->id.'_'.$other_form->prompt;
+								$options = explode("~", $row[11]);
+
+								preg_match_all('/(.*?){(.*?)}/', $row[11], $matches);
+								$data_con = array();
+								$options = explode("~", $row[11]);
+								foreach ($options as $option) {
+									$with_value = preg_match('/{(.*?)}/', $option, $match);
+									$x1 = array();
+									$x2 = array();
+									$_opt1 = "";
+									$_opt2 = "";
+									if($with_value){
+										$codes = explode('^', $match[1]);
+									
+										if(count($codes)> 0){
+											foreach ($codes as $code) {
+												$other_data = DB::table('temp_forms')->where('code',$code)->first();
+												$other_form = FormRepository::insertForm($template,$other_data->type,$other_data->required,$other_data->prompt,$other_data->choices);
+												$x1[] = $other_form->id;
+												$x2[] = $other_form->id.'_'.$other_form->prompt;
+												
+											}
+										}
 										
-								// 	// }
+										if(count($x1) > 0){
+											$_opt1 = implode("^", $x1);
+										}
+										if(count($x2) > 0){
+											$_opt2 = implode("^", $x2);
+										}
+									}
 									
-								// 	$_opt1 = implode("^", $x1);
-								// 	$_opt2 = implode("^", $x2);
-								// 	$data_con[] = ['option' => strtok($option, '{'), 'condition' => $_opt1, 'condition_desc' => $_opt2];
+									$data_con[] = ['option' => strtoupper(strtok($option, '{')), 'condition' => $_opt1, 'condition_desc' => $_opt2];
 									
-								// }
-								// $form = FormRepository::insertForm($template,$row[10],$row[9],$row[8],$row[11],array(),$data_con);
+								}
+								$form = FormRepository::insertForm($template,$row[10],$row[9],$row[8],$row[11],array(),$data_con);
 								
 							}else{
 								$form = FormRepository::insertForm($template,$row[10],$row[9],$row[8],$row[11]);

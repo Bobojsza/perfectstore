@@ -33,7 +33,7 @@ class Store extends Model
     }
 
     public static function getLists(){
-        return self::select(DB::raw('CONCAT(store_code, " - ", store) AS store_desc', 'id')
+        return self::select(DB::raw('CONCAT(store_code, " - ", store) AS store_desc', 'id'))
         ->orderBy('store_desc')
         ->lists('store_desc','id')
         ->all();
