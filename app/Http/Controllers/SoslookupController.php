@@ -13,6 +13,7 @@ use App\AuditTemplate;
 use App\Region;
 use App\Distributor;
 use App\Store;
+use App\SosLookup;
 
 class SoslookupController extends Controller
 {
@@ -23,7 +24,12 @@ class SoslookupController extends Controller
      */
     public function index()
     {
-        $lookups = array();
+        $lookups = SosLookup::with('customer')
+            ->with('region')
+            ->with('distributor')
+            ->with('store')
+            ->with('template')
+            ->get();
         return view('soslookup.index',compact('lookups'));
     }
 

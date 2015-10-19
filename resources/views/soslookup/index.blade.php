@@ -30,17 +30,58 @@
 						<tbody>
 							<tr>
 								<th>ID</th>
-								<th>Category</th>
+								<th>Customer</th>
 								<th>Region</th>
 								<th>Distributor</th>
 								<th>Store</th>
 								<th>Audit Template</th>
-								<th>Category</th>
+								<th>Action</th>
 							</tr>
-							@foreach($lookups as $tag)
+							@foreach($lookups as $lookup)
 							<tr>
-								<td>{{ $tag->id }}</td>
-								<td>{{ $tag->sos_tag }}</td>
+								<td>{{ $lookup->id }}</td>
+								<td>
+									@if(!empty($lookup->customer))
+									{{ $lookup->customer->customer }}
+									@else
+									ALL
+									@endif
+								</td>
+
+								<td>
+									@if(!empty($lookup->region))
+									{{ $lookup->region->region }}
+									@else
+									ALL
+									@endif
+								</td>
+
+								<td>
+									@if(!empty($lookup->distributor))
+									{{ $lookup->distributor->distributor }}
+									@else
+									ALL
+									@endif
+								</td>
+
+
+								<td>
+									@if(!empty($lookup->store))
+									{{ $lookup->store->store_code }} - {{ $lookup->store->store }}
+									@else
+									ALL
+									@endif
+								</td>
+
+								<td>
+									@if(!empty($lookup->template))
+									{{ $lookup->template->template }}
+									@else
+									ALL
+									@endif
+								</td>
+
+								<td></td>
 							</tr>
 							@endforeach
 						</tbody>
