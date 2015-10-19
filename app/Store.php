@@ -10,6 +10,21 @@ class Store extends Model
 
     protected $hidden = array('pivot');
 
+    public function account()
+    {
+        return $this->belongsTo('App\Account','account_id','id');
+    }
+
+    public function customer()
+    {
+        return $this->belongsTo('App\Customer','customer_id','id');
+    }
+
+    public function region()
+    {
+        return $this->belongsTo('App\Region','region_id','id');
+    }
+
     public function distributor()
     {
         return $this->belongsTo('App\Distributor','distributor_id','id');
@@ -33,7 +48,7 @@ class Store extends Model
     }
 
     public static function getLists(){
-        return self::select(DB::raw('CONCAT(store_code, " - ", store) AS store_desc', 'id'))
+        return self::select(\DB::raw('CONCAT(store_code, " - ", store) AS store_desc'), 'id')
         ->orderBy('store_desc')
         ->lists('store_desc','id')
         ->all();

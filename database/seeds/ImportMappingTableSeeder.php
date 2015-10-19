@@ -168,35 +168,20 @@ class ImportMappingTableSeeder extends Seeder
 			$records = $reader->get();
 			$records->each(function($row) {
 				if(!is_null($row->account)){
-					$account = Account::where('account',$row->account)->first();
-					if(!empty($account)){
-						$customer = Customer::where('account_id',$account->id)
-							->where('customer_code',$row->customer_code)
-							->where('customer',$row->customer)
-							->first();
-						if(!empty($customer)){
-							$area = Area::where('customer_id',$customer->id)
-								->where('area',$row->area)
-								->first();
-							if(!empty($area)){
-								$region = Region::where('area_id',$area->id)
-									->where('region_code',$row->region_code)
-									->where('region',$row->region)
-									->first();
-								if(count($region) == 0){
-									$newregion = new Region;
-									$newregion->area_id = $area->id;
-									$newregion->region_code = $row->region_code;
-									$newregion->region = $row->region;
-									$newregion->save();
-								}
-							}
-						}
+					$region = Region::where('region_code',$row->region_code)
+						->where('region',$row->region)
+						->first();
+					if(count($region) == 0){
+						$newregion = new Region;
+						$newregion->region_code = $row->region_code;
+						$newregion->region = $row->region;
+						$newregion->save();
 					}
 				}
 			});
 
 		});
+
 
 		DB::table('distributors')->truncate();
 
@@ -204,36 +189,14 @@ class ImportMappingTableSeeder extends Seeder
 			$records = $reader->get();
 			$records->each(function($row) {
 				if(!is_null($row->account)){
-					$account = Account::where('account',$row->account)->first();
-					if(!empty($account)){
-						$customer = Customer::where('account_id',$account->id)
-							->where('customer_code',$row->customer_code)
-							->where('customer',$row->customer)
-							->first();
-						if(!empty($customer)){
-							$area = Area::where('customer_id',$customer->id)
-								->where('area',$row->area)
-								->first();
-							if(!empty($area)){
-								$region = Region::where('area_id',$area->id)
-									->where('region_code',$row->region_code)
-									->where('region',$row->region)
-									->first();
-								if(!empty($region)){
-									$dis = Distributor::where('region_id',$region->id)
-										->where('distributor_code',$row->distributor_code)
-										->where('distributor',$row->distributor)
-										->first();
-									if(count($dis) == 0){
-										$newdis = new Distributor;
-										$newdis->region_id = $region->id;
-										$newdis->distributor_code = $row->distributor_code;
-										$newdis->distributor = $row->distributor;
-										$newdis->save();
-									}
-								}
-							}
-						}
+					$dis = Distributor::where('distributor_code',$row->distributor_code)
+						->where('distributor',$row->distributor)
+						->first();
+					if(count($dis) == 0){
+						$newdis = new Distributor;
+						$newdis->distributor_code = $row->distributor_code;
+						$newdis->distributor = strtoupper($row->distributor);
+						$newdis->save();
 					}
 				}
 			});
@@ -253,48 +216,38 @@ class ImportMappingTableSeeder extends Seeder
 							->where('customer',$row->customer)
 							->first();
 						if(!empty($customer)){
-							$area = Area::where('customer_id',$customer->id)
-								->where('area',$row->area)
+
+							$region = Region::where('region_code',$row->region_code)->first();
+							$dis = Distributor::where('distributor_code',$row->distributor_code)->first();
+
+							$store = Store::where('account_id',$account->id)
+								->where('customer_id',$customer->id)
+								->where('region_id',$region->id)
+								->where('distributor_id',$dis->id)
+								->where('store_code',$row->store_code)
+								->where('store',$row->store_name)
 								->first();
-							if(!empty($area)){
-								$region = Region::where('area_id',$area->id)
-									->where('region_code',$row->region_code)
-									->where('region',$row->region)
-									->first();
-								if(!empty($region)){
-									$dis = Distributor::where('region_id',$region->id)
-										->where('distributor_code',$row->distributor_code)
-										->where('distributor',$row->distributor)
-										->first();
-									if(!empty($dis)){
-										$store = Store::where('distributor_id',$dis->id)
-											->where('store_code',$row->store_code)
-											->where('store',$row->store_name)
-											->first();
-										if(count($store) == 0){
+							if(count($store) == 0){
+								$template = AuditTemplate::where('template',$row->template)->first();
+								$matrix = GradeMatrix::where('desc',$row->enrollment_type)->first();
 
-											
+								$newstore = new Store;
+								$newstore->account_id = $account->id;
+								$newstore->customer_id = $customer->id;
+								$newstore->region_id = $region->id;
+								$newstore->distributor_id = $dis->id;
+								$newstore->store_code = $row->store_code;
+								$newstore->store = $row->store_name;
+								$newstore->grade_matrix_id = $matrix->id;
+								$newstore->audit_template_id = $template->id;
+								$newstore->save();
 
-											$template = AuditTemplate::where('template',$row->template)->first();
-											$matrix = GradeMatrix::where('desc',$row->enrollment_type)->first();
+								$emaillist = explode("/", $row->email);
 
-											$newstore = new Store;
-											$newstore->distributor_id = $dis->id;
-											$newstore->store_code = $row->store_code;
-											$newstore->store = $row->store_name;
-											$newstore->grade_matrix_id = $matrix->id;
-											$newstore->audit_template_id = $template->id;
-											$newstore->save();
-
-											$emaillist = explode("/", $row->email);
-
-											for ($i=0; $i < count($emaillist); $i++) { 
-												$user = User::where('email',$emaillist[$i])->first();
-												$newstore->users()->attach($user->id);
-											}											
-										}
-									}
-								}
+								for ($i=0; $i < count($emaillist); $i++) { 
+									$user = User::where('email',$emaillist[$i])->first();
+									$newstore->users()->attach($user->id);
+								}											
 							}
 						}
 					}

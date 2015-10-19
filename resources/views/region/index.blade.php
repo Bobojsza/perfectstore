@@ -30,18 +30,14 @@
 						<tbody>
 							<tr>
 								<th>ID</th>
-								<th>Account</th>
-								<th>Customer</th>
-								<th>Area</th>
+								<th>Region Code</th>
 								<th>Region</th>
 								<th>Action</th>
 							</tr>
 							@foreach($regions as $region)
 							<tr>
 								<td>{{ $region->id }}</td>
-								<td>{{ $region->area->customer->account->account }}</td>
-								<td>{{ $region->area->customer->customer }}</td>
-								<td>{{ $region->area->area }}</td>
+								<td>{{ $region->region_code }}</td>
 								<td>{{ $region->region }}</td>
 								<td></td>
 							</tr>

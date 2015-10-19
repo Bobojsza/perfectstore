@@ -168,7 +168,7 @@ class ImportAuditTemplateTableSeeder extends Seeder
 					$cnt++;
 			  
 				}
-			}else {
+			}elseif($sheet->getName() == 'Others') {
 				$cnt = 0;
 				foreach ($sheet->getRowIterator() as $row) {
 					if($cnt > 0){
@@ -181,9 +181,64 @@ class ImportAuditTemplateTableSeeder extends Seeder
 			  
 				}
 			}
+			elseif($sheet->getName() == 'SOS') {
+				$cnt = 0;
+				foreach ($sheet->getRowIterator() as $row) {
+					if($cnt > 0){
+						if(!is_null($row[0])){
+							$form_category = FormCategory::where('category',$row[0])->first();
+							if(!empty($form_category)){
+								$form_category->sos_tagging = true;
+								$form_category->update();
+							}
+							
+						}
+					}
+					$cnt++;
+			  
+				}
+			}
+			elseif($sheet->getName() == 'OSA') {
+				$cnt = 0;
+				foreach ($sheet->getRowIterator() as $row) {
+					if($cnt > 0){
+						if(!is_null($row[0])){
+							$form_category = FormCategory::where('category',$row[0])->first();
+							if(!empty($form_category)){
+								$form_category->osa_tagging = true;
+								$form_category->update();
+							}
+							
+						}
+					}
+					$cnt++;
+			  
+				}
+			}
+			elseif($sheet->getName() == 'Secondary') {
+				$cnt = 0;
+				foreach ($sheet->getRowIterator() as $row) {
+					if($cnt > 0){
+						if(!is_null($row[0])){
+							$form_category = FormCategory::where('category',$row[0])->first();
+							if(!empty($form_category)){
+								$form_category->secondary_display = true;
+								$form_category->update();
+							}
+							
+						}
+					}
+					$cnt++;
+			  
+				}
+			}else{
+
+			}
 		}
 
 		$reader->close();
+
+
 
 
 		DB::statement('SET FOREIGN_KEY_CHECKS=1;');

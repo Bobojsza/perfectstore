@@ -19,7 +19,7 @@ class DistributorController extends Controller
      */
     public function index()
     {
-        $distributors = Distributor::with('region')->get();
+        $distributors = Distributor::orderBy('distributor')->get();
         return view('distributor.index',compact('distributors'));
     }
 
@@ -30,8 +30,7 @@ class DistributorController extends Controller
      */
     public function create()
     {
-        $regions = Region::getLists();
-        return view('distributor.create',compact('regions'));
+        return view('distributor.create');
     }
 
     /**
@@ -43,16 +42,14 @@ class DistributorController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'distributor' => 'required|max:100|unique_with:distributors, distributor_code = distributor_code, region = region_id',
-            'distributor_code' => 'required|not_in:0',
-            'region' => 'required|not_in:0'
+            'distributor' => 'required|max:100|unique_with:distributors, distributor_code = distributor_code',
+            'distributor_code' => 'required|not_in:0'
         ]);
 
         \DB::beginTransaction();
 
         try {
             $distributor = new Distributor;
-            $distributor->region_id = $request->region;
             $distributor->distributor_code = $request->distributor_code;
             $distributor->distributor = $request->distributor;
             $distributor->save();

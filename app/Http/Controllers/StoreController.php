@@ -23,7 +23,13 @@ class StoreController extends Controller
      */
     public function index()
     {
-        $stores = Store::with('distributor')->get();
+        $stores = Store::with('account')
+            ->with('customer')
+            ->with('region')
+            ->with('distributor')
+            ->with('audittemplate')
+            ->with('gradematrix')
+            ->get();
         return view('store.index',compact('stores'));
     }
 

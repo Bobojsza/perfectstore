@@ -13,12 +13,7 @@
 				</div>
 				{!! Form::open(array('route' => 'distributor.store')) !!}
 				  	<div class="box-body">
-
-				  		<div class="form-group">
-							<label>Region</label>
-							{!! Form::select('region', $regions, null,['class' => 'form-control', 'id' => 'region']) !!}
-						</div>
-
+				  		
 						<div class="form-group">
 					   		{!! Form::label('distributor_code', 'Distributor Code'); !!}
 	                    	{!! Form::text('distributor_code',null,['class' => 'form-control','placeholder' => 'Distributor Code']) !!}

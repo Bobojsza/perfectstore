@@ -19,7 +19,7 @@ class RegionController extends Controller
      */
     public function index()
     {
-        $regions = Region::with('area')->get();
+        $regions = Region::orderBy('region')->get();
         return view('region.index',compact('regions'));
     }
 
@@ -30,8 +30,7 @@ class RegionController extends Controller
      */
     public function create()
     {
-        $areas = Area::getLists();
-        return view('region.create',compact('areas'));
+        return view('region.create');
     }
 
     /**
@@ -43,16 +42,14 @@ class RegionController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'region' => 'required|max:100|unique_with:regions, region_code = region_code, area = area_id',
-            'region_code' => 'required|not_in:0',
-            'area' => 'required|not_in:0'
+            'region' => 'required|max:100|unique_with:regions, region_code = region_code',
+            'region_code' => 'required|not_in:0'
         ]);
 
         \DB::beginTransaction();
 
         try {
             $region = new Region;
-            $region->area_id = $request->area;
             $region->region_code = $request->region_code;
             $region->region = $request->region;
             $region->save();

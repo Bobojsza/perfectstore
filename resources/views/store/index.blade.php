@@ -32,7 +32,6 @@
 								<th>ID</th>
 								<th>Account</th>
 								<th>Customer</th>
-								<th>Area</th>
 								<th>Region</th>
 								<th>Distributor</th>
 								<th>Store</th>
@@ -45,10 +44,9 @@
 							@foreach($stores as $store)
 							<tr>
 								<td>{{ $store->id }}</td>
-								<td>{{ $store->distributor->region->area->customer->account->account }}</td>
-								<td>{{ $store->distributor->region->area->customer->customer }}</td>
-								<td>{{ $store->distributor->region->area->area }}</td>
-								<td>{{ $store->distributor->region->region }}</td>
+								<td>{{ $store->account->account }}</td>
+								<td>{{ $store->customer->customer }}</td>
+								<td>{{ $store->region->region }}</td>
 								<td>{{ $store->distributor->distributor }}</td>
 								<td>{{ $store->store }}</td>
 								<td>{{ $store->audittemplate->template }}</td>

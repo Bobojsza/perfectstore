@@ -13,12 +13,6 @@
 				</div>
 				{!! Form::open(array('route' => 'region.store')) !!}
 				  	<div class="box-body">
-
-				  		<div class="form-group">
-							<label>Area</label>
-							{!! Form::select('area', $areas, null,['class' => 'form-control', 'id' => 'area']) !!}
-						</div>
-
 						<div class="form-group">
 					   		{!! Form::label('region_code', 'Region Code'); !!}
 	                    	{!! Form::text('region_code',null,['class' => 'form-control','placeholder' => 'Region Code']) !!}

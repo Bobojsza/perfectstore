@@ -9,11 +9,7 @@ class Distributor extends Model
     public $timestamps = false;
 
     public static function getLists(){
-    	return self::lists('distributor','id')->all();
+    	return self::orderBy('distributor')->lists('distributor','id')->all();
     }
 
-     public function region()
-    {
-        return $this->belongsTo('App\Region','region_id','id');
-    }
 }

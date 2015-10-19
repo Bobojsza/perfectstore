@@ -38,7 +38,6 @@
 				  			
 							<li>{!! link_to_route('account.index','Accounts') !!}</li>
 							<li>{!! link_to_route('customer.index','Customers') !!}</li>
-							<li>{!! link_to_route('area.index','Areas') !!}</li>
 							<li>{!! link_to_route('region.index','Regions') !!}</li>
 							<li>{!! link_to_route('distributor.index','Distributors') !!}</li>
 							<li>{!! link_to_route('store.index','Stores') !!}</li>

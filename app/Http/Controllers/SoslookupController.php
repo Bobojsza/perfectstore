@@ -10,6 +10,9 @@ use App\FormCategory;
 use App\SosTagging;
 use App\Customer;
 use App\AuditTemplate;
+use App\Region;
+use App\Distributor;
+use App\Store;
 
 class SoslookupController extends Controller
 {
@@ -33,9 +36,13 @@ class SoslookupController extends Controller
     {
         $sostags = SosTagging::all();
         $customers = Customer::getLists();
+        $regions = Region::getLists();
+        $distributors = Distributor::getLists();
         $templates = AuditTemplate::getLists();
-        $categories = FormCategory::sosTagging()->lists('category','id');
-        return view('soslookup.create',compact('sostags', 'customers', 'templates', 'categories'));
+        $categories = FormCategory::sosTagging();
+        $stores = Store::getLists();
+        return view('soslookup.create',compact('sostags', 'customers','regions',
+            'distributors','templates', 'categories', 'stores'));
     }
 
     /**

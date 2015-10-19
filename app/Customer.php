@@ -12,6 +12,6 @@ class Customer extends Model
     }
 
     public static function getLists(){
-    	return self::lists('customer','id')->all();
+    	return self::orderBy('customer')->lists('customer','id')->all();
     }
 }

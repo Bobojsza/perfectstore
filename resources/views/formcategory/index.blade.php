@@ -32,6 +32,7 @@
 								<th>ID</th>
 								<th>Category</th>
 								<th>SOS Tagging</th>
+								<th>OSA Tagging</th>
 								<th>Secondary Display</th>
 								<th>Option</th>
 							</tr>
@@ -41,6 +42,11 @@
 								<td>{{ $category->category }}</td>
 								<td>
 									@if($category->sos_tagging == 1)
+									<i class="fa fa-fw fa-check"></i>
+									@endif
+								</td>
+								<td>
+									@if($category->osa_tagging == 1)
 									<i class="fa fa-fw fa-check"></i>
 									@endif
 								</td>

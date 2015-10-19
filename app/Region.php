@@ -9,11 +9,6 @@ class Region extends Model
     public $timestamps = false;
 
     public static function getLists(){
-    	return self::lists('region','id')->all();
-    }
-
-    public function area()
-    {
-        return $this->belongsTo('App\Area','area_id','id');
+    	return self::orderBy('region')->lists('region','id')->all();
     }
 }
