@@ -30,16 +30,18 @@
 						<tbody>
 							<tr>
 								<th>ID</th>
-								<th>Category</th>
-								<th>Brand</th>
+								<th>Store Code</th>
+								<th>Store</th>
 								<th>Option</th>
 							</tr>
-							@foreach($lookups as $brand)
+							@foreach($stores as $store)
 							<tr>
-								<td>{{ $brand->id }}</td>
-								<td>{{ $brand->category }}</td>
-								<td>{{ $brand->category }}</td>
-								<td></td>
+								<td>{{ $store->id }}</td>
+								<td>{{ $store->store_code }}</td>
+								<td>{{ $store->store }}</td>
+								<td>
+									<td>{!! link_to_action('SecondarylookupController@edit', 'View', $store->id, ['class' => 'btn btn-xs btn btn-primary']) !!}</td>
+								</td>
 							</tr>
 							@endforeach
 						</tbody>

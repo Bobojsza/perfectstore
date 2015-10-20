@@ -5,12 +5,16 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-use Session;
-use App\Store;
-use App\FormCategory;
-use App\SecondaryDisplay;
 
-class SecondarydisplayController extends Controller
+use Session;
+use App\Customer;
+use App\Region;
+use App\Distributor;
+use App\AuditTemplate;
+use App\FormCategory;
+use App\Store;
+
+class OsaController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -19,9 +23,8 @@ class SecondarydisplayController extends Controller
      */
     public function index()
     {
-        $secondarydisplays = SecondaryDisplay::with('category')->get();
-        return view('secondarydisplay.index', compact('secondarydisplays'));
-
+        $osas = array();
+        return view('osalookup.index', compact('osas'));
     }
 
     /**
@@ -31,8 +34,13 @@ class SecondarydisplayController extends Controller
      */
     public function create()
     {
-        $categories = FormCategory::secondaryDisplay()->lists('category', 'id');
-        return view('secondarydisplay.create', compact('categories'));
+        $customers = Customer::getLists();
+        $regions = Region::getLists();
+        $distributors = Distributor::getLists();
+        $templates = AuditTemplate::getLists();
+        $categories = FormCategory::osaTagging();
+        $stores = Store::getLists();
+        return view('osalookup.create', compact('customers', 'regions', 'distributors', 'templates', 'categories', 'stores'));
     }
 
     /**
@@ -43,28 +51,7 @@ class SecondarydisplayController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validate($request, [
-            'brand' => 'required|max:100|unique_with:secondary_displays, category = category_id',
-            'category' => 'required|not_in:0'
-        ]);
-
-        \DB::beginTransaction();
-
-        try {
-            $display = new SecondaryDisplay;
-            $display->category_id = $request->category;
-            $display->brand = $request->brand;
-            $display->save();
-
-            \DB::commit();
-
-            Session::flash('flash_message', 'Secondary Display successfully added!');
-            return redirect()->route("secondarydisplay.index");
-
-        } catch (Exception $e) {
-            DB::rollBack();
-            return redirect()->back();
-        }
+        //
     }
 
     /**
@@ -86,7 +73,7 @@ class SecondarydisplayController extends Controller
      */
     public function edit($id)
     {
-        
+        //
     }
 
     /**

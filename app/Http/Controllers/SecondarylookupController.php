@@ -7,6 +7,8 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Session;
 use App\Store;
+use App\FormCategory;
+use App\SecondaryDisplayLookup;
 
 class SecondarylookupController extends Controller
 {
@@ -17,8 +19,8 @@ class SecondarylookupController extends Controller
      */
     public function index()
     {
-        $lookups = array();
-        return view('secondarylookup.index', compact('lookups'));
+        $stores = SecondaryDisplayLookup::getStores();
+        return view('secondarylookup.index', compact('stores'));
     }
 
     /**
@@ -28,8 +30,14 @@ class SecondarylookupController extends Controller
      */
     public function create()
     {
-     
-        return view('secondarylookup.create');
+        $stores = Store::getLists();
+        $categories = FormCategory::with(array('secondarybrand' => function($query) {
+                $query->orderBy('brand');
+            }))
+            ->where('secondary_display',1)
+            ->orderBy('category')
+            ->get();
+        return view('secondarylookup.create',compact('stores', 'categories'));
     }
 
     /**
@@ -40,7 +48,28 @@ class SecondarylookupController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->validate($request, [
+            'store' => 'required|not_in:0',
+            'brands' => 'required',
+        ]);
+
+        \DB::beginTransaction();
+
+        try {
+            $store = Store::find($request->store);
+            foreach ($request->brands as $value) {
+                SecondaryDisplayLookup::create(['store_id' => $store->id, 'secondary_display_id' => $value ]);
+            }
+
+            \DB::commit();
+
+            Session::flash('flash_message', 'Secondary Display Lookup successfully added!');
+            return redirect()->route("secondarylookup.index");
+
+        } catch (Exception $e) {
+            DB::rollBack();
+            return redirect()->back();
+        }
     }
 
     /**
@@ -51,7 +80,7 @@ class SecondarylookupController extends Controller
      */
     public function show($id)
     {
-        //
+        
     }
 
     /**
@@ -62,7 +91,19 @@ class SecondarylookupController extends Controller
      */
     public function edit($id)
     {
-        //
+        $store = Store::findOrFail($id);
+
+        $stores = Store::getLists();
+        $categories = FormCategory::with(array('secondarybrand' => function($query) {
+                $query->orderBy('brand');
+            }))
+            ->where('secondary_display',1)
+            ->orderBy('category')
+            ->get();
+
+        $list = SecondaryDisplayLookup::getLists($id);
+        // dd($list);
+        return view('secondarylookup.edit',compact('stores', 'categories', 'store', 'list'));
     }
 
     /**
@@ -74,7 +115,7 @@ class SecondarylookupController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        
     }
 
     /**

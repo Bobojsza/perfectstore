@@ -60,6 +60,9 @@ Route::resource('secondarydisplay', 'SecondarydisplayController');
 
 Route::resource('secondarylookup', 'SecondarylookupController');
 
+Route::resource('osalookup', 'OsaController');
+
+
 Route::group(array('prefix' => 'api'), function()
 {
    Route::get('form/inputs', 'Api\FormsController@inputs');

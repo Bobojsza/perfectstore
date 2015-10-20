@@ -34,11 +34,11 @@
 								<th>Brand</th>
 								<th>Option</th>
 							</tr>
-							@foreach($secondarydisplays as $brand)
+							@foreach($secondarydisplays as $display)
 							<tr>
-								<td>{{ $brand->id }}</td>
-								<td>{{ $brand->category }}</td>
-								<td>{{ $brand->category }}</td>
+								<td>{{ $display->id }}</td>
+								<td>{{ $display->category->category }}</td>
+								<td>{{ $display->brand }}</td>
 								<td></td>
 							</tr>
 							@endforeach

@@ -40,12 +40,11 @@ class Store extends Model
         return $this->belongsTo('App\GradeMatrix','grade_matrix_id','id');
     }
 
-
-
     public function users()
     {
         return $this->belongsToMany('App\User');
     }
+
 
     public static function getLists(){
         return self::select(\DB::raw('CONCAT(store_code, " - ", store) AS store_desc'), 'id')

@@ -11,17 +11,22 @@
 				<div class="box-header with-border">
 				  	<h3 class="box-title">New Secondary Display</h3>
 				</div>
-				{!! Form::open(array('route' => 'formcategory.store')) !!}
+				{!! Form::open(array('route' => 'secondarydisplay.store')) !!}
 				  	<div class="box-body">
 				  		<div class="form-group">
-					   		{!! Form::label('category', 'Category Text'); !!}
-	                    	{!! Form::text('category',null,['class' => 'form-control','placeholder' => 'Category Text']) !!}
+					   		{!! Form::label('category', 'Category'); !!}
+	                    	{!! Form::select('category', $categories, null,['class' => 'form-control', 'id' => 'category']) !!}
+						</div>
+
+						<div class="form-group">
+					   		{!! Form::label('brand', 'Brand'); !!}
+	                    	{!! Form::text('brand',null,['class' => 'form-control','placeholder' => 'Brand']) !!}
 						</div>
 				  	</div><!-- /.box-body -->
 
 				 	<div class="box-footer">
 						<button type="submit" class="btn btn-primary">Submit</button>
-						{!! link_to_route('formcategory.index','Back',array(),['class' => 'btn btn-default']) !!}
+						{!! link_to_route('secondarydisplay.index','Back',array(),['class' => 'btn btn-default']) !!}
 				  	</div>
 
 

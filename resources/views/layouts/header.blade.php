@@ -29,6 +29,7 @@
 				  			<li>{!! link_to_route('soslookup.index','SOS Category Lookup') !!}</li>
 				  			<li>{!! link_to_route('secondarydisplay.index','Secondary Display') !!}</li>
 				  			<li>{!! link_to_route('secondarylookup.index','Secondary Display Lookup') !!}</li>
+				  			<li>{!! link_to_route('osalookup.index','OSA Category Lookup') !!}</li>
 
 				  			<li>{!! link_to_route('formcategory.index','Form Categories') !!}</li>
 				  			<li>{!! link_to_route('formgroup.index','Form Groups') !!}</li>

@@ -10,6 +10,10 @@ class FormCategory extends Model
 	
     public $timestamps = false;
 
+    public function secondarybrand(){
+        return $this->hasMany('App\SecondaryDisplay', 'category_id', 'id');
+    }
+
     public static function getLists(){
     	return self::orderBy('category')
     	->lists('category','id')
@@ -20,5 +24,17 @@ class FormCategory extends Model
     	return self::where('sos_tagging',1)
     	->orderBy('category')
     	->get();
+    }
+
+    public static function osaTagging(){
+        return self::where('osa_tagging',1)
+        ->orderBy('category')
+        ->get();
+    }
+
+    public static function secondaryDisplay(){
+        return self::where('secondary_display',1)
+        ->orderBy('category')
+        ->get();
     }
 }
