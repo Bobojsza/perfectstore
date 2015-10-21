@@ -50,6 +50,7 @@ Route::resource('gradematrix', 'GradeMatrixController');
 
 Route::resource('role', 'RoleController');
 
+Route::get('user/{id}/stores','UserController@stores');
 Route::resource('user', 'UserController');
 
 Route::resource('sostag', 'SostaggingController');

@@ -49,7 +49,9 @@
 									@endforeach
 								</td>
 								<td></td>
-								<td></td>
+								<td>
+									{!! link_to_action('UserController@stores', 'Store Mapping', $user->id, ['class' => 'btn btn-xs btn btn-primary']) !!}
+								</td>
 							</tr>
 							@endforeach
 						</tbody>

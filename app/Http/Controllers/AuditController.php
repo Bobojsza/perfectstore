@@ -8,6 +8,11 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Session;
 use App\Audit;
+use App\Customer;
+use App\Region;
+use App\Distributor;
+use App\AuditTemplate;
+use App\Store;
 
 class AuditController extends Controller
 {
@@ -29,7 +34,11 @@ class AuditController extends Controller
      */
     public function create()
     {
-        return view('audit.create');
+        $customers = Customer::getLists();
+        $regions = Region::getLists();
+        $distributors = Distributor::getLists();
+        $stores = Store::getLists();
+        return view('audit.create',compact('customers', 'regions', 'distributors', 'stores'));
     }
 
     /**

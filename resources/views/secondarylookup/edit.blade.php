@@ -33,7 +33,7 @@
 				  	</div><!-- /.box-body -->
 
 				 	<div class="box-footer">
-						<button type="submit" class="btn btn-primary">Update</button>
+						<button type="submit" class="btn btn-success">Update</button>
 						{!! link_to_route('secondarylookup.index','Back',array(),['class' => 'btn btn-default']) !!}
 				  	</div>
 

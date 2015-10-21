@@ -18,6 +18,8 @@
 		<link rel="stylesheet" href="{{ asset("/bower_components/AdminLTE/plugins/datatables/dataTables.bootstrap.css")}}">
 		<!-- Fancy Tree -->
 		<link rel="stylesheet" href="{{ asset("/plugins/fancytree-2.10.2/skin-xp/ui.fancytree.min.css")}}">
+		<!-- Bootstrap Multiselect -->
+		<link rel="stylesheet" href="{{ asset("/plugins/bootstrap-multiselect-0.9.13/css/bootstrap-multiselect.css")}}">
 		<!-- Theme style -->
 		<link rel="stylesheet" href="{{ asset("/bower_components/AdminLTE/dist/css/AdminLTE.min.css")}}">
 		<!-- AdminLTE Skins. We have chosen the skin-blue for this starter
@@ -95,6 +97,12 @@
 
     	<!-- Fancy Tree -->
     	<script src="{{ asset ("/plugins/fancytree-2.10.2/jquery.fancytree.min.js") }}"></script>
+
+    	<!-- Bootstrap Multiselect -->
+    	<script src="{{ asset ("/plugins/bootstrap-multiselect-0.9.13/js/bootstrap-multiselect.js") }}"></script>
+
+    	<!-- Numeric Input -->
+    	<script src="{{ asset ("/plugins/jQuery.numeric_input/jquery.numeric_input.min.js") }}"></script>
     	
 		<script type="text/javascript">
 			$(document).ready(function() {

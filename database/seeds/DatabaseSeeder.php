@@ -25,6 +25,8 @@ class DatabaseSeeder extends Seeder
         $this->call(UploadSecondaryDisplayTableSeeder::class);
         $this->call(UploadSecondaryDisplayLookupTableSeeder::class);
 
+         $this->call(UploadOsaTableSeeder::class);
+
         Model::reguard();
     }
 }

@@ -46,6 +46,7 @@
 							<li>{!! link_to_route('role.index','Roles') !!}</li>
 							<li>{!! link_to_route('user.index','Users') !!}</li>
 
+							
 				  		</ul>
 					</li>
 			  	</ul>

@@ -14,6 +14,19 @@ table {
 	display: none;
 }
 
+.message{
+    padding: 15px 15px 0 15px;
+    margin-right: auto;
+    margin-left: auto;
+
+}
+.alert{
+	margin-bottom: 0px;
+}
+
+.header-link {
+	margin-bottom: 15px;
+}
 /*sortable*/
 .ui-sortable tr {
 	cursor: pointer;
@@ -22,4 +35,3 @@ table {
 .ui-sortable tr:hover {
 	background:rgba(244,251,17,0.45);
 }
-

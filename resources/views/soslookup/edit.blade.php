@@ -9,38 +9,38 @@
 		<div class="col-md-12 col-xs-12">
 			<div class="box box-primary">
 				<div class="box-header with-border">
-				  	<h3 class="box-title">New SOS Category Lookup</h3>
+				  	<h3 class="box-title">Edit SOS Category Lookup</h3>
 				</div>
-				{!! Form::open(array('route' => 'soslookup.store')) !!}
+				{!! Form::open(array('route' => array('soslookup.update', $lookup->id),'method' => 'put')) !!}
 				  	<div class="box-body">
 				  		<div class="row">
 				  			<div class="form-group col-md-6">
 						   		{!! Form::label('customer_id', 'Customer'); !!}
-		                    	{!! Form::select('customer_id', array('0' => 'ALL CUSTOMER') +$customers, null,['class' => 'form-control', 'id' => 'customer_id']) !!}
+		                    	{!! Form::select('customer_id', array('0' => 'ALL CUSTOMER') +$customers, $lookup->customer_id,['class' => 'form-control', 'id' => 'customer_id']) !!}
 							</div>
 
 							<div class="form-group col-md-6">
 						   		{!! Form::label('regions', 'Region'); !!}
-		                    	{!! Form::select('regions', array('0' => 'ALL REGION') +$regions, null,['class' => 'form-control', 'id' => 'regions']) !!}
+		                    	{!! Form::select('regions', array('0' => 'ALL REGION') +$regions, $lookup->region_id,['class' => 'form-control', 'id' => 'regions']) !!}
 							</div>
 				  		</div>
 
 				  		<div class="row">
 				  			<div class="form-group col-md-6">
 						   		{!! Form::label('distributors', 'Distributor'); !!}
-		                    	{!! Form::select('distributors', array('0' => 'ALL DISTRIBUTORS') +$distributors, null,['class' => 'form-control', 'id' => 'distributors']) !!}
+		                    	{!! Form::select('distributors', array('0' => 'ALL DISTRIBUTORS') +$distributors, $lookup->distributor_id,['class' => 'form-control', 'id' => 'distributors']) !!}
 							</div>
 
 							<div class="form-group col-md-6">
 						   		{!! Form::label('stores', 'Store'); !!}
-		                    	{!! Form::select('stores', array('0' => 'ALL STORES') +$stores, null,['class' => 'form-control', 'id' => 'stores']) !!}
+		                    	{!! Form::select('stores', array('0' => 'ALL STORES') +$stores, $lookup->store_id,['class' => 'form-control', 'id' => 'stores']) !!}
 							</div>
 				  		</div>
 
 				  		<div class="row">
 				  			<div class="form-group col-md-6">
 						   		{!! Form::label('templates', 'Audit Template'); !!}
-		                    	{!! Form::select('templates', array('0' => 'ALL AUDIT TEMPLATE') +$templates, null,['class' => 'form-control', 'id' => 'templates']) !!}
+		                    	{!! Form::select('templates', array('0' => 'ALL AUDIT TEMPLATE') +$templates,  $lookup->template_id,['class' => 'form-control', 'id' => 'templates']) !!}
 							</div>
 				  		</div>
 				  		
@@ -58,10 +58,10 @@
 				                    	@foreach($categories as $category)
 				                    <tr>
 				                      	<td>{{ $category->category }}</td>
-				                      	<td>{!! Form::text('category['.$category->id.'][0]',null,['class' => 'form-control numeric_input','placeholder' => 'Less']) !!}</td>
+				                      	<td>{!! Form::text('category['.$category->id.'][0]',isset($lookup->categories->where('category_id',$category->id)->first()->less) ? $lookup->categories->where('category_id',$category->id)->first()->less : "" ,['class' => 'form-control numeric_input','placeholder' => 'Less']) !!}</td>
 				                      	@foreach($sostags as $tag)
 				                      	<td>
-				                      		{!! Form::text('category['.$category->id.']['.$tag->id.']',null,['class' => 'form-control numeric_input','placeholder' => $tag->sos_tag]) !!}
+				                      		{!! Form::text('category['.$category->id.']['.$tag->id.']',isset($lookup->categories->where('category_id',$category->id)->where('sos_id',$tag->id)->first()->value) ? $lookup->categories->where('category_id',$category->id)->where('sos_id',$tag->id)->first()->value : "",['class' => 'form-control numeric_input','placeholder' => $tag->sos_tag]) !!}
 						                </td>
 				                      	@endforeach
 				                      	
@@ -71,16 +71,10 @@
 				              	</table>
 							</div>
 				  		</div>
-						
-
-						
-						
-
-
 				  	</div><!-- /.box-body -->
 
 				 	<div class="box-footer">
-						<button type="submit" class="btn btn-success">Submit</button>
+						<button type="submit" class="btn btn-success">Update</button>
 						{!! link_to_route('soslookup.index','Back',array(),['class' => 'btn btn-default']) !!}
 				  	</div>
 

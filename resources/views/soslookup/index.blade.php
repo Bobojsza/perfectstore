@@ -81,7 +81,9 @@
 									@endif
 								</td>
 
-								<td></td>
+								<td>
+									{!! link_to_action('SoslookupController@edit', 'Edit', $lookup->id, ['class' => 'btn btn-xs btn btn-primary']) !!}
+								</td>
 							</tr>
 							@endforeach
 						</tbody>

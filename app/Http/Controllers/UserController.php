@@ -87,4 +87,9 @@ class UserController extends Controller
     {
         //
     }
+
+    public function stores($id){
+        $user = User::findorFail($id);
+        return view('user.stores',compact('user'));
+    }
 }

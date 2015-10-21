@@ -30,4 +30,8 @@ class SosLookup extends Model
     {
         return $this->belongsTo('App\AuditTemplate','customer_id','id');
     }
+
+    public function categories(){
+        return $this->hasMany('App\SosLookupPercentage','sos_lookup_id', 'id');
+    }
 }
