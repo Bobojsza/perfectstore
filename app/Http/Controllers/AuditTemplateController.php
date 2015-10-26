@@ -123,13 +123,13 @@ class AuditTemplateController extends Controller
 	}
 
 	public function storeform(Request $request, $id){
-		// dd($request->all());
+		dd($request->all());
 
 		$this->validate($request, [
             'category' => 'required|not_in:0',
             'group' => 'required|not_in:0',
             'prompt' => 'required',
-            'form_type' => 'required|not_in:0'
+            'formtype' => 'required|not_in:0'
         ]);
 
 		 \DB::beginTransaction();
