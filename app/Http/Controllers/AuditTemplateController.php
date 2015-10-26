@@ -123,7 +123,7 @@ class AuditTemplateController extends Controller
 	}
 
 	public function storeform(Request $request, $id){
-		dd($request->all());
+		// dd($request->all());
 
 		$this->validate($request, [
             'category' => 'required|not_in:0',
