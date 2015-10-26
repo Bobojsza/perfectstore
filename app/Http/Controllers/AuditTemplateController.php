@@ -145,9 +145,9 @@ class AuditTemplateController extends Controller
 					'audit_template_id' => $template->id,
 					'form_type_id' => $form_type->id,
 					'prompt' => strtoupper($prompt),
-					'required' => $request->prompt,
-					'expected_answer' => $request->expected_answer,
-					'exempt' => $request->exempt,
+					'required' => ($request->required == '1') ? 1 : 0;
+					'expected_answer' => ($request->expected_answer == '1') ? 1 : 0;,
+					'exempt' => ($request->exempt == '1') ? 1 : 0;,
 				));
 
 			$lastCategory = AuditTemplateForm::getLastCategoryCount($template->id);
