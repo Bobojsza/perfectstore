@@ -54,6 +54,14 @@
 							</div>
 
 				  		</div>
+
+				  		<div class="row">
+				  			<div class="form-group col-md-6">
+						   		{!! Form::label('templates', 'Templates'); !!}
+		                    	{!! Form::select('templates', $templates, null,['class' => 'form-control', 'id' => 'templates', 'multiple' => 'multiple']) !!}
+							</div>
+
+				  		</div>
 						
 				  	</div>
 
@@ -78,7 +86,7 @@
 	    todayHighlight: true
 	});
 
-	$('#customers,#regions,#distributors').multiselect({
+	$('#customers,#regions,#distributors,#templates').multiselect({
 		maxHeight: 200,
 		includeSelectAllOption: true,
 		enableCaseInsensitiveFiltering: true,

@@ -25,7 +25,8 @@ class FormtypesTableSeeder extends Seeder
 			(9, 'MULTI ITEM SELECT'),
 			(10, 'SINGLE ITEM SELECT'),
 			(11, 'COMPUTATIONAL'),
-			(12, 'CONDITIONAL');");
+			(12, 'CONDITIONAL'),
+			(13, 'HEADER');");
 		DB::statement('SET FOREIGN_KEY_CHECKS=1;');
     }
 }

@@ -12,6 +12,9 @@ use App\FormCategory;
 use App\FormGroup;
 use App\Form;
 use App\AuditTemplateForm;
+use App\FormType;
+use App\MultiSelect;
+use App\SingleSelect;
 
 class AuditTemplateController extends Controller
 {
@@ -113,46 +116,91 @@ class AuditTemplateController extends Controller
 		$audittemplate = AuditTemplate::findOrFail($id);
 		$formcategories = FormCategory::getLists();
 		$formgroups = FormGroup::getLists();
-		return view('audittemplate.addform',compact('audittemplate','formcategories','formgroups'));
+		$activitytypes = FormType::getLists();
+		$multiselects = MultiSelect::getLists();
+		$singleselects = SingleSelect::getLists();
+		return view('audittemplate.addform',compact('audittemplate','formcategories','formgroups', 'activitytypes', 'multiselects', 'singleselects'));
 	}
 
 	public function storeform(Request $request, $id){
 		// dd($request->all());
-		$lastCategoryCount = AuditTemplateForm::getLastCategoryCount($id);
-		$lastGroupCount = AuditTemplateForm::getLastGroupCount($id,$request->category);
-		
-		$catCnt = 0;
-		$grpCnt = 0;
-		
 
-		if(!empty($lastCategoryCount)){
-			$catCnt = $lastCategoryCount->category_order;
-		}
+		$this->validate($request, [
+            'category' => 'required|not_in:0',
+            'group' => 'required|not_in:0',
+            'prompt' => 'required',
+            'form_type' => 'required|not_in:0'
+        ]);
 
-		if(!empty($lastGroupCount)){
-			$grpCnt = $lastGroupCount->order;
-		}
-	   
-		if ($request->has('forms_id')) {
-			$forms = array();
-			$catCnt++;
-			foreach ($request->forms_id as $form) {
-				$grpCnt ++;
-				$forms[] = array('category_order' => $catCnt,
-					'order' => $grpCnt ,
-					'form_category_id' => $request->category,
-					'audit_template_id' => $id, 
-					'form_id' => $form
-					);
+		 \DB::beginTransaction();
+
+        try {
+            $template = AuditTemplate::find($id);
+			$group = FormGroup::find($request->group);
+			$category = FormCategory::find($request->category);
+			$form_type = FormType::find($request->formtype);
+			$prompt = $request->prompt;
+			
+			$form = Form::create(array(
+					'audit_template_id' => $template->id,
+					'form_type_id' => $form_type->id,
+					'prompt' => strtoupper($prompt),
+					'required' => $request->prompt,
+					'expected_answer' => $request->expected_answer,
+					'exempt' => $request->exempt,
+				));
+
+			$lastCategory = AuditTemplateForm::getLastCategoryCount($template->id);
+			$lastGroupCount = AuditTemplateForm::getLastGroupCount($template->id, $category->id);
+			
+			$catCnt = 1;
+			$grpCnt = 1;
+
+
+			if(!empty($lastCategory)){
+				if($lastCategory->form_category_id == $category->id){
+					$catCnt = $lastCategory->category_order;
+				}else{
+					$existingCat = AuditTemplateForm::where('form_category_id',$category->id)
+						->where('audit_template_id',$template->id)
+						->first();
+					if(empty($existingCat)){
+						$catCnt = $lastCategory->category_order;
+						$catCnt++;
+					}else{
+						$catCnt = $existingCat->category_order;
+					}
+					
+				}	
 			}
-			if(count($forms) > 0){
-				AuditTemplateForm::insert($forms);
+
+			if(count($lastGroupCount) > 0){
+				$grpCnt = $lastGroupCount->order;
+				$grpCnt++;
 			}
-		}
 
-		Session::flash('flash_message', 'Template successfully added!');
+			AuditTemplateForm::insert(array(
+				'category_order' => $catCnt,
+				'order' => $grpCnt ,
+				'form_category_id' => $category->id,
+				'form_group_id' => $group->id,
+				'audit_template_id' => $template->id, 
+				'form_id' => $form->id
+				));
 
-		return redirect()->route("audittemplate.form",$id);
+            \DB::commit();
+
+            Session::flash('flash_message', 'Template successfully added!');
+
+			return redirect()->route("audittemplate.form",$id);
+
+        } catch (Exception $e) {
+            DB::rollBack();
+            Session::flash('flash_message', 'An error occured in adding form!');
+            return redirect()->back();
+        }
+
+		
 	}
 
 	public function updateorder(Request $request, $id){

@@ -37,8 +37,8 @@ class AuditController extends Controller
         $customers = Customer::getLists();
         $regions = Region::getLists();
         $distributors = Distributor::getLists();
-        $stores = Store::getLists();
-        return view('audit.create',compact('customers', 'regions', 'distributors', 'stores'));
+        $templates = AuditTemplate::getLists();
+        return view('audit.create',compact('customers', 'regions', 'distributors', 'templates'));
     }
 
     /**

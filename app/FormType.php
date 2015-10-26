@@ -10,4 +10,10 @@ class FormType extends Model
     {
         return $this->hasMany('App\Form');
     }
+
+    public static function getLists(){
+    	return self::orderBy('form_type')
+    	->lists('form_type','id')
+    	->all();
+    }
 }

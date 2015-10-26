@@ -8,6 +8,8 @@ class Form extends Model
 {
     public $timestamps = false;
 
+    protected $fillable = ['audit_template_id', 'form_type_id', 'prompt', 'required', 'expected_answer', 'exempt'];
+
     public static function getLists(){
     	return self::select('forms.id', \DB::raw('CONCAT(form_type, " - ", prompt ) AS prompt'))
     		->join('form_types', 'form_types.id', '=', 'forms.form_type_id')

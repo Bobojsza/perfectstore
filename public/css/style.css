@@ -27,6 +27,10 @@ table {
 .header-link {
 	margin-bottom: 15px;
 }
+
+.page-header-name{
+	margin-top: 0px;
+}
 /*sortable*/
 .ui-sortable tr {
 	cursor: pointer;

@@ -44,7 +44,7 @@ class FormRepository extends Model
 		}
 		
 
-		$form = Form::create(array(
+		$form = Form::insert(array(
 				'audit_template_id' => $template->id,
 				'form_type_id' => $form_type->id,
 				'prompt' => strtoupper($prompt),

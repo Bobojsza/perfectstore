@@ -28,7 +28,7 @@ class SosLookup extends Model
 
     public function template()
     {
-        return $this->belongsTo('App\AuditTemplate','customer_id','id');
+        return $this->belongsTo('App\AuditTemplate','template_id','id');
     }
 
     public function categories(){
