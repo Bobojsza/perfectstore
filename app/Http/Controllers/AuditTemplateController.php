@@ -15,6 +15,11 @@ use App\AuditTemplateForm;
 use App\FormType;
 use App\MultiSelect;
 use App\SingleSelect;
+use App\FormRepository;
+use App\FormCondition;
+use App\FormFormula;
+use App\FormMultiSelect;
+use App\FormSingleSelect;
 
 class AuditTemplateController extends Controller
 {
@@ -102,7 +107,21 @@ class AuditTemplateController extends Controller
 	 */
 	public function destroy($id)
 	{
-		//
+		$template = AuditTemplate::findOrFail($id);
+		$tempforms = AuditTemplateForm::where('audit_template_id',$template->id)->get();
+		$forms = Form::where('audit_template_id',$template->id)->get();
+		foreach ($forms as $form) {
+			FormFormula::where('form_id',$form->id)->delete();
+			FormCondition::where('form_id',$form->id)->delete();
+			FormMultiSelect::where('form_id',$form->id)->delete();
+			FormSingleSelect::where('form_id',$form->id)->delete();
+		}
+		AuditTemplateForm::where('audit_template_id',$template->id)->delete();
+		Form::where('audit_template_id',$template->id)->delete();
+		$template->delete();
+
+		Session::flash('flash_message', 'Template successfully deleted!');
+		return redirect()->route("audittemplate.index");
 	}
 
 
@@ -281,17 +300,88 @@ class AuditTemplateController extends Controller
 			$newtemplate->save();
 
 			$oldforms = AuditTemplateForm::where('audit_template_id',$template->id)->get();
+			// dd($oldforms);
 			foreach ($oldforms as $oldform) {
-				$form = FormRepository::duplicate($newtemplate,$oldform->form_id);
+				$form = Form::find($oldform->form_id);
+				if($form->form_type_id == 11){
+					$choice = FormFormula::where('form_id',$form->id)->first();
+					
+					$index1 = array();
+					$index2 = array();
+					preg_match_all('/{(.*?)}/', $choice->formula, $matches);
+					foreach ($matches[1] as $key => $a ){
+						$data = Form::find($a);
+						$other_form = FormRepository::duplicate($newtemplate,$data->id);
+						$index1[$a] = $other_form->id;
+						$index2[$a] = $other_form->id.'_'.$other_form->prompt;
+						
+					}
+					$formula1 = $choice->formula;
+					$formula2 = $choice->formula_desc;
+					foreach ($matches[1] as $key => $a ){
+						$formula1 = str_replace('{'.$a.'}',$index1[$a], $formula1);
+						$formula2 = str_replace('{'.$a.'}', ' :'.$index2[$a].': ', $formula2);
+						
+					}
+					$newform = FormRepository::duplicate($newtemplate,$oldform->form_id,$formula1,$formula2);
+				
+				}elseif ($form->form_type_id == 12) {
+					$choices = FormCondition::where('form_id',$form->id)->get();
+
+					foreach ($choices as $choice) {
+						// $with_value = preg_match('/{(.*?)}/', $choice->condition, $match);
+						$option = $choice->condition;
+						$x1 = array();
+						$x2 = array();
+						$_opt1 = "";
+						$_opt2 = "";
+						if(!empty($choice->condition)){
+							$codes = explode('^', $choice->condition);
+							if(count($codes)> 0){
+								foreach ($codes as $code) {
+									$other_data = Form::find($code);
+									$other_form = FormRepository::duplicate($newtemplate,$other_data->id);
+									$x1[] = $other_form->id;
+									$x2[] = $other_form->id.'_'.$other_form->prompt;
+								}
+							}
+							
+							if(count($x1) > 0){
+								$_opt1 = implode("^", $x1);
+							}
+							if(count($x2) > 0){
+								$_opt2 = implode("^", $x2);
+							}
+						}
+						
+						$data_con[] = ['option' => $choice->option, 'condition' => $_opt1, 'condition_desc' => $_opt2];
+						
+					}
+					$newform = FormRepository::duplicate($newtemplate,$oldform->form_id,array(),array(),$data_con);
+				}
+				else{
+					$newform = FormRepository::duplicate($newtemplate,$oldform->form_id);
+				}
+
+				// dd($newform->id);
+				AuditTemplateForm::insert(array(
+					'category_order' => $oldform->category_order,
+					'order' => $oldform->order,
+					'form_category_id' => $oldform->form_category_id,
+					'form_group_id' => $oldform->form_group_id,
+					'audit_template_id' => $newtemplate->id, 
+					'form_id' => $newform->id,
+				));
 			}
 
             \DB::commit();
 
             Session::flash('flash_message', 'Template successfully added!');
-			return redirect()->route("audittemplate.form",$id);
+			return redirect()->route("audittemplate.form",$newtemplate->id);
 
         } catch (Exception $e) {
             DB::rollBack();
+            dd($e);
             Session::flash('flash_message', 'An error occured in adding form!');
             return redirect()->back();
         }

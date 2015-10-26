@@ -10,8 +10,8 @@
 			<div class="box box-primary">
 				<div class="box-header with-border">
 				  	<h3 class="box-title">Duplicate "{{ $template->template }}" Audit Template</h3>
-				</div>
-				{!! Form::open(array('route' => 'audittemplate.store')) !!}
+				   {!! Form::open(array('action' => array('AuditTemplateController@duplicatetemplate', $template->id ), 'class' => 'disable-button')) !!}                       
+
 				  	<div class="box-body">
 				  		<div class="row">
 				  			<div class="form-group col-md-6">

@@ -18,9 +18,10 @@ use App\FormCondition;
 
 class FormRepository extends Model
 {
-	public static function duplicate($template,$oldform_id){
+	public static function duplicate($template,$oldform_id,$choices = null,$choices2 = null,$con_datas = null){
 		$form = Form::find($oldform_id);
-		$newform = Form::insert(array(
+
+		$newform = Form::create(array(
 				'audit_template_id' => $template->id,
 				'form_type_id' => $form->form_type_id,
 				'prompt' => $form->prompt,
@@ -28,6 +29,37 @@ class FormRepository extends Model
 				'expected_answer' => $form->expected_answer,
 				'exempt' => $form->exempt,
 			));
+
+		if($form->form_type_id == 9){
+			$choices = FormMultiSelect::where('form_id',$form->id)->get();
+			foreach ($choices as $choice) {
+				FormMultiSelect::insert(array('form_id' => $newform->id, 'multi_select_id' => $choice->multi_select_id));
+			}
+		}
+
+		if($form->form_type_id == 10){
+			$choices = FormSingleSelect::where('form_id',$form->id)->get();
+			foreach ($choices as $choice) {
+				FormSingleSelect::insert(array('form_id' => $newform->id, 'single_select_id' => $choice->single_select_id));
+			}
+		}
+
+		if($form->form_type_id == 11){
+			FormFormula::insert(['form_id' => $newform->id, 'formula' => $choices, 'formula_desc' => $choices2]);
+		}
+
+		if($form->form_type_id == 12){
+
+			foreach ($con_datas as $con_data) {
+				$con = FormCondition::insert(['form_id' => $newform->id,
+					'option' => $con_data['option'], 
+					'condition' => $con_data['condition'], 
+					'condition_desc' => $con_data['condition_desc']]);
+				// dd($con);	
+			}
+		}
+
+		return $newform;
 	}
 	
 
@@ -57,7 +89,7 @@ class FormRepository extends Model
 		}
 		
 
-		$form = Form::insert(array(
+		$form = Form::create(array(
 				'audit_template_id' => $template->id,
 				'form_type_id' => $form_type->id,
 				'prompt' => strtoupper($prompt),

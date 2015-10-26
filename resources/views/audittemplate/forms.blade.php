@@ -9,9 +9,10 @@
 	<h2 class="page-header-name">{{ $audittemplate->template }}</h2>
 	<div class="row menu">
 		<div class="col-xs-12">
-			{!! link_to_route('audittemplate.index','Back',array(),['class' => 'btn btn-default']) !!}
+			
 			<button type="submit" class="btn btn-success">Update Order</button>
 			{!! link_to_route('audittemplate.addform','Add Form',$audittemplate->id,['class' => 'btn btn-primary']) !!}
+			{!! link_to_route('audittemplate.index','Back',array(),['class' => 'btn btn-default']) !!}
 			
 		</div>
 	</div>

@@ -39,6 +39,11 @@
 								<td>{{ $template->template}}</td>
 								<td>{!! link_to_action('AuditTemplateController@forms', 'Manage Form', $template->id, ['class' => 'btn btn-xs btn btn-primary']) !!}</td>
 								<td>{!! link_to_action('AuditTemplateController@duplicate', 'Duplicate Form', $template->id, ['class' => 'btn btn-xs btn btn-primary']) !!}</td>
+								<td>
+									{!! Form::open(array('method' => 'DELETE', 'action' => array('AuditTemplateController@destroy', $template->id), 'class' => 'disable-button')) !!}                       
+									{!! Form::submit('Delete', array('class'=> 'btn btn-danger btn-xs','onclick' => "if(!confirm('Are you sure to delete this record?')){return false;};")) !!}
+									{!! Form::close() !!}
+								</td>
 							</tr>
 							@endforeach
 						</tbody>
