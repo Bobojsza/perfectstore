@@ -49,7 +49,9 @@
 									<td>{{ $group->form->type->form_type }}</td>
 									<td>{{ $group->form->prompt}}</td>
 									<td></td>
-									<td></td>
+									<td>
+										<td>{!! link_to_action('AuditTemplateController@deleteform', 'Delete', $group->id, ['class' => 'btn btn-xs btn btn-danger']) !!}</td>
+									</td>
 								</tr>
 								<?php $cnt++; ?>
 								@endforeach

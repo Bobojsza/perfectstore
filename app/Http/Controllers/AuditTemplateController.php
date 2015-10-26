@@ -105,6 +105,8 @@ class AuditTemplateController extends Controller
 		//
 	}
 
+
+
 	public function forms($id){
 		$audittemplate = AuditTemplate::findOrFail($id);
 		$forms = AuditTemplateForm::getForms($id);
@@ -241,5 +243,22 @@ class AuditTemplateController extends Controller
 		Session::flash('flash_message', 'Template order succesfully updated!');
 
 		return redirect()->route("audittemplate.form",$id);
+	}
+
+	public function deleteform($id){
+		$audit_form = AuditTemplateForm::with('form')
+			->findOrFail($id);
+		return view('audittemplate.deleteform',compact('audit_form'));
+
+	}
+
+	public function destroyform($id){
+		$audit_form = AuditTemplateForm::with('form')
+			->findOrFail($id);
+		$audit_form->delete();
+		Form::where('id', $audit_form->form_id)->delete();
+		Session::flash('flash_message', 'Template form succesfully deleted!');
+
+		return redirect()->route("audittemplate.form",$audit_form->audit_template_id);
 	}
 }

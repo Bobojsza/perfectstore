@@ -21,11 +21,12 @@ Route::resource('multiselect','MultiSelectController');
 
 Route::resource('singleselect','SingleSelectController');
 
+Route::get('audittemplate/{id}/deleteform',['as' => 'audittemplate.deleteform', 'uses' => 'AuditTemplateController@deleteform']);
+Route::delete('audittemplate/{id}/destroyform',['as' => 'audittemplate.destroyform', 'uses' => 'AuditTemplateController@destroyform']);
 Route::get('audittemplate/{id}/forms', ['as' => 'audittemplate.form', 'uses' => 'AuditTemplateController@forms']);
 Route::get('audittemplate/{id}/addform', ['as' => 'audittemplate.addform', 'uses' => 'AuditTemplateController@addform']);
 Route::post('audittemplate/{id}/addform', ['as' => 'audittemplate.storeform', 'uses' => 'AuditTemplateController@storeform']);
 Route::put('audittemplate/{id}/updateorder', ['as' => 'audittemplate.updateorder', 'uses' => 'AuditTemplateController@updateorder']);
-
 Route::resource('audittemplate','AuditTemplateController');
 
 Route::resource('formcategory','FormCategoryController');
