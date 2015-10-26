@@ -21,6 +21,7 @@ Route::resource('multiselect','MultiSelectController');
 
 Route::resource('singleselect','SingleSelectController');
 
+Route::get('audittemplate/{id}/duplicate',['as' => 'audittemplate.duplicate', 'uses' => 'AuditTemplateController@duplicate']);
 Route::get('audittemplate/{id}/deleteform',['as' => 'audittemplate.deleteform', 'uses' => 'AuditTemplateController@deleteform']);
 Route::delete('audittemplate/{id}/destroyform',['as' => 'audittemplate.destroyform', 'uses' => 'AuditTemplateController@destroyform']);
 Route::get('audittemplate/{id}/forms', ['as' => 'audittemplate.form', 'uses' => 'AuditTemplateController@forms']);

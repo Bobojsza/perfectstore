@@ -18,6 +18,19 @@ use App\FormCondition;
 
 class FormRepository extends Model
 {
+	public static function duplicate($template,$oldform_id){
+		$form = Form::find($oldform_id);
+		$newform = Form::insert(array(
+				'audit_template_id' => $template->id,
+				'form_type_id' => $form->form_type_id,
+				'prompt' => $form->prompt,
+				'required' => $form->required,
+				'expected_answer' => $form->expected_answer,
+				'exempt' => $form->exempt,
+			));
+	}
+	
+
     public static function insertForm($template,$type,$required,$prompt,$choices,$choices2 = null,$con_datas = null){
     	if(strtoupper($type) == 'DOUBLE'){
 			$form_type = FormType::where('form_type', "NUMERIC")->first();

@@ -31,13 +31,14 @@
 							<tr>
 								<th>ID</th>
 								<th>Template</th>
-								<th>Manage Forms</th>
+								<th colspan="2">Manage Forms</th>
 							</tr>
 							@foreach($templates as $template)
 							<tr>
 								<td>{{ $template->id }}</td>
 								<td>{{ $template->template}}</td>
-								<td>{!! link_to_action('AuditTemplateController@forms', 'Manage Forms', $template->id, ['class' => 'btn btn-xs btn btn-primary']) !!}</td>
+								<td>{!! link_to_action('AuditTemplateController@forms', 'Manage Form', $template->id, ['class' => 'btn btn-xs btn btn-primary']) !!}</td>
+								<td>{!! link_to_action('AuditTemplateController@duplicate', 'Duplicate Form', $template->id, ['class' => 'btn btn-xs btn btn-primary']) !!}</td>
 							</tr>
 							@endforeach
 						</tbody>

@@ -261,4 +261,42 @@ class AuditTemplateController extends Controller
 
 		return redirect()->route("audittemplate.form",$audit_form->audit_template_id);
 	}
+
+	public function duplicate($id){
+		$template = AuditTemplate::findOrFail($id);
+		return view('audittemplate.duplicate', compact('template'));
+	}
+
+	public function duplicatetemplate(Request $request, $id){
+		$template = AuditTemplate::findOrFail($id);
+		\DB::beginTransaction();
+
+        try {
+            $this->validate($request, [
+				'template' => 'required|unique:audit_templates|max:100',
+			]);
+
+			$newtemplate = new AuditTemplate;
+			$newtemplate->template = $request->template;
+			$newtemplate->save();
+
+			$oldforms = AuditTemplateForm::where('audit_template_id',$template->id)->get();
+			foreach ($oldforms as $oldform) {
+				$form = FormRepository::duplicate($newtemplate,$oldform->form_id);
+			}
+
+            \DB::commit();
+
+            Session::flash('flash_message', 'Template successfully added!');
+			return redirect()->route("audittemplate.form",$id);
+
+        } catch (Exception $e) {
+            DB::rollBack();
+            Session::flash('flash_message', 'An error occured in adding form!');
+            return redirect()->back();
+        }
+
+		
+
+	}
 }
