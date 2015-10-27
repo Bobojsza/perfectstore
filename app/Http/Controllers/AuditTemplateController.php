@@ -223,9 +223,12 @@ class AuditTemplateController extends Controller
 
 			$lastCategory = AuditTemplateForm::getLastCategoryCount($template->id);
 			$lastGroupCount = AuditTemplateForm::getLastGroupCount($template->id, $category->id);
-			
+			$lastFormCount = AuditTemplateForm::getLastFormCount($template->id, $category->id,$group->id);
+
 			$catCnt = 1;
 			$grpCnt = 1;
+			$order = 1;
+
 
 			if(!empty($lastCategory)){
 				if($lastCategory->form_category_id == $category->id){
@@ -244,9 +247,27 @@ class AuditTemplateController extends Controller
 				}	
 			}
 
-			if(count($lastGroupCount) > 0){
-				$grpCnt = $lastGroupCount->order;
-				$grpCnt++;
+			if(!empty($lastGroupCount)){
+				if($lastGroupCount->form_group_id == $group->id){
+					$grpCnt = $lastGroupCount->group_order;
+				}else{
+					$existingGrp = AuditTemplateForm::where('form_category_id',$category->id)
+						->where('form_group_id',$group->id)
+						->where('audit_template_id',$template->id)
+						->first();
+					if(empty($existingGrp)){
+						$grpCnt = $lastGroupCount->group_order;
+						$grpCnt++;
+					}else{
+						$grpCnt = $existingGrp->group_order;
+					}
+					
+				}	
+			}
+
+			if(count($lastFormCount) > 0){
+				$order = $lastFormCount->order;
+				$order++;
 			}
 
 			AuditTemplateForm::insert(array(
