@@ -83,7 +83,7 @@ class DownloadController extends Controller
                 $data[11] = $form->required;
                 $data[12] = $form->expected_answer;
                 $data[13] = $form->exempt;
-                $data[14] = $form->group_order;
+                // $data[14] = $form->group_order;
                 // var_dump($data);
                 $writer->addRow($data); 
             }
