@@ -31,7 +31,7 @@
 							<tr>
 								<th>ID</th>
 								<th>Template</th>
-								<th colspan="2">Manage Forms</th>
+								<th colspan="3">Manage Forms</th>
 							</tr>
 							@foreach($templates as $template)
 							<tr>

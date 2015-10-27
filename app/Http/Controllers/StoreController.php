@@ -102,7 +102,15 @@ class StoreController extends Controller
      */
     public function edit($id)
     {
-        //
+        $store = Store::findOrFail($id);
+
+        $distributors = Distributor::getLists();
+        $audittemplates = AuditTemplate::getLists();
+        $passings = GradeMatrix::getLists();
+        $categories = FormCategory::sosTagging();
+        $sostags = SosTagging::all();
+
+        return view('store.edit',compact('store', 'distributors', 'audittemplates', 'passings', 'categories', 'sostags'));
     }
 
     /**
@@ -114,7 +122,34 @@ class StoreController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $this->validate($request, [
+            'store' => 'required|max:100|unique_with:stores, store_code = store_code,'.$id,
+            'store_code' => 'required',
+            'distributor' => 'required|not_in:0',
+            'template' => 'required|not_in:0',
+            'passing' => 'required|not_in:0'
+        ]);
+
+        \DB::beginTransaction();
+
+        try {
+            $store = Store::findOrFail($id);
+            $store->distributor_id = $request->distributor;
+            $store->store_code = $request->store_code;
+            $store->store = $request->store;
+            $store->grade_matrix_id = $request->passing;
+            $store->audit_template_id = $request->template;
+            $store->update();
+
+            \DB::commit();
+
+            Session::flash('flash_message', 'Store successfully updated!');
+            return redirect()->back();
+
+        } catch (Exception $e) {
+            DB::rollBack();
+            return redirect()->back();
+        }
     }
 
     /**

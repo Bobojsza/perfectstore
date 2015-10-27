@@ -51,7 +51,8 @@
 								<td>{{ $store->store }}</td>
 								<td>{{ $store->audittemplate->template }}</td>
 								<td>{{ $store->gradematrix->desc }}</td>
-								<td></td>
+								<td>{!! link_to_action('StoreController@edit', 'Edit', $store->id, ['class' => 'btn btn-xs btn btn-primary']) !!}</td>
+
 							</tr>
 							@endforeach
 						</tbody>

@@ -119,9 +119,10 @@ $(document).ready(function (){
 
    $('#formula').atwho({
     at: ":", 
-       data: "{{ action('Api\FormsController@inputs') }}",
-       displayTpl: '<li>${name}<small>_${input}</small></li>',
-       insertTpl: ":${name}_${input}:",
+      data: "{{ action('Api\FormsController@inputs') }}",
+      displayTpl: '<li><small>${input}</small>_${name}</li>',
+      insertTpl: ":${input}_${name}:",
+      searchKey: "input",
    })
 
    

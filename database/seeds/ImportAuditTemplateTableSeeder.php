@@ -72,7 +72,7 @@ class ImportAuditTemplateTableSeeder extends Seeder
 									$data = DB::table('temp_forms')->where('code',$a)->first();
 									$other_form = FormRepository::insertForm($template,$data->type,$data->required,$data->prompt,$data->choices);
 									$index1[$a] = $other_form->id;
-									$index2[$a] = $other_form->id.'_'.$other_form->prompt;
+									$index2[$a] = $other_form->prompt.'_'.$other_form->id;
 									
 								}
 								$formula1 = $row[11];
@@ -104,7 +104,7 @@ class ImportAuditTemplateTableSeeder extends Seeder
 												$other_data = DB::table('temp_forms')->where('code',$code)->first();
 												$other_form = FormRepository::insertForm($template,$other_data->type,$other_data->required,$other_data->prompt,$other_data->choices);
 												$x1[] = $other_form->id;
-												$x2[] = $other_form->id.'_'.$other_form->prompt;
+												$x2[] = $other_form->prompt.'_'.$other_form->id;
 												
 											}
 										}

@@ -161,7 +161,7 @@ class AuditTemplateController extends Controller
 			$category = FormCategory::find($request->category);
 			$form_type = FormType::find($request->formtype);
 			$prompt = $request->prompt;
-			
+
 			$form = Form::create(array(
 					'audit_template_id' => $template->id,
 					'form_type_id' => $form_type->id,
@@ -170,6 +170,55 @@ class AuditTemplateController extends Controller
 					'expected_answer' => ($request->expected_answer == '1') ? 1 : 0,
 					'exempt' => ($request->exempt == '1') ? 1 : 0,
 				));
+
+			if($request->formtype == 9){
+				$multiData = array();
+				foreach ($request->multiselect as $option) {
+					$multiData[] = array('form_id' => $form->id, 'multi_select_id' => $option);
+				}
+				if(count($multiData) > 0){
+					FormMultiSelect::insert($multiData);
+				}
+			}
+
+			if($request->formtype == 10){
+				$singleData = array();
+				foreach ($request->singleselect as $option) {
+					$singleData[] = array('form_id' => $form->id, 'single_select_id' => $option);
+				}
+				if(count($singleData) > 0){
+					FormSingleSelect::insert($singleData);
+				}
+			}
+
+			if($request->formtype == 11){
+				if ($request->has('formula')) {
+
+					$text = $request->formula;
+					preg_match_all('/:(.*?):/', $text, $matches);
+					// print_r($matches[1]);
+					
+					$index = array();
+					foreach ($matches[1] as $value) {
+						$split_up = explode('_', $value);
+		  				$last_item = $split_up[count($split_up)-1];
+						$index[] = $last_item;
+					}
+					// print_r($index);
+
+					$formula1 = $text;
+					foreach ($matches[1] as $key => $a ){
+						$formula1 = str_replace(':'.$a.':',$index[$key], $formula1);
+					}
+					// echo $formula1;
+
+				    $formformula = new FormFormula;
+				    $formformula->form_id = $form->id;
+				    $formformula->formula = $formula1;
+				    $formformula->formula_desc = $request->formula;
+				    $formformula->save();
+				}
+			}
 
 			$lastCategory = AuditTemplateForm::getLastCategoryCount($template->id);
 			$lastGroupCount = AuditTemplateForm::getLastGroupCount($template->id, $category->id);
@@ -212,7 +261,6 @@ class AuditTemplateController extends Controller
             \DB::commit();
 
             Session::flash('flash_message', 'Template successfully added!');
-
 			return redirect()->route("audittemplate.form",$id);
 
         } catch (Exception $e) {
@@ -313,7 +361,7 @@ class AuditTemplateController extends Controller
 						$data = Form::find($a);
 						$other_form = FormRepository::duplicate($newtemplate,$data->id);
 						$index1[$a] = $other_form->id;
-						$index2[$a] = $other_form->id.'_'.$other_form->prompt;
+						$index2[$a] = $other_form->prompt.'_'.$other_form->id;
 						
 					}
 					$formula1 = $choice->formula;
@@ -342,7 +390,7 @@ class AuditTemplateController extends Controller
 									$other_data = Form::find($code);
 									$other_form = FormRepository::duplicate($newtemplate,$other_data->id);
 									$x1[] = $other_form->id;
-									$x2[] = $other_form->id.'_'.$other_form->prompt;
+									$x2[] = $other_form->prompt.'_'.$other_form->id;
 								}
 							}
 							
