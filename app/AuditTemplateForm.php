@@ -35,10 +35,18 @@ class AuditTemplateForm extends Model
 	}
 
 
-
 	public static function getLastGroupCount($id,$form_category_id){
 		return self::where('audit_template_id',$id)
 			->where('form_category_id',$form_category_id)
+			->groupBy('group_order')
+			->orderBy('group_order', 'desc')->first();
+	}
+
+	public static function getLastFormCount($id,$form_category_id,$form_group_id){
+		return self::where('audit_template_id',$id)
+			->where('form_category_id',$form_category_id)
+			->where('form_group_id',$form_group_id)
+			->groupBy('order')
 			->orderBy('order', 'desc')->first();
 	}
 
@@ -57,6 +65,7 @@ class AuditTemplateForm extends Model
 			$records[$key]->groups = self::with('form')
 			->where('audit_template_id',$id)
 			->where('form_category_id',$value->form_category_id)
+			->orderBy('group_order')
 			->orderBy('order')
 			->get();
 		}

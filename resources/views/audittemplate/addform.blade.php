@@ -52,13 +52,30 @@
                      <label>Single Item Select Options</label>
                      {!! Form::select('singleselect[]', $singleselects, null,['multiple' => 'multiple','class' => 'form-multiple', 'id' => 'singleselect', '']) !!}
                   </div>
+
+
                   <div id="compute" class="form-hide">
                      <div class="form-group">
                         <label>Formula</label>
                         {!! Form::textarea('formula',null,['class' => 'form-control','placeholder' => 'Formula', 'rows' => '3','id' => 'formula']) !!}
                      </div>
                   </div>
-                  
+
+                  <div id="condition" class="form-hide">
+
+                     <div class="row">
+                        <div class="form-group col-md-6">
+                           <label>Condition</label>
+                           {!! Form::text('condition[]',null,['class' => 'form-control','placeholder' => 'Condition']) !!}
+                           {!! Form::textarea('selection[]',null,['class' => 'form-control condi','placeholder' => 'Selection', 'rows' => '3','id' => 'selection']) !!}
+                        </div>
+                     </div>
+
+
+                     <input type='button' value='Add New Condition' id='addButton'>
+
+                   </div>
+
 
                   <div class="checkbox">
                      <label>{!! Form::checkbox('required', '1') !!} Required Form</label>
@@ -110,6 +127,9 @@ $(document).ready(function (){
          case '11':
             showOne('compute');
             break;
+         case '12':
+            showOne('condition');
+            break;
          default:
             showOne('1');
       }
@@ -123,9 +143,28 @@ $(document).ready(function (){
       displayTpl: '<li><small>${input}</small>_${name}</li>',
       insertTpl: ":${input}_${name}:",
       searchKey: "input",
-   })
+   })     
 
-   
+   $('.condi').atwho({
+    at: ":", 
+      data: "{{ action('Api\FormsController@inputs') }}",
+      displayTpl: '<li><small>${input}</small>_${name}</li>',
+      insertTpl: ":${input}_${name}:",
+      searchKey: "input",
+   })      
+
+   $('#addButton').click(function(){
+      var clone = $("#condition > div:last").clone().find("input,textarea").val("").end().insertAfter("#condition > div:last");;
+      
+      $('.condi').atwho({
+       at: ":", 
+         data: "{{ action('Api\FormsController@inputs') }}",
+         displayTpl: '<li><small>${input}</small>_${name}</li>',
+         insertTpl: ":${input}_${name}:",
+         searchKey: "input",
+      })
+
+   });
 });
        
 @endsection

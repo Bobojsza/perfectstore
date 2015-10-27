@@ -144,7 +144,7 @@ class AuditTemplateController extends Controller
 	}
 
 	public function storeform(Request $request, $id){
-		// dd($request->all());
+		dd($request->all());
 
 		$this->validate($request, [
             'category' => 'required|not_in:0',
@@ -161,6 +161,8 @@ class AuditTemplateController extends Controller
 			$category = FormCategory::find($request->category);
 			$form_type = FormType::find($request->formtype);
 			$prompt = $request->prompt;
+
+
 
 			$form = Form::create(array(
 					'audit_template_id' => $template->id,
@@ -193,25 +195,18 @@ class AuditTemplateController extends Controller
 
 			if($request->formtype == 11){
 				if ($request->has('formula')) {
-
 					$text = $request->formula;
-					preg_match_all('/:(.*?):/', $text, $matches);
-					// print_r($matches[1]);
-					
+					preg_match_all('/:(.*?):/', $text, $matches);					
 					$index = array();
 					foreach ($matches[1] as $value) {
 						$split_up = explode('_', $value);
 		  				$last_item = $split_up[count($split_up)-1];
 						$index[] = $last_item;
 					}
-					// print_r($index);
-
 					$formula1 = $text;
 					foreach ($matches[1] as $key => $a ){
 						$formula1 = str_replace(':'.$a.':',$index[$key], $formula1);
 					}
-					// echo $formula1;
-
 				    $formformula = new FormFormula;
 				    $formformula->form_id = $form->id;
 				    $formformula->formula = $formula1;
@@ -220,12 +215,17 @@ class AuditTemplateController extends Controller
 				}
 			}
 
+			if($request->formtype == 12 ){
+				if ($request->has('condition')) {
+					
+				}
+			}
+
 			$lastCategory = AuditTemplateForm::getLastCategoryCount($template->id);
 			$lastGroupCount = AuditTemplateForm::getLastGroupCount($template->id, $category->id);
 			
 			$catCnt = 1;
 			$grpCnt = 1;
-
 
 			if(!empty($lastCategory)){
 				if($lastCategory->form_category_id == $category->id){
@@ -251,7 +251,8 @@ class AuditTemplateController extends Controller
 
 			AuditTemplateForm::insert(array(
 				'category_order' => $catCnt,
-				'order' => $grpCnt ,
+				'group_order' => $grpCnt,
+				'order' => $order,
 				'form_category_id' => $category->id,
 				'form_group_id' => $group->id,
 				'audit_template_id' => $template->id, 
@@ -273,8 +274,6 @@ class AuditTemplateController extends Controller
 	}
 
 	public function updateorder(Request $request, $id){
-
-
 		if($request->has('c_id')){
 			$category = array();
 			foreach ($request->c_id as $key => $value) {

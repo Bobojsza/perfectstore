@@ -54,7 +54,9 @@ class DownloadController extends Controller
         // get template questions
         if($type == 2){
             // dd($list);
-            $forms = AuditTemplateForm::select('audit_template_forms.id', 'audit_template_forms.category_order', 'audit_template_forms.order',
+            $forms = AuditTemplateForm::select('audit_template_forms.id', 'audit_template_forms.category_order',
+                'audit_template_forms.group_order',
+                'audit_template_forms.order',
                 'audit_template_forms.form_category_id', 'form_categories.category', 'audit_template_forms.form_group_id', 'form_groups.group_desc',
                 'audit_template_forms.audit_template_id', 'audit_template_forms.form_id', 'forms.form_type_id', 'forms.prompt', 'forms.required', 
                 'forms.expected_answer', 'forms.exempt')
@@ -81,6 +83,7 @@ class DownloadController extends Controller
                 $data[11] = $form->required;
                 $data[12] = $form->expected_answer;
                 $data[13] = $form->exempt;
+                $data[14] = $form->group_order;
                 // var_dump($data);
                 $writer->addRow($data); 
             }
