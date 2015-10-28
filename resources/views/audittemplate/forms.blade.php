@@ -1,4 +1,4 @@
-@extends('layouts.default')
+	@extends('layouts.default')
 
 @section('content')
 
@@ -25,6 +25,14 @@
 					<div class="box-header">
 						<h3 class="box-title"> {{$category->category_order }} - {{ $category->category->category }}</h3>
 						{!! Form::hidden('c_id['.$category->category_order.']',$category->category_order,['class' => 'category-hidden']) !!}
+						<div class="box-tools pull-right">
+			                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+			                </button>
+			                <div class="btn-group">
+			                  <button type="button" class="btn btn-box-tool dropdown-toggle" data-toggle="dropdown"></button>
+			                  
+			                </div>
+			              </div>
 					</div><!-- /.box-header -->
 					<div class="box-body table-responsive no-padding">
 						<table class="table table-hover sort-group">
