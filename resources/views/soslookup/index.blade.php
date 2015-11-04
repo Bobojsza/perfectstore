@@ -33,8 +33,8 @@
 								<th>Customer</th>
 								<th>Region</th>
 								<th>Distributor</th>
-								<th>Store</th>
 								<th>Audit Template</th>
+								<th>Store</th>
 								<th>Action</th>
 							</tr>
 							@foreach($lookups as $lookup)
@@ -64,6 +64,13 @@
 									@endif
 								</td>
 
+								<td>
+									@if(!empty($lookup->template))
+									{{ $lookup->template->template }}
+									@else
+									ALL
+									@endif
+								</td>
 
 								<td>
 									@if(!empty($lookup->store))
@@ -73,13 +80,7 @@
 									@endif
 								</td>
 
-								<td>
-									@if(!empty($lookup->template))
-									{{ $lookup->template->template }}
-									@else
-									ALL
-									@endif
-								</td>
+								
 
 								<td>
 									{!! link_to_action('SoslookupController@edit', 'Edit', $lookup->id, ['class' => 'btn btn-xs btn btn-primary']) !!}

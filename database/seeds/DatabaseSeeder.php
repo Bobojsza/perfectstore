@@ -20,10 +20,10 @@ class DatabaseSeeder extends Seeder
         $this->call(ImportMappingTableSeeder::class);
         $this->call(ImportAuditTemplateTableSeeder::class);
 
-        $this->call(UploadSosLookupTableSeeder::class);
+        // $this->call(UploadSosLookupTableSeeder::class);
 
-        $this->call(UploadSecondaryDisplayTableSeeder::class);
-        $this->call(UploadSecondaryDisplayLookupTableSeeder::class);
+        // $this->call(UploadSecondaryDisplayTableSeeder::class);
+        // $this->call(UploadSecondaryDisplayLookupTableSeeder::class);
 
         // $this->call(UploadOsaTableSeeder::class);
 

@@ -33,55 +33,58 @@
 								<th>Customer</th>
 								<th>Region</th>
 								<th>Distributor</th>
-								<th>Store</th>
 								<th>Audit Template</th>
+								<th>Store</th>
 								<th>Action</th>
 							</tr>
 							@foreach($osas as $osa)
 							<tr>
-								<td>{{ $lookup->id }}</td>
+								<td>{{ $osa->id }}</td>
 								<td>
-									@if(!empty($lookup->customer))
-									{{ $lookup->customer->customer }}
+									@if(!empty($osa->customer))
+									{{ $osa->customer->customer }}
 									@else
 									ALL
 									@endif
 								</td>
 
 								<td>
-									@if(!empty($lookup->region))
-									{{ $lookup->region->region }}
+									@if(!empty($osa->region))
+									{{ $osa->region->region }}
 									@else
 									ALL
 									@endif
 								</td>
 
 								<td>
-									@if(!empty($lookup->distributor))
-									{{ $lookup->distributor->distributor }}
-									@else
-									ALL
-									@endif
-								</td>
-
-
-								<td>
-									@if(!empty($lookup->store))
-									{{ $lookup->store->store_code }} - {{ $lookup->store->store }}
+									@if(!empty($osa->distributor))
+									{{ $osa->distributor->distributor }}
 									@else
 									ALL
 									@endif
 								</td>
 
 								<td>
-									@if(!empty($lookup->template))
-									{{ $lookup->template->template }}
+									@if(!empty($osa->template))
+									{{ $osa->template->template }}
 									@else
 									ALL
 									@endif
 								</td>
 
-								<td></td>
+								<td>
+									@if(!empty($osa->store))
+									{{ $osa->store->store_code }} - {{ $osa->store->store }}
+									@else
+									ALL
+									@endif
+								</td>
+
+								
+
+								<td>
+									{!! link_to_action('OsaController@edit', 'Edit', $osa->id, ['class' => 'btn btn-xs btn btn-primary']) !!}
+								</td>
 							</tr>
 							@endforeach
 						</tbody>

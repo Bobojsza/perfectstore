@@ -11,6 +11,10 @@
 |
 */
 
+Route::get('test', function(){
+	echo (((1 * 4) / (2 * 1) + 1) - 1);
+});
+
 Route::get('/', 'DashboardController@index');
 
 Route::resource('dashboard', 'DashboardController');

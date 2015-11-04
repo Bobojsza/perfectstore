@@ -32,15 +32,16 @@
 							</div>
 
 							<div class="form-group col-md-6">
-						   		{!! Form::label('stores', 'Store'); !!}
-		                    	{!! Form::select('stores', array('0' => 'ALL STORES') +$stores, null,['class' => 'form-control', 'id' => 'stores']) !!}
+						   		{!! Form::label('templates', 'Audit Template'); !!}
+		                    	{!! Form::select('templates', array('0' => 'ALL AUDIT TEMPLATE') +$templates, null,['class' => 'form-control', 'id' => 'templates']) !!}
 							</div>
+							
 				  		</div>
 
 				  		<div class="row">
 				  			<div class="form-group col-md-6">
-						   		{!! Form::label('templates', 'Audit Template'); !!}
-		                    	{!! Form::select('templates', array('0' => 'ALL AUDIT TEMPLATE') +$templates, null,['class' => 'form-control', 'id' => 'templates']) !!}
+						   		{!! Form::label('stores', 'Store'); !!}
+		                    	{!! Form::select('stores', array('0' => 'ALL STORES') +$stores, null,['class' => 'form-control', 'id' => 'stores']) !!}
 							</div>
 				  		</div>
 				  		

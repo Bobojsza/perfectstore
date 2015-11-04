@@ -39,9 +39,7 @@
 								<td>{{ $store->id }}</td>
 								<td>{{ $store->store_code }}</td>
 								<td>{{ $store->store }}</td>
-								<td>
-									<td>{!! link_to_action('SecondarylookupController@edit', 'Edit', $store->id, ['class' => 'btn btn-xs btn btn-primary']) !!}</td>
-								</td>
+								<td>{!! link_to_action('SecondarylookupController@edit', 'Edit', $store->id, ['class' => 'btn btn-xs btn btn-primary']) !!}</td>
 							</tr>
 							@endforeach
 						</tbody>

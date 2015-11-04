@@ -23,8 +23,8 @@
 			<div class="col-xs-12">
 				<div class="box">
 					<div class="box-header">
-						<h3 class="box-title text-center">{{ $category->category->category }}</h3>
-						
+						<h3 class="box-title"> {{$category->category_order }} - {{ $category->category->category }}</h3>
+						{!! Form::hidden('c_id['.$category->category_order.']',$category->category_order,['class' => 'category-hidden']) !!}
 						<div class="box-tools pull-right">
 			                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
 			                </button>
@@ -35,24 +35,11 @@
 			              </div>
 					</div><!-- /.box-header -->
 					<div class="box-body table-responsive no-padding">
-						@foreach($category->groups as $group)
-						<div class="box">
-							<div class="box-header">
-								<h3 class="box-title"> {{ $group->group->group_desc }}</h3>
-								
-								<div class="box-tools pull-right">
-					                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
-					                </button>
-					                <div class="btn-group">
-					                  <button type="button" class="btn btn-box-tool dropdown-toggle" data-toggle="dropdown"></button>
-					                  
-					                </div>
-					              </div>
-							</div><!-- /.box-header -->
-							<div class="box-body table-responsive no-padding">
-								<table class="table table-hover sort-group">
+						<table class="table table-hover sort-group">
 							<thead>
 								<tr>
+									<th>Priority</th>
+									<th>Group</th>
 									<th>Type</th>
 									<th>Prompt</th>
 									<th>Expected Answer</th>
@@ -60,25 +47,26 @@
 								</tr>
 							</thead>
 							<tbody>
-								@foreach($group->forms as $form)
+								<?php $cnt = 1;?>
+								@foreach($category->groups as $group)
 								<tr>
-									<td>{{ $form->form->type->form_type }}</td>
-									<td>{{ $form->form->prompt }}</td>
+									<td class='priority'>
+										{{ $cnt }}
+										{!! Form::hidden('p_id['.$group ->id.']',$group->order,['class' => 'priority-hidden']) !!}
+									</td>
+									<td>{{ $group->group->group_desc }}</td>
+									<td>{{ $group->form->type->form_type }}</td>
+									<td>{{ $group->form->prompt}}</td>
 									<td></td>
-									<td></td>
+									<td>
+										<td>{!! link_to_action('AuditTemplateController@deleteform', 'Delete', $group->id, ['class' => 'btn btn-xs btn btn-danger']) !!}</td>
+									</td>
 								</tr>
+								<?php $cnt++; ?>
 								@endforeach
 							</tbody>
 						</table>
-								
-							</div><!-- /.box-body -->
-								
-
-						</div><!-- /.box -->
-						@endforeach
-						
 					</div><!-- /.box-body -->
-						
 
 				</div><!-- /.box -->
 			</div>

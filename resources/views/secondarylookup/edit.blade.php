@@ -11,7 +11,7 @@
 				<div class="box-header with-border">
 				  	<h3 class="box-title">Edit Secondary Display Lookup</h3>
 				</div>
-				{!! Form::open(array('route' => 'secondarylookup.store')) !!}
+				{!! Form::open(array('route' => array('secondarylookup.update', $store->id),'method' => 'put')) !!}
 				  	<div class="box-body">
 				  		<div class="form-group">
 					   		{!! Form::label('store', 'Store'); !!}

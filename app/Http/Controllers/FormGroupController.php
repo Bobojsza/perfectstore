@@ -44,13 +44,24 @@ class FormGroupController extends Controller
             'group_desc' => 'required|unique:form_groups|max:100',
         ]);
 
-        $group = new FormGroup;
-        $group->group_desc = $request->group_desc;
-        $group->save();
+        \DB::beginTransaction();
+        try {
+            $group = new FormGroup;
+            $group->group_desc = $request->group_desc;
+            $group->secondary_display = ($request->secondary_display) ? 1 : 0;
+            $group->save();
 
-        Session::flash('flash_message', 'Form Group successfully added!');
+            \DB::commit();
 
-        return redirect()->route("formgroup.index");
+            Session::flash('flash_message', 'Form Group successfully added!');
+            return redirect()->route("formgroup.index");
+
+        } catch (Exception $e) {
+            DB::rollBack();
+            return redirect()->back();
+        }
+
+        
     }
 
     /**
@@ -72,7 +83,8 @@ class FormGroupController extends Controller
      */
     public function edit($id)
     {
-        //
+        $formgroup = FormGroup::findOrFail($id);
+        return view('formgroup.edit', compact('formgroup'));
     }
 
     /**
@@ -84,7 +96,26 @@ class FormGroupController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $group = FormGroup::findOrFail($id);
+
+        $this->validate($request, [
+            'group_desc' => 'required||max:100|unique_with:form_groups,'.$id
+        ]);
+
+        \DB::beginTransaction();
+        try {
+            $group->group_desc = strtoupper($request->group_desc);
+            $group->secondary_display = ($request->secondary_display) ? 1 : 0;
+            $group->update();
+            \DB::commit();
+
+            Session::flash('flash_message', 'Form Group successfully updated!');
+            return redirect()->route("formgroup.edit",[$id]);
+            
+        } catch (Exception $e) {
+            DB::rollBack();
+            return redirect()->back();
+        }
     }
 
     /**

@@ -31,11 +31,19 @@
 							<tr>
 								<th>ID</th>
 								<th>Group</th>
+								<th>Secondary Display Tag</th>
+								<th>Action</th>
 							</tr>
 							@foreach($formgroups as $group)
 							<tr>
 								<td>{{ $group->id }}</td>
 								<td>{{ $group->group_desc }}</td>
+								<td>
+									@if($group->secondary_display == 1)
+									<i class="fa fa-fw fa-check"></i>
+									@endif
+								</td>
+								<td>{!! link_to_action('FormGroupController@edit', 'Edit', $group->id, ['class' => 'btn btn-xs btn btn-primary']) !!}</td>
 							</tr>
 							@endforeach
 						</tbody>

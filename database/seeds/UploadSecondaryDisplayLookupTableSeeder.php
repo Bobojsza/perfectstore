@@ -16,7 +16,7 @@ class UploadSecondaryDisplayLookupTableSeeder extends Seeder
         Model::unguard();
 
 		DB::statement('SET FOREIGN_KEY_CHECKS=0;');
-		// DB::table('secondary_displays')->truncate();
+		DB::table('secondary_display_lookups')->truncate();
 
 		$reader = ReaderFactory::create(Type::XLSX); // for XLSX files
 		$filePath = 'database/seeds/seed_files/Secondary Display.xlsx';

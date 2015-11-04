@@ -14,6 +14,8 @@ use App\AuditTemplateForm;
 use App\FormCategory;
 use App\FormFormula;
 
+use App\AuditTemplateCategory;
+use App\AuditTemplateGroup;
 use App\FormRepository;
 
 use Box\Spout\Reader\ReaderFactory;
@@ -41,6 +43,8 @@ class ImportAuditTemplateTableSeeder extends Seeder
 		DB::table('form_conditions')->truncate();
 
 		DB::table('audit_template_forms')->truncate();
+		DB::table('audit_template_groups')->truncate();
+		DB::table('audit_template_categories')->truncate();
 
 		$reader = ReaderFactory::create(Type::XLSX); // for XLSX files
 		$filePath = 'database/seeds/seed_files/Forms.xlsx';
@@ -53,6 +57,7 @@ class ImportAuditTemplateTableSeeder extends Seeder
 				foreach ($sheet->getRowIterator() as $row) {
 					if($cnt > 0){
 						if(!is_null($row[1])){
+
 							$template = AuditTemplate::firstOrCreate(['template' => $row[1]]);
 							$category = FormCategory::firstOrCreate(['category' => $row[3]]);
 							$group = FormGroup::firstOrCreate(['group_desc' => $row[6]]);
@@ -127,61 +132,61 @@ class ImportAuditTemplateTableSeeder extends Seeder
 							}
 						}
 
-						$lastCategory = AuditTemplateForm::getLastCategoryCount($template->id);
-						$lastGroupCount = AuditTemplateForm::getLastGroupCount($template->id, $category->id);
-						$lastFormCount = AuditTemplateForm::getLastFormCount($template->id, $category->id,$group->id);
 
-						$catCnt = 1;
-						$grpCnt = 1;
+						$cat_order = 1;
+						$a_cat_id = 0;
+						$clast_cnt = AuditTemplateCategory::getLastOrder($template->id);
+						if(empty($clast_cnt)){
+							$a_cat = AuditTemplateCategory::create(['category_order' => $cat_order,
+								'audit_template_id' => $template->id, 
+								'category_id' => $category->id]);
+							$a_cat_id = $a_cat->id;
+						}else{
+							$cat = AuditTemplateCategory::categoryExist($template->id, $category->id);
+							if(empty($cat)){
+								$cat_order = $clast_cnt->category_order + 1;
+								$a_cat = AuditTemplateCategory::create(['category_order' => $cat_order,
+									'audit_template_id' => $template->id, 
+									'category_id' => $category->id]);
+								$a_cat_id = $a_cat->id;
+							}else{
+								$a_cat_id = $cat->id;
+							}
+						}
+
+						$grp_order = 1;
+						$a_grp_id = 0;
+						$glast_cnt = AuditTemplateGroup::getLastOrder($a_cat_id);
+						if(empty($glast_cnt)){
+							$a_grp = AuditTemplateGroup::create(['group_order' => $grp_order,
+								'audit_template_category_id' => $a_cat_id, 
+								'form_group_id' => $group->id]);
+							$a_grp_id = $a_grp->id;
+						}else{
+							$grp = AuditTemplateGroup::categoryExist($a_cat_id, $group->id);
+							if(empty($grp)){
+								$grp_order = $glast_cnt->group_order + 1;
+								$a_grp = AuditTemplateGroup::create(['group_order' => $grp_order,
+									'audit_template_category_id' => $a_cat_id, 
+									'form_group_id' => $group->id]);
+								$a_grp_id = $a_grp->id;
+							}else{
+								$a_grp_id = $grp->id;
+							}
+						}
+
+
 						$order = 1;
-
-
-						if(!empty($lastCategory)){
-							if($lastCategory->form_category_id == $category->id){
-								$catCnt = $lastCategory->category_order;
-							}else{
-								$existingCat = AuditTemplateForm::where('form_category_id',$category->id)
-									->where('audit_template_id',$template->id)
-									->first();
-								if(empty($existingCat)){
-									$catCnt = $lastCategory->category_order;
-									$catCnt++;
-								}else{
-									$catCnt = $existingCat->category_order;
-								}
-								
-							}	
+						$a_frm_id = 0;
+						$last_cnt = AuditTemplateForm::getLastOrder($a_grp_id);
+						if(!empty($last_cnt)){
+							$order = $last_cnt->order + 1;
 						}
 
-						if(!empty($lastGroupCount)){
-							if($lastGroupCount->form_group_id == $group->id){
-								$grpCnt = $lastGroupCount->group_order;
-							}else{
-								$existingGrp = AuditTemplateForm::where('form_category_id',$category->id)
-									->where('form_group_id',$group->id)
-									->where('audit_template_id',$template->id)
-									->first();
-								if(empty($existingGrp)){
-									$grpCnt = $lastGroupCount->group_order;
-									$grpCnt++;
-								}else{
-									$grpCnt = $existingGrp->group_order;
-								}
-								
-							}	
-						}
-
-						if(count($lastFormCount) > 0){
-							$order = $lastFormCount->order;
-							$order++;
-						}
 
 						AuditTemplateForm::create(array(
-							'category_order' => $catCnt,
-							'group_order' => $grpCnt,
+							'audit_template_group_id' => $a_grp_id,
 							'order' => $order,
-							'form_category_id' => $category->id,
-							'form_group_id' => $group->id,
 							'audit_template_id' => $template->id, 
 							'form_id' => $form->id
 							));

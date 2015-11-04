@@ -20,6 +20,7 @@ use App\FormCondition;
 use App\FormFormula;
 use App\FormMultiSelect;
 use App\FormSingleSelect;
+use App\AuditTemplateCategory;
 
 class AuditTemplateController extends Controller
 {
@@ -128,8 +129,7 @@ class AuditTemplateController extends Controller
 
 	public function forms($id){
 		$audittemplate = AuditTemplate::findOrFail($id);
-		$forms = AuditTemplateForm::getForms($id);
-		// dd($forms);
+		$forms = AuditTemplateCategory::getCategories($id);
 		return view('audittemplate.forms',compact('audittemplate', 'forms'));
 	}
 

@@ -27,6 +27,7 @@ class ImportMappingTableSeeder extends Seeder
 					$template = AuditTemplate::where('template',$row->template)->first();
 					if(count($template) == 0){
 						$newtemplate = new AuditTemplate;
+						$newtemplate->template_code = $row->channel_code;
 						$newtemplate->template = $row->template;
 						$newtemplate->save();
 					}

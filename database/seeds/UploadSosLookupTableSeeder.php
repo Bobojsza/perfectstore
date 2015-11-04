@@ -32,9 +32,11 @@ class UploadSosLookupTableSeeder extends Seeder
 		foreach ($reader->getSheetIterator() as $sheet) {
 			// dd($sheet);
 			if($sheet->getName() == 'Sheet1'){
+				$cnt = 0;
 				foreach ($sheet->getRowIterator() as $row) {
 					if(!is_null($row[0])){
-						$caip = $row[9];
+						if($cnt > 0){
+							$caip = $row[9];
 						$noncaip = str_replace("%","",$row[10])/100;
 
 						if(($caip > 0) || ($noncaip > 0)){
@@ -65,7 +67,7 @@ class UploadSosLookupTableSeeder extends Seeder
 							$template_id = 0;
 							$template = AuditTemplate::where('template',$row[4])->first();
 							if(!empty($template)){
-								$template_id = $store->id;
+								$template_id = $template->id;
 							}
 
 							$category = FormCategory::where('category',$row[5])->first();
@@ -100,6 +102,8 @@ class UploadSosLookupTableSeeder extends Seeder
 
 							
 						}
+						}
+						$cnt++;
 						
 					}
 				}
