@@ -39,7 +39,7 @@ class DownloadController extends Controller
         
 
         // get store list
-        if($type == 1){
+        if($type == "stores"){
             $writer = WriterFactory::create(Type::CSV); 
             $writer->openToBrowser('stores.txt');
             foreach ($storelist as $store) {
@@ -57,7 +57,7 @@ class DownloadController extends Controller
         }
 
         // get template categories
-        if($type == 2){
+        if($type == "temp_categories"){
             $categories = AuditTemplateCategory::select('audit_template_categories.id',
                     'audit_template_categories.audit_template_id', 
                     'audit_template_categories.category_id', 'form_categories.category', 'audit_template_categories.category_order')
@@ -84,7 +84,7 @@ class DownloadController extends Controller
         }
 
         // get template groups
-        if($type == 3){
+        if($type == " "){
             $c_list = array();
             $categories = AuditTemplateCategory::select('audit_template_categories.id',
                     'audit_template_categories.audit_template_id', 
@@ -101,7 +101,7 @@ class DownloadController extends Controller
             // dd($c_list);
 
             $groups = AuditTemplateGroup::select('audit_template_groups.id', 'audit_template_groups.form_group_id', 'form_groups.group_desc',
-                'audit_template_categories.audit_template_id', 'audit_template_groups.group_order')
+                'audit_template_categories.audit_template_id', 'audit_template_groups.group_order', 'audit_template_groups.audit_template_category_id')
                 ->join('audit_template_categories', 'audit_template_categories.id' , '=', 'audit_template_groups.audit_template_category_id')
                 ->join('form_groups', 'form_groups.id' , '=', 'audit_template_groups.form_group_id')
                 ->whereIn('audit_template_category_id',$c_list)
@@ -117,6 +117,7 @@ class DownloadController extends Controller
             foreach ($groups as $group) {
                 $data[0] = $group->id;
                 $data[1] = $group->audit_template_id;
+                $data[2] = $group->audit_template_category_id;
                 $data[3] = $group->group_order;
                 $data[4] = $group->form_group_id;
                 $data[5] = $group->group_desc;
@@ -128,7 +129,7 @@ class DownloadController extends Controller
         }
 
         // get template questions
-        if($type == 4){
+        if($type == "temp_questions"){
             // dd($list);
             $forms = AuditTemplateForm::select('audit_template_forms.id', 
                 'audit_template_forms.order',
@@ -164,7 +165,7 @@ class DownloadController extends Controller
         }
 
         // get template forms
-        if($type == 5){
+        if($type == "temp_forms"){
             $forms = Form::whereIn('forms.audit_template_id',$list)
                 ->get();
             
@@ -185,7 +186,7 @@ class DownloadController extends Controller
         }
 
         // get single selects
-        if($type == 6){
+        if($type == "single_selects"){
             $forms = Form::whereIn('forms.audit_template_id',$list)
                 ->where('form_type_id',10)
                 ->get();
@@ -215,7 +216,7 @@ class DownloadController extends Controller
         }
 
         // get multiple selects
-        if($type == 7){
+        if($type == "multi_selects"){
             $forms = Form::whereIn('forms.audit_template_id',$list)
                 ->where('form_type_id',9)
                 ->get();
@@ -242,7 +243,7 @@ class DownloadController extends Controller
         }
 
         // get formulas
-        if($type == 8){
+        if($type == "formulas"){
             $forms = Form::whereIn('forms.audit_template_id',$list)
                 ->where('form_type_id',11)
                 ->get();
@@ -265,7 +266,7 @@ class DownloadController extends Controller
         }
 
         // get conditions
-        if($type == 9){
+        if($type == "conditions"){
             $forms = Form::whereIn('forms.audit_template_id',$list)
                 ->where('form_type_id',12)
                 ->get();
@@ -289,7 +290,7 @@ class DownloadController extends Controller
         }
 
         // get secondary display lookup
-        if($type == 10){
+        if($type == "secondary_lookups"){
             $store_ids = array();
             foreach ($storelist as $store) {
                 $store_ids[] = $store->id;
@@ -314,7 +315,7 @@ class DownloadController extends Controller
         }
 
         // get secondary key list
-        if($type == 11){
+        if($type == "secondary_lists"){
             $keylist = FormGroup::where('secondary_display', 1)
                 ->get();
 
