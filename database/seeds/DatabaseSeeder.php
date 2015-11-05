@@ -17,6 +17,8 @@ class DatabaseSeeder extends Seeder
         $this->call(FormtypesTableSeeder::class);
         $this->call(RoleTableSeeder::class);
 
+        $this->call(SosTableSeeder::class);
+
         $this->call(ImportMappingTableSeeder::class);
         $this->call(ImportAuditTemplateTableSeeder::class);
 
