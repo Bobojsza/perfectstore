@@ -315,7 +315,7 @@ class DownloadController extends Controller
             foreach ($secondarydisplay as $category) {
                 $data[0] = $category->store_id;
                 $data[1] = $category->category_id;
-                $data[2] = $category->brand;
+                $data[2] = strtoupper($category->brand);
                 $writer->addRow($data); 
             }
 
