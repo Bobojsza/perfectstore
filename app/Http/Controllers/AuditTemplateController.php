@@ -355,104 +355,104 @@ class AuditTemplateController extends Controller
 	}
 
 	public function duplicatetemplate(Request $request, $id){
-		$template = AuditTemplate::findOrFail($id);
-		\DB::beginTransaction();
+		// $template = AuditTemplate::findOrFail($id);
+		// \DB::beginTransaction();
 
-        try {
-            $this->validate($request, [
-				'template' => 'required|unique:audit_templates|max:100',
-			]);
+  //       try {
+  //           $this->validate($request, [
+		// 		'template' => 'required|unique:audit_templates|max:100',
+		// 	]);
 
-			$newtemplate = new AuditTemplate;
-			$newtemplate->template = $request->template;
-			$newtemplate->save();
+		// 	$newtemplate = new AuditTemplate;
+		// 	$newtemplate->template = $request->template;
+		// 	$newtemplate->save();
 
-			$oldforms = AuditTemplateForm::where('audit_template_id',$template->id)->get();
-			// dd($oldforms);
-			foreach ($oldforms as $oldform) {
-				$form = Form::find($oldform->form_id);
-				if($form->form_type_id == 11){
-					$choice = FormFormula::where('form_id',$form->id)->first();
+		// 	$oldforms = AuditTemplateForm::where('audit_template_id',$template->id)->get();
+		// 	// dd($oldforms);
+		// 	foreach ($oldforms as $oldform) {
+		// 		$form = Form::find($oldform->form_id);
+		// 		if($form->form_type_id == 11){
+		// 			$choice = FormFormula::where('form_id',$form->id)->first();
 					
-					$index1 = array();
-					$index2 = array();
-					preg_match_all('/{(.*?)}/', $choice->formula, $matches);
-					foreach ($matches[1] as $key => $a ){
-						$data = Form::find($a);
-						$other_form = FormRepository::duplicate($newtemplate,$data->id);
-						$index1[$a] = $other_form->id;
-						$index2[$a] = $other_form->prompt.'_'.$other_form->id;
+		// 			$index1 = array();
+		// 			$index2 = array();
+		// 			preg_match_all('/{(.*?)}/', $choice->formula, $matches);
+		// 			foreach ($matches[1] as $key => $a ){
+		// 				$data = Form::find($a);
+		// 				$other_form = FormRepository::duplicate($newtemplate,$data->id);
+		// 				$index1[$a] = $other_form->id;
+		// 				$index2[$a] = $other_form->prompt.'_'.$other_form->id;
 						
-					}
-					$formula1 = $choice->formula;
-					$formula2 = $choice->formula_desc;
-					foreach ($matches[1] as $key => $a ){
-						$formula1 = str_replace('{'.$a.'}',$index1[$a], $formula1);
-						$formula2 = str_replace('{'.$a.'}', ' :'.$index2[$a].': ', $formula2);
+		// 			}
+		// 			$formula1 = $choice->formula;
+		// 			$formula2 = $choice->formula_desc;
+		// 			foreach ($matches[1] as $key => $a ){
+		// 				$formula1 = str_replace('{'.$a.'}',$index1[$a], $formula1);
+		// 				$formula2 = str_replace('{'.$a.'}', ' :'.$index2[$a].': ', $formula2);
 						
-					}
-					$newform = FormRepository::duplicate($newtemplate,$oldform->form_id,$formula1,$formula2);
+		// 			}
+		// 			$newform = FormRepository::duplicate($newtemplate,$oldform->form_id,$formula1,$formula2);
 				
-				}elseif ($form->form_type_id == 12) {
-					$choices = FormCondition::where('form_id',$form->id)->get();
+		// 		}elseif ($form->form_type_id == 12) {
+		// 			$choices = FormCondition::where('form_id',$form->id)->get();
 
-					foreach ($choices as $choice) {
-						// $with_value = preg_match('/{(.*?)}/', $choice->condition, $match);
-						$option = $choice->condition;
-						$x1 = array();
-						$x2 = array();
-						$_opt1 = "";
-						$_opt2 = "";
-						if(!empty($choice->condition)){
-							$codes = explode('^', $choice->condition);
-							if(count($codes)> 0){
-								foreach ($codes as $code) {
-									$other_data = Form::find($code);
-									$other_form = FormRepository::duplicate($newtemplate,$other_data->id);
-									$x1[] = $other_form->id;
-									$x2[] = $other_form->prompt.'_'.$other_form->id;
-								}
-							}
+		// 			foreach ($choices as $choice) {
+		// 				// $with_value = preg_match('/{(.*?)}/', $choice->condition, $match);
+		// 				$option = $choice->condition;
+		// 				$x1 = array();
+		// 				$x2 = array();
+		// 				$_opt1 = "";
+		// 				$_opt2 = "";
+		// 				if(!empty($choice->condition)){
+		// 					$codes = explode('^', $choice->condition);
+		// 					if(count($codes)> 0){
+		// 						foreach ($codes as $code) {
+		// 							$other_data = Form::find($code);
+		// 							$other_form = FormRepository::duplicate($newtemplate,$other_data->id);
+		// 							$x1[] = $other_form->id;
+		// 							$x2[] = $other_form->prompt.'_'.$other_form->id;
+		// 						}
+		// 					}
 							
-							if(count($x1) > 0){
-								$_opt1 = implode("^", $x1);
-							}
-							if(count($x2) > 0){
-								$_opt2 = implode("^", $x2);
-							}
-						}
+		// 					if(count($x1) > 0){
+		// 						$_opt1 = implode("^", $x1);
+		// 					}
+		// 					if(count($x2) > 0){
+		// 						$_opt2 = implode("^", $x2);
+		// 					}
+		// 				}
 						
-						$data_con[] = ['option' => $choice->option, 'condition' => $_opt1, 'condition_desc' => $_opt2];
+		// 				$data_con[] = ['option' => $choice->option, 'condition' => $_opt1, 'condition_desc' => $_opt2];
 						
-					}
-					$newform = FormRepository::duplicate($newtemplate,$oldform->form_id,array(),array(),$data_con);
-				}
-				else{
-					$newform = FormRepository::duplicate($newtemplate,$oldform->form_id);
-				}
+		// 			}
+		// 			$newform = FormRepository::duplicate($newtemplate,$oldform->form_id,array(),array(),$data_con);
+		// 		}
+		// 		else{
+		// 			$newform = FormRepository::duplicate($newtemplate,$oldform->form_id);
+		// 		}
 
-				// dd($newform->id);
-				AuditTemplateForm::insert(array(
-					'category_order' => $oldform->category_order,
-					'order' => $oldform->order,
-					'form_category_id' => $oldform->form_category_id,
-					'form_group_id' => $oldform->form_group_id,
-					'audit_template_id' => $newtemplate->id, 
-					'form_id' => $newform->id,
-				));
-			}
+		// 		// dd($newform->id);
+		// 		AuditTemplateForm::insert(array(
+		// 			'category_order' => $oldform->category_order,
+		// 			'order' => $oldform->order,
+		// 			'form_category_id' => $oldform->form_category_id,
+		// 			'form_group_id' => $oldform->form_group_id,
+		// 			'audit_template_id' => $newtemplate->id, 
+		// 			'form_id' => $newform->id,
+		// 		));
+		// 	}
 
-            \DB::commit();
+  //           \DB::commit();
 
-            Session::flash('flash_message', 'Template successfully added!');
-			return redirect()->route("audittemplate.form",$newtemplate->id);
+  //           Session::flash('flash_message', 'Template successfully added!');
+		// 	return redirect()->route("audittemplate.form",$newtemplate->id);
 
-        } catch (Exception $e) {
-            DB::rollBack();
-            dd($e);
-            Session::flash('flash_message', 'An error occured in adding form!');
-            return redirect()->back();
-        }
+  //       } catch (Exception $e) {
+  //           DB::rollBack();
+  //           dd($e);
+  //           Session::flash('flash_message', 'An error occured in adding form!');
+  //           return redirect()->back();
+  //       }
 
 		
 

@@ -49,6 +49,7 @@ class FormGroupController extends Controller
             $group = new FormGroup;
             $group->group_desc = $request->group_desc;
             $group->secondary_display = ($request->secondary_display) ? 1 : 0;
+            $group->osa = ($request->osa) ? 1 : 0;            
             $group->save();
 
             \DB::commit();
@@ -106,6 +107,7 @@ class FormGroupController extends Controller
         try {
             $group->group_desc = strtoupper($request->group_desc);
             $group->secondary_display = ($request->secondary_display) ? 1 : 0;
+            $group->osa = ($request->osa) ? 1 : 0;            
             $group->update();
             \DB::commit();
 

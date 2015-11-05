@@ -34,4 +34,13 @@ class OsaLookup extends Model
     public function categories(){
         return $this->hasMany('App\OsaLookupTarget','osa_lookup_id', 'id');
     }
+
+    // public static function getOsaCategory($id){
+    //     $store = Store::find($id);
+    //     $lookup = self::all();
+    //     // store level
+    //     foreach ($lookup as $value) {
+    //         if($store->)
+    //     }
+    // }
 }

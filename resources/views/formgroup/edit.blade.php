@@ -23,6 +23,12 @@
 		                  	{!! Form::checkbox('secondary_display', 1, $formgroup->secondary_display) !!} Secondary Display Tag
 		                  </label>
 		                </div>
+
+		                <div class="checkbox">
+		                  <label>
+		                  	{!! Form::checkbox('osa', 1, $formgroup->osa) !!} OSA Tag
+		                  </label>
+		                </div>
 				  	</div><!-- /.box-body -->
 
 				 	<div class="box-footer">

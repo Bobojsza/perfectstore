@@ -113,7 +113,7 @@ class DownloadController extends Controller
 
             $writer = WriterFactory::create(Type::CSV); 
             $writer->openToBrowser('temp_group.txt');
-            $writer->addRow(['id', 'audit_template_id', 'group_order', 'form_group_id', 'group_desc']); 
+            $writer->addRow(['id', 'audit_template_id', 'audit_template_category_id', 'group_order', 'form_group_id','group_desc']); 
             foreach ($groups as $group) {
                 $data[0] = $group->id;
                 $data[1] = $group->audit_template_id;
@@ -336,6 +336,30 @@ class DownloadController extends Controller
 
             $writer->close();
         }
+
+        // get osa key list
+        if($type == "osa_lists"){
+            $keylist = FormGroup::where('osa', 1)
+                ->get();
+
+            $writer = WriterFactory::create(Type::CSV); 
+            $writer->openToBrowser('osa_keylist.txt');
+            $writer->addRow(['id']); 
+            foreach ($keylist as $list) {
+                $data[0] = $list->id;
+                $writer->addRow($data); 
+            }
+
+            $writer->close();
+        }
+
+        if($type == "osa_lookups"){
+            foreach ($storelist as $store) {
+                # code...
+            }
+        }
+
+
 
         
     }
