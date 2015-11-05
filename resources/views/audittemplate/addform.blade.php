@@ -18,14 +18,14 @@
                   <div class="row">
                      <div class="form-group col-md-6">
                            {!! Form::label('category', 'Form Category'); !!}
-                           {!! Form::select('category', $formcategories, null,['class' => 'form-control', 'id' => 'category']) !!}
+                           {!! Form::select('category[]', $formcategories, null, array('id' => 'category', 'class' => 'form-control multiselect', 'multiple' => 'multiple')) !!}
                      </div>
                   </div>
 
                   <div class="row">
                      <div class="form-group col-md-6">
                            {!! Form::label('group', 'Form Group'); !!}
-                           {!! Form::select('group', $formgroups, null,['class' => 'form-control', 'id' => 'group']) !!}
+                           {!! Form::select('group[]', $formgroups, null, array('id' => 'group', 'class' => 'form-control multiselect', 'multiple' => 'multiple')) !!}
                      </div>
                   </div>
 
@@ -107,6 +107,15 @@
 @section('page-script')
 
 $(document).ready(function (){
+   $('#category,#group').multiselect({
+      maxHeight: 200,
+      includeSelectAllOption: true,
+      enableCaseInsensitiveFiltering: true,
+      enableFiltering: true,
+      buttonWidth: '100%',
+      buttonClass: 'form-control'
+   });
+
    function showOne(id) { 
       $('.form-hide').hide(1000);
       $('#'+id).show(1000); 

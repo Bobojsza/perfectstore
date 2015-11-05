@@ -21,6 +21,7 @@ use App\FormFormula;
 use App\FormMultiSelect;
 use App\FormSingleSelect;
 use App\AuditTemplateCategory;
+use App\AuditTemplateGroup;
 
 class AuditTemplateController extends Controller
 {
@@ -129,7 +130,9 @@ class AuditTemplateController extends Controller
 
 	public function forms($id){
 		$audittemplate = AuditTemplate::findOrFail($id);
+
 		$forms = AuditTemplateCategory::getCategories($id);
+		// dd($forms);
 		return view('audittemplate.forms',compact('audittemplate', 'forms'));
 	}
 
@@ -146,139 +149,142 @@ class AuditTemplateController extends Controller
 	public function storeform(Request $request, $id){
 		// dd($request->all());
 
-		$this->validate($request, [
-            'category' => 'required|not_in:0',
-            'group' => 'required|not_in:0',
-            'prompt' => 'required',
-            'formtype' => 'required|not_in:0'
-        ]);
+		// $this->validate($request, [
+  //           'category' => 'required',
+  //           'group' => 'required',
+  //           'prompt' => 'required',
+  //           'formtype' => 'required'
+  //       ]);
 
 		 \DB::beginTransaction();
 
         try {
             $template = AuditTemplate::find($id);
-			$group = FormGroup::find($request->group);
-			$category = FormCategory::find($request->category);
-			$form_type = FormType::find($request->formtype);
-			$prompt = $request->prompt;
+            $form_type = FormType::find($request->formtype);
+            $prompt = $request->prompt;
 
+            foreach ($request->category as $cat_id) {
 
-
-			$form = Form::create(array(
-					'audit_template_id' => $template->id,
-					'form_type_id' => $form_type->id,
-					'prompt' => strtoupper($prompt),
-					'required' => ($request->required == '1') ? 1 : 0,
-					'expected_answer' => ($request->expected_answer == '1') ? 1 : 0,
-					'exempt' => ($request->exempt == '1') ? 1 : 0,
-				));
-
-			if($request->formtype == 9){
-				$multiData = array();
-				foreach ($request->multiselect as $option) {
-					$multiData[] = array('form_id' => $form->id, 'multi_select_id' => $option);
-				}
-				if(count($multiData) > 0){
-					FormMultiSelect::insert($multiData);
-				}
-			}
-
-			if($request->formtype == 10){
-				$singleData = array();
-				foreach ($request->singleselect as $option) {
-					$singleData[] = array('form_id' => $form->id, 'single_select_id' => $option);
-				}
-				if(count($singleData) > 0){
-					FormSingleSelect::insert($singleData);
-				}
-			}
-
-			if($request->formtype == 11){
-				if ($request->has('formula')) {
-					$text = $request->formula;
-					preg_match_all('/:(.*?):/', $text, $matches);					
-					$index = array();
-					foreach ($matches[1] as $value) {
-						$split_up = explode('_', $value);
-		  				$last_item = $split_up[count($split_up)-1];
-						$index[] = $last_item;
-					}
-					$formula1 = $text;
-					foreach ($matches[1] as $key => $a ){
-						$formula1 = str_replace(':'.$a.':',$index[$key], $formula1);
-					}
-				    $formformula = new FormFormula;
-				    $formformula->form_id = $form->id;
-				    $formformula->formula = $formula1;
-				    $formformula->formula_desc = $request->formula;
-				    $formformula->save();
-				}
-			}
-
-			if($request->formtype == 12 ){
-				if ($request->has('condition')) {
-					
-				}
-			}
-
-			$lastCategory = AuditTemplateForm::getLastCategoryCount($template->id);
-			$lastGroupCount = AuditTemplateForm::getLastGroupCount($template->id, $category->id);
-			$lastFormCount = AuditTemplateForm::getLastFormCount($template->id, $category->id,$group->id);
-
-			$catCnt = 1;
-			$grpCnt = 1;
-			$order = 1;
-
-
-			if(!empty($lastCategory)){
-				if($lastCategory->form_category_id == $category->id){
-					$catCnt = $lastCategory->category_order;
+            	$category = FormCategory::find($cat_id);
+            	$cat_order = 1;
+				$a_cat_id = 0;
+				$clast_cnt = AuditTemplateCategory::getLastOrder($template->id);
+				if(empty($clast_cnt)){
+					$a_cat = AuditTemplateCategory::create(['category_order' => $cat_order,
+						'audit_template_id' => $template->id, 
+						'category_id' => $category->id]);
+					$a_cat_id = $a_cat->id;
 				}else{
-					$existingCat = AuditTemplateForm::where('form_category_id',$category->id)
-						->where('audit_template_id',$template->id)
-						->first();
-					if(empty($existingCat)){
-						$catCnt = $lastCategory->category_order;
-						$catCnt++;
+					$cat = AuditTemplateCategory::categoryExist($template->id, $category->id);
+					if(empty($cat)){
+						$cat_order = $clast_cnt->category_order + 1;
+						$a_cat = AuditTemplateCategory::create(['category_order' => $cat_order,
+							'audit_template_id' => $template->id, 
+							'category_id' => $category->id]);
+						$a_cat_id = $a_cat->id;
 					}else{
-						$catCnt = $existingCat->category_order;
+						$a_cat_id = $cat->id;
 					}
-					
-				}	
-			}
+				}
 
-			if(!empty($lastGroupCount)){
-				if($lastGroupCount->form_group_id == $group->id){
-					$grpCnt = $lastGroupCount->group_order;
-				}else{
-					$existingGrp = AuditTemplateForm::where('form_category_id',$category->id)
-						->where('form_group_id',$group->id)
-						->where('audit_template_id',$template->id)
-						->first();
-					if(empty($existingGrp)){
-						$grpCnt = $lastGroupCount->group_order;
-						$grpCnt++;
+            	foreach ($request->group as $grp_id) {
+            		$group = FormGroup::find($grp_id);
+            		$grp_order = 1;
+					$a_grp_id = 0;
+					$glast_cnt = AuditTemplateGroup::getLastOrder($a_cat_id);
+					if(empty($glast_cnt)){
+						$a_grp = AuditTemplateGroup::create(['group_order' => $grp_order,
+							'audit_template_category_id' => $a_cat_id, 
+							'form_group_id' => $group->id]);
+						$a_grp_id = $a_grp->id;
 					}else{
-						$grpCnt = $existingGrp->group_order;
+						$grp = AuditTemplateGroup::categoryExist($a_cat_id, $group->id);
+						if(empty($grp)){
+							$grp_order = $glast_cnt->group_order + 1;
+							$a_grp = AuditTemplateGroup::create(['group_order' => $grp_order,
+								'audit_template_category_id' => $a_cat_id, 
+								'form_group_id' => $group->id]);
+							$a_grp_id = $a_grp->id;
+						}else{
+							$a_grp_id = $grp->id;
+						}
 					}
-					
-				}	
-			}
 
-			if(count($lastFormCount) > 0){
-				$order = $lastFormCount->order;
-				$order++;
-			}
+            		$form = Form::create(array(
+						'audit_template_id' => $template->id,
+						'form_type_id' => $form_type->id,
+						'prompt' => strtoupper($prompt),
+						'required' => ($request->required == '1') ? 1 : 0,
+						'expected_answer' => ($request->expected_answer == '1') ? 1 : 0,
+						'exempt' => ($request->exempt == '1') ? 1 : 0,
+					));
 
-			AuditTemplateForm::insert(array(
-				'category_order' => $catCnt,
-				'group_order' => $grpCnt,
-				'order' => $order,
-				'form_category_id' => $category->id,
-				'form_group_id' => $group->id,
-				'audit_template_id' => $template->id, 
-				'form_id' => $form->id
-				));
+					if($request->formtype == 9){
+						$multiData = array();
+						foreach ($request->multiselect as $option) {
+							$multiData[] = array('form_id' => $form->id, 'multi_select_id' => $option);
+						}
+						if(count($multiData) > 0){
+							FormMultiSelect::insert($multiData);
+						}
+					}
+
+					if($request->formtype == 10){
+						$singleData = array();
+						foreach ($request->singleselect as $option) {
+							$singleData[] = array('form_id' => $form->id, 'single_select_id' => $option);
+						}
+						if(count($singleData) > 0){
+							FormSingleSelect::insert($singleData);
+						}
+					}
+
+					if($request->formtype == 11){
+						if ($request->has('formula')) {
+							$text = $request->formula;
+							preg_match_all('/:(.*?):/', $text, $matches);					
+							$index = array();
+							foreach ($matches[1] as $value) {
+								$split_up = explode('_', $value);
+				  				$last_item = $split_up[count($split_up)-1];
+								$index[] = $last_item;
+							}
+							$formula1 = $text;
+							foreach ($matches[1] as $key => $a ){
+								$formula1 = str_replace(':'.$a.':',$index[$key], $formula1);
+							}
+						    $formformula = new FormFormula;
+						    $formformula->form_id = $form->id;
+						    $formformula->formula = $formula1;
+						    $formformula->formula_desc = $request->formula;
+						    $formformula->save();
+						}
+					}
+
+					if($request->formtype == 12 ){
+						if ($request->has('condition')) {
+							
+						}
+					}
+
+
+					$order = 1;
+					$a_frm_id = 0;
+					$last_cnt = AuditTemplateForm::getLastOrder($a_grp_id);
+					if(!empty($last_cnt)){
+						$order = $last_cnt->order + 1;
+					}
+
+
+					AuditTemplateForm::insert(array(
+						'audit_template_group_id' => $a_grp_id,
+						'order' => $order,
+						'audit_template_id' => $template->id, 
+						'form_id' => $form->id
+					));
+            	}
+            }
+
 
             \DB::commit();
 
@@ -295,31 +301,25 @@ class AuditTemplateController extends Controller
 	}
 
 	public function updateorder(Request $request, $id){
+		// dd($request->all());
 		if($request->has('c_id')){
-			$category = array();
 			foreach ($request->c_id as $key => $value) {
-				$ids = array();
-				$records = AuditTemplateForm::select('id')
-					->where('category_order', $key)
-					->where('audit_template_id', $id)
-					->get();
-
-				foreach ($records as $row) {
-					$ids[] = $row->id;
-				}
-				$category[$value] = $ids;
-			}
-
-			foreach ($category as $key => $value) {
-				AuditTemplateForm::select('id')
-					->whereIn('id', $value)
-					->update(['category_order' => $key]);
+				$category = AuditTemplateCategory::find($key);
+				$category->category_order = $value;
+				$category->update();
 			}
 		}
 
-		if ($request->has('p_id')) {
-			$forms = array();
-			foreach ($request->p_id as $key => $order) {
+		if ($request->has('g_id')) {
+			foreach ($request->g_id as $key => $order) {
+				$group = AuditTemplateGroup::find($key);
+				$group->group_order = $order;
+				$group->update();
+			}
+		}
+
+		if ($request->has('f_id')) {
+			foreach ($request->f_id as $key => $order) {
 				$form = AuditTemplateForm::find($key);
 				$form->order = $order;
 				$form->update();
