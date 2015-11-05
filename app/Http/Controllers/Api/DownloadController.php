@@ -42,7 +42,7 @@ class DownloadController extends Controller
         if($type == "stores"){
             $writer = WriterFactory::create(Type::CSV); 
             $writer->openToBrowser('stores.txt');
-            $writer->addRow('id', 'store', 'grade_matrix_id', 'audit_template_id', 'template'); 
+            $writer->addRow(['id', 'store', 'grade_matrix_id', 'audit_template_id', 'template']); 
             foreach ($storelist as $store) {
                 $store_ids[] = $store->id;
                 $data[0] = $store->id;
@@ -145,7 +145,7 @@ class DownloadController extends Controller
             // dd($forms);
             $writer = WriterFactory::create(Type::CSV); 
             $writer->openToBrowser('questions.txt');
-            $writer->addRow('id', 'order', 'audit_template_group_id', 'audit_template_id', 'form_id', 'form_type_id', 'prompt', 'required', 'expected_answer', 'exempt'); 
+            $writer->addRow(['id', 'order', 'audit_template_group_id', 'audit_template_id', 'form_id', 'form_type_id', 'prompt', 'required', 'expected_answer', 'exempt']); 
             foreach ($forms as $form) {
                 $data[0] = $form->id;
                 $data[1] = $form->order;
@@ -172,7 +172,7 @@ class DownloadController extends Controller
             
             $writer = WriterFactory::create(Type::CSV); 
             $writer->openToBrowser('forms.txt');
-            $writer->addRow('id', 'audit_template_id', 'form_type_id', 'prompt', 'required', 'expected_answer', 'exempt'); 
+            $writer->addRow(['id', 'audit_template_id', 'form_type_id', 'prompt', 'required', 'expected_answer', 'exempt']); 
             foreach ($forms as $form) {
                 $data[0] = $form->id;
                 $data[1] = $form->audit_template_id;
@@ -207,7 +207,7 @@ class DownloadController extends Controller
 
             $writer = WriterFactory::create(Type::CSV); 
             $writer->openToBrowser('single_selects.txt');
-            $writer->addRow('form_id', 'id', 'option'); 
+            $writer->addRow(['form_id', 'id', 'option']); 
             foreach ($selections as $selection) {
                 $data[0] = $selection->form_id;
                 $data[1] = $selection->id;
@@ -235,7 +235,7 @@ class DownloadController extends Controller
                 ->get();
             $writer = WriterFactory::create(Type::CSV); 
             $writer->openToBrowser('multi_selects.txt');
-            $writer->addRow('form_id', 'id', 'option'); 
+            $writer->addRow(['form_id', 'id', 'option']); 
             foreach ($selections as $selection) {
                 $data[0] = $selection->form_id;
                 $data[1] = $selection->id;
@@ -260,7 +260,7 @@ class DownloadController extends Controller
                 ->get();
             $writer = WriterFactory::create(Type::CSV); 
             $writer->openToBrowser('formula.txt');
-            $writer->addRow('form_id', 'formula'); 
+            $writer->addRow(['form_id', 'formula']); 
             foreach ($formulas as $formula) {
                 $data[0] = $formula->form_id;
                 $data[1] = $formula->formula;
@@ -283,7 +283,7 @@ class DownloadController extends Controller
             $conditions = FormCondition::select('form_conditions.form_id', 'option', 'condition')->get();
             $writer = WriterFactory::create(Type::CSV); 
             $writer->openToBrowser('conditions.txt');
-            $writer->addRow('form_id', 'option', 'condition'); 
+            $writer->addRow(['form_id', 'option', 'condition']); 
             foreach ($conditions as $condition) {
                 $data[0] = $condition->form_id;
                 $data[1] = $condition->option;
@@ -310,7 +310,7 @@ class DownloadController extends Controller
 
             $writer = WriterFactory::create(Type::CSV); 
             $writer->openToBrowser('secondarydisplay.txt');
-            $writer->addRow('store_id', 'category_id', 'brand'); 
+            $writer->addRow(['store_id', 'category_id', 'brand']); 
             foreach ($secondarydisplay as $category) {
                 $data[0] = $category->store_id;
                 $data[1] = $category->category_id;
@@ -328,7 +328,7 @@ class DownloadController extends Controller
 
             $writer = WriterFactory::create(Type::CSV); 
             $writer->openToBrowser('secondary_keylist.txt');
-            $writer->addRow('id'); 
+            $writer->addRow(['id']); 
             foreach ($keylist as $list) {
                 $data[0] = $list->id;
                 $writer->addRow($data); 
