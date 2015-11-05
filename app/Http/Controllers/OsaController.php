@@ -62,10 +62,10 @@ class OsaController extends Controller
             'unique_with' => 'This combination of selection already exists.',
         ];
         $this->validate($request, [
-            'customer_id' => 'required|unique_with:osa_lookups, regions = region_id, distributors = distributor_id, stores = store_id, templates = template_id',
+            'customer_id' => 'required|unique_with:osa_lookups, regions = region_id, distributors = distributor_id, store_id = store_id, templates = template_id',
             'regions' => 'required',
             'distributors' => 'required',
-            'stores' => 'required',
+            'store_id' => 'required|unique_with:osa_lookups',
             'templates' => 'required'
         ],$messages);
 
@@ -76,7 +76,7 @@ class OsaController extends Controller
             $lookup->customer_id = $request->customer_id;
             $lookup->region_id = $request->regions;
             $lookup->distributor_id = $request->distributors;
-            $lookup->store_id = $request->stores;
+            $lookup->store_id = $request->store_id;
             $lookup->template_id = $request->templates;
             $lookup->save();
 
@@ -152,10 +152,10 @@ class OsaController extends Controller
             'unique_with' => 'This combination of selection already exists.',
         ];
         $this->validate($request, [
-            'customer_id' => 'required|unique_with:osa_lookups, regions = region_id, distributors = distributor_id, stores = store_id, templates = template_id,'.$id,
+            'customer_id' => 'required|unique_with:osa_lookups, regions = region_id, distributors = distributor_id, store_id = store_id, templates = template_id,'.$id,
             'regions' => 'required',
             'distributors' => 'required',
-            'stores' => 'required',
+            'store_id' => 'required',
             'templates' => 'required'
         ],$messages);
 

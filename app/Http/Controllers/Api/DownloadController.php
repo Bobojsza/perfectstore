@@ -16,6 +16,7 @@ use App\SecondaryDisplayLookup;
 use App\FormGroup;
 use App\AuditTemplateCategory;
 use App\AuditTemplateGroup;
+use App\OsaLookup;
 
 use Box\Spout\Reader\ReaderFactory;
 use Box\Spout\Common\Type;
@@ -354,11 +355,26 @@ class DownloadController extends Controller
         }
 
         if($type == "osa_lookups"){
+            $writer = WriterFactory::create(Type::CSV); 
+            $writer->openToBrowser('osa_lookups.txt');
             foreach ($storelist as $store) {
-                # code...
+                $lookup = OsaLookup::getOsaCategory($store->id);
+                foreach ($lookup->categories as $category) {
+                    $data[0] = $store->id;
+                    $data[1] = $category->category_id;
+                    $data[2] = $category->target;
+                    $data[3] = $category->total;
+                    $data[4] = $lookup->id;
+                    $writer->addRow($data); 
+                }
             }
+            $writer->close();
         }
 
+
+            
+
+            
 
 
         

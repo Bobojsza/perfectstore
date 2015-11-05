@@ -42,8 +42,8 @@
 				  		
 				  		<div class="row">
 				  			<div class="form-group col-md-6">
-						   		{!! Form::label('stores', 'Store'); !!}
-		                    	{!! Form::select('stores', array('0' => 'ALL STORES') +$stores, $lookup->store_id,['class' => 'form-control', 'id' => 'stores']) !!}
+						   		{!! Form::label('store_id', 'Store'); !!}
+		                    	{!! Form::select('store_id', array('0' => 'ALL STORES') +$stores, $lookup->store_id,['class' => 'form-control', 'id' => 'store_id']) !!}
 							</div>
 				  		</div>
 
