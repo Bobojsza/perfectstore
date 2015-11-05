@@ -15,7 +15,7 @@ class SosTableSeeder extends Seeder
 
 		DB::statement("INSERT INTO sos_taggings (id, sos_tag) VALUES
 			(1, 'CAIP'),
-			(2, 'NONCAIP);");
+			(2, 'NONCAIP');");
 		DB::statement('SET FOREIGN_KEY_CHECKS=1;');
     }
 }
