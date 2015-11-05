@@ -149,12 +149,12 @@ class AuditTemplateController extends Controller
 	public function storeform(Request $request, $id){
 		// dd($request->all());
 
-		// $this->validate($request, [
-  //           'category' => 'required',
-  //           'group' => 'required',
-  //           'prompt' => 'required',
-  //           'formtype' => 'required'
-  //       ]);
+		$this->validate($request, [
+            'category' => 'required',
+            'group' => 'required',
+            'prompt' => 'required',
+            'formtype' => 'required'
+        ]);
 
 		 \DB::beginTransaction();
 
