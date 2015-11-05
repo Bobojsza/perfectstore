@@ -83,7 +83,7 @@ class DownloadController extends Controller
         }
 
         // get template groups
-        if($type == " "){
+        if($type == "temp_groups"){
             $c_list = array();
             $categories = AuditTemplateCategory::select('audit_template_categories.id',
                     'audit_template_categories.audit_template_id', 
