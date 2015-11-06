@@ -33,6 +33,7 @@
 								<th>Group</th>
 								<th>Secondary Display Tag</th>
 								<th>OSA Tag</th>
+								<th>SOS Tag</th>
 								<th>Action</th>
 							</tr>
 							@foreach($formgroups as $group)
@@ -46,6 +47,11 @@
 								</td>
 								<td>
 									@if($group->osa == 1)
+									<i class="fa fa-fw fa-check"></i>
+									@endif
+								</td>
+								<td>
+									@if($group->sos == 1)
 									<i class="fa fa-fw fa-check"></i>
 									@endif
 								</td>

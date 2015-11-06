@@ -17,6 +17,7 @@ use App\FormGroup;
 use App\AuditTemplateCategory;
 use App\AuditTemplateGroup;
 use App\OsaLookup;
+use App\SosLookup;
 
 use Box\Spout\Reader\ReaderFactory;
 use Box\Spout\Common\Type;
@@ -357,6 +358,7 @@ class DownloadController extends Controller
         if($type == "osa_lookups"){
             $writer = WriterFactory::create(Type::CSV); 
             $writer->openToBrowser('osa_lookups.txt');
+            $writer->addRow(['id', 'category_id', 'target', 'total', 'lookup_id']); 
             foreach ($storelist as $store) {
                 $lookup = OsaLookup::getOsaCategory($store->id);
                 foreach ($lookup->categories as $category) {
@@ -365,6 +367,41 @@ class DownloadController extends Controller
                     $data[2] = $category->target;
                     $data[3] = $category->total;
                     $data[4] = $lookup->id;
+                    $writer->addRow($data); 
+                }
+            }
+            $writer->close();
+        }
+
+        // sos lookup
+        if($type == "sos_lists"){
+            $keylist = FormGroup::where('sos', 1)
+                ->get();
+
+            $writer = WriterFactory::create(Type::CSV); 
+            $writer->openToBrowser('sos_keylist.txt');
+            $writer->addRow(['id']); 
+            foreach ($keylist as $list) {
+                $data[0] = $list->id;
+                $writer->addRow($data); 
+            }
+
+            $writer->close();
+        }
+        
+        if($type == "sos_lookups"){
+            $writer = WriterFactory::create(Type::CSV); 
+            $writer->openToBrowser('sos_lookups.txt');
+            $writer->addRow(['id', 'category_id', 'sos_id', 'less', 'value', 'sos_lookup_id']); 
+            foreach ($storelist as $store) {
+                $lookup = SosLookup::getSosCategory($store->id);
+                foreach ($lookup->categories as $category) {
+                    $data[0] = $store->id;
+                    $data[1] = $category->category_id;
+                    $data[2] = $category->sos_id;
+                    $data[3] = $category->less;
+                    $data[4] = $category->value;
+                    $data[5] = $category->sos_lookup_id;
                     $writer->addRow($data); 
                 }
             }

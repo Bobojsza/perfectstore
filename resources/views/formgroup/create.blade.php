@@ -29,6 +29,12 @@
 		                  	{!! Form::checkbox('osa', 1) !!} OSA Tag
 		                  </label>
 		                </div>
+
+		                <div class="checkbox">
+		                  <label>
+		                  	{!! Form::checkbox('sos', 1) !!} SOS Tag
+		                  </label>
+		                </div>
 				  	</div><!-- /.box-body -->
 
 				 	<div class="box-footer">
