@@ -50,7 +50,7 @@ class SecondarylookupController extends Controller
     {
         $store = Store::findOrFail($request->store_id);
         $this->validate($request, [
-            'store_id' => 'required|not_in:0|unique_with:secondary_display_lookups',
+            'store_id' => 'required',
             'brands' => 'required',
         ]);
 
@@ -116,7 +116,29 @@ class SecondarylookupController extends Controller
      */
     public function update(Request $request, $id)
     {
-        dd(1);
+        $store = Store::findOrFail($id);
+        $this->validate($request, [
+            'store_id' => 'required',
+            'brands' => 'required',
+        ]);
+
+        \DB::beginTransaction();
+
+        try {
+            SecondaryDisplayLookup::where('store_id',$store->id)->delete();
+            foreach ($request->brands as $value) {
+                SecondaryDisplayLookup::create(['store_id' => $store->id, 'secondary_display_id' => $value ]);
+            }
+
+            \DB::commit();
+
+            Session::flash('flash_message', 'Secondary Display Lookup successfully updated!');
+            return redirect()->route("secondarylookup.edit",[$id]);
+
+        } catch (Exception $e) {
+            DB::rollBack();
+            return redirect()->back();
+        }
     }
 
     /**

@@ -14,8 +14,8 @@
 				{!! Form::open(array('route' => array('secondarylookup.update', $store->id),'method' => 'put')) !!}
 				  	<div class="box-body">
 				  		<div class="form-group">
-					   		{!! Form::label('store', 'Store'); !!}
-	                    	{!! Form::select('store', $stores, $store->id,['class' => 'form-control', 'id' => 'store']) !!}
+					   		{!! Form::label('store_id', 'Store'); !!}
+	                    	{!! Form::select('store_id', $stores, $store->id,['class' => 'form-control', 'id' => 'store_id']) !!}
 						</div>
 
 						@foreach($categories as $category)
