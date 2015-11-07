@@ -163,7 +163,7 @@ class DownloadController extends Controller
                 $data[7] = $form->required;
                 $data[8] = $form->expected_answer;
                 $data[9] = $form->exempt;
-                $data[10] = $form->form->image2wbmp(image);
+                $data[10] = $form->form->image;
                 // $data[14] = $form->group_order;
                 // var_dump($data);
                 $writer->addRow($data); 
