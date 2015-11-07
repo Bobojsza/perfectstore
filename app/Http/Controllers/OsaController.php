@@ -65,7 +65,7 @@ class OsaController extends Controller
             'customer_id' => 'required|unique_with:osa_lookups, regions = region_id, distributors = distributor_id, store_id = store_id, templates = template_id',
             'regions' => 'required',
             'distributors' => 'required',
-            'store_id' => 'required|unique_with:osa_lookups',
+            'store_id' => 'required',
             'templates' => 'required'
         ],$messages);
 

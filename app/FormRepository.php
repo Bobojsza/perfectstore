@@ -63,7 +63,7 @@ class FormRepository extends Model
 	}
 	
 
-    public static function insertForm($template,$type,$required,$prompt,$choices,$choices2 = null,$con_datas = null){
+    public static function insertForm($template,$type,$required,$prompt,$choices,$expected_answer,$choices2 = null,$con_datas = null){
     	if(strtoupper($type) == 'DOUBLE'){
 			$form_type = FormType::where('form_type', "NUMERIC")->first();
 		}else{
@@ -94,8 +94,7 @@ class FormRepository extends Model
 				'form_type_id' => $form_type->id,
 				'prompt' => strtoupper($prompt),
 				'required' => $required,
-				'expected_answer' => 0,
-				'exempt' => 0,
+				'exempt' => 0
 			));
 
 
@@ -122,15 +121,21 @@ class FormRepository extends Model
 					$opt = $choice;
 				}
 	
-				$sel = SingleSelect::where('option',$opt)->first();
-				if(empty($sel)){
-					$sel = SingleSelect::create(array('option' => strtoupper($opt)));
-				}
+				$sel = SingleSelect::firstOrCreate(array('option' => strtoupper($opt)));
 				FormSingleSelect::create(array('form_id' => $form->id, 'single_select_id' => $sel->id));
 			}
+
+			if(!empty($expected_answer)){
+				$_form = Form::find($form->id);
+				$ans = SingleSelect::where('option',strtoupper($expected_answer))->first();
+				$_form->expected_answer = $ans->id;
+				$_form->update();
+			}
+			
 		}
 
 		if($form_type->id == 11){
+			// dd($choices2);
 			FormFormula::create(['form_id' => $form->id, 'formula' => $choices, 'formula_desc' => $choices2]);
 		}
 

@@ -14,13 +14,13 @@ use App\User;
 
 class ImportMappingTableSeeder extends Seeder
 {
-    public function run()
-    {
-    	Model::unguard();
-    	DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+	public function run()
+	{
+		Model::unguard();
+		DB::statement('SET FOREIGN_KEY_CHECKS=0;');
 
-    	DB::table('audit_templates')->truncate();
-        Excel::selectSheets('Store Mapping')->load('/database/seeds/seed_files/Store Mapping.xlsx', function($reader) {
+		DB::table('audit_templates')->truncate();
+		Excel::selectSheets('Store Mapping')->load('/database/seeds/seed_files/Store Mapping.xlsx', function($reader) {
 			$records = $reader->get();
 			$records->each(function($row) {
 				if(!is_null($row->template)){
@@ -36,7 +36,7 @@ class ImportMappingTableSeeder extends Seeder
 		});
 
 		DB::table('grade_matrixs')->truncate();
-        Excel::selectSheets('Store Mapping')->load('/database/seeds/seed_files/Store Mapping.xlsx', function($reader) {
+		Excel::selectSheets('Store Mapping')->load('/database/seeds/seed_files/Store Mapping.xlsx', function($reader) {
 			$records = $reader->get();
 			$records->each(function($row) {
 				if(!is_null($row->enrollment_type)){
@@ -52,7 +52,7 @@ class ImportMappingTableSeeder extends Seeder
 
 		DB::table('users')->truncate();	
 		DB::table('role_user')->truncate();	
-        Excel::selectSheets('Store Mapping')->load('/database/seeds/seed_files/Store Mapping.xlsx', function($reader) {
+		Excel::selectSheets('Store Mapping')->load('/database/seeds/seed_files/Store Mapping.xlsx', function($reader) {
 			$records = $reader->get();
 			$records->each(function($row) {
 				if(!is_null($row->fullname)){
@@ -60,16 +60,21 @@ class ImportMappingTableSeeder extends Seeder
 					$emaillist = explode("/", $row->email);
 
 					for ($i=0; $i < count($userlist); $i++) { 
-						$user = User::where('email',$emaillist[$i])->first();
+						$user = User::where('username',$row->username)->first();
 						if(count($user) == 0){
+							if(empty($emaillist[$i])){
+								$email = strtolower($row->username."@unilever.com");
+							}else{
+								$email = strtolower($emaillist[$i]);
+							}
 							$newuser = User::create(array(
-						    	'name'     => strtoupper($userlist[$i]),
-						        'email'    => strtolower($emaillist[$i]),
-						        'username' => strtolower($emaillist[$i]),
-						        'password' => Hash::make('password'),
-						    ));
+								'name'     => strtoupper($userlist[$i]),
+								'email'    => $email,
+								'username' => $row->username,
+								'password' => Hash::make('password'),
+							));
 
-						    $newuser->roles()->attach(3);
+							$newuser->roles()->attach(3);
 						}else{
 							// $user->name = strtoupper($row->fullname);
 							// $user->username = $row->username;
@@ -91,9 +96,9 @@ class ImportMappingTableSeeder extends Seeder
 
 
 
-    	DB::table('accounts')->truncate();
+		DB::table('accounts')->truncate();
 
-        Excel::selectSheets('Store Mapping')->load('/database/seeds/seed_files/Store Mapping.xlsx', function($reader) {
+		Excel::selectSheets('Store Mapping')->load('/database/seeds/seed_files/Store Mapping.xlsx', function($reader) {
 			$records = $reader->get();
 			$records->each(function($row) {
 				if(!is_null($row->account)){
@@ -246,7 +251,12 @@ class ImportMappingTableSeeder extends Seeder
 								$emaillist = explode("/", $row->email);
 
 								for ($i=0; $i < count($emaillist); $i++) { 
-									$user = User::where('email',$emaillist[$i])->first();
+									if(empty($emaillist[$i])){
+										$email = strtolower($row->username."@unilever.com");
+									}else{
+										$email = strtolower($emaillist[$i]);
+									}
+									$user = User::where('email',$email)->first();
 									$newstore->users()->attach($user->id);
 								}											
 							}
@@ -260,5 +270,5 @@ class ImportMappingTableSeeder extends Seeder
 		DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 		Model::reguard();
 
-    }
+	}
 }
