@@ -155,7 +155,11 @@ class DownloadController extends Controller
                 $data[3] = $form->audit_template_id;
                 $data[4] = $form->form_id;
                 $data[5] = $form->form_type_id;
-                $data[6] = $form->prompt;
+                $prompt = "null";
+                if(!empty($form->prompt)){
+                    $prompt = $form->prompt;
+                }
+                $data[6] = $prompt;
                 $data[7] = $form->required;
                 $data[8] = $form->expected_answer;
                 $data[9] = $form->exempt;
