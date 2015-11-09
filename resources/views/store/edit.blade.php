@@ -52,7 +52,15 @@
                       	<td>{{ $category->category }}</td>
                       	@foreach($sostags as $tag)
                       	<td>
-                      	 	<input type="radio" name="cat_{{ $category->id }}" id="{{ $category->id }}" value="{{ $tag->id}}" checked="">
+                      		<?php 
+                      		$selected = false;
+                      			foreach ($storesos as $row) {
+                      				if(($row->form_category_id == $category->id ) && ($row->sos_tag_id == $tag->id)){
+                      					$selected = true;
+                      				}
+                      			}
+                      		?>
+                      		{!! Form::radio('cat['.$category->id.']', $tag->id, $selected) !!}
 		                </td>
                       	@endforeach
                       	

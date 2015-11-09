@@ -13,6 +13,7 @@ use App\AuditTemplate;
 use App\GradeMatrix;
 use App\FormCategory;
 use App\SosTagging;
+use App\StoreSosTag;
 
 class StoreController extends Controller
 {
@@ -109,8 +110,9 @@ class StoreController extends Controller
         $passings = GradeMatrix::getLists();
         $categories = FormCategory::sosTagging();
         $sostags = SosTagging::all();
+        $storesos = StoreSosTag::where('store_id',$store->id)->get();
 
-        return view('store.edit',compact('store', 'distributors', 'audittemplates', 'passings', 'categories', 'sostags'));
+        return view('store.edit',compact('store', 'distributors', 'audittemplates', 'passings', 'categories', 'sostags', 'storesos'));
     }
 
     /**
@@ -122,6 +124,7 @@ class StoreController extends Controller
      */
     public function update(Request $request, $id)
     {
+        // dd($request->all());
         $this->validate($request, [
             'store' => 'required|max:100|unique_with:stores, store_code = store_code,'.$id,
             'store_code' => 'required',
@@ -140,6 +143,14 @@ class StoreController extends Controller
             $store->grade_matrix_id = $request->passing;
             $store->audit_template_id = $request->template;
             $store->update();
+
+            StoreSosTag::where('store_id', $store->id)->delete();
+
+            foreach ($request->cat as $key => $value) {
+                $data[] = ['store_id' => $store->id, 'form_category_id' => $key, 'sos_tag_id' => $value];
+            }
+
+            StoreSosTag::insert($data);
 
             \DB::commit();
 

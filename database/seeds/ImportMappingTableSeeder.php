@@ -259,6 +259,18 @@ class ImportMappingTableSeeder extends Seeder
 									$user = User::where('email',$email)->first();
 									$newstore->users()->attach($user->id);
 								}											
+							}else{
+								$emaillist = explode("/", $row->email);
+
+								for ($i=0; $i < count($emaillist); $i++) { 
+									if(empty($emaillist[$i])){
+										$email = strtolower($row->username."@unilever.com");
+									}else{
+										$email = strtolower($emaillist[$i]);
+									}
+									$user = User::where('email',$email)->first();
+									$store->users()->attach($user->id);
+								}	
 							}
 						}
 					}
