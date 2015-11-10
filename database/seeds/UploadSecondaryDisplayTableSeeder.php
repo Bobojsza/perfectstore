@@ -1,4 +1,4 @@
-<?php
+	<?php
 
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Eloquent\Model;
@@ -30,6 +30,8 @@ class UploadSecondaryDisplayTableSeeder extends Seeder
 					if(!is_null($row[0])){
 						if($cnt > 0){
 							$category = FormCategory::firstOrCreate(['category'=>strtoupper($row[0])]);
+							$category->secondary_display = 1;
+							$category->update();
 							if(!empty($category)){
 								SecondaryDisplay::create(array('category_id' => $category->id, 
 									'brand' =>  $row[1]));
