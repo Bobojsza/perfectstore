@@ -25,13 +25,17 @@ class UploadSecondaryDisplayTableSeeder extends Seeder
 	   // Accessing the sheet name when reading
 		foreach ($reader->getSheetIterator() as $sheet) {
 			if($sheet->getName() == 'Sheet2'){
+				$cnt = 0;
 				foreach ($sheet->getRowIterator() as $row) {
 					if(!is_null($row[0])){
-						$category = FormCategory::where('category',$row[0])->first();
-						if(!empty($category)){
-							SecondaryDisplay::create(array('category_id' => $category->id, 
-								'brand' =>  $row[1]));
+						if($cnt > 0){
+							$category = FormCategory::firstOrCreate(['category'=>strtoupper($row[0])]);
+							if(!empty($category)){
+								SecondaryDisplay::create(array('category_id' => $category->id, 
+									'brand' =>  $row[1]));
+							}
 						}
+						$cnt++;	
 						
 					}
 				}

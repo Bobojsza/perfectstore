@@ -27,12 +27,13 @@ class UploadSecondaryDisplayLookupTableSeeder extends Seeder
 			if($sheet->getName() == 'Sheet1'){
 				$cnt = 0;
 				foreach ($sheet->getRowIterator() as $row) {
-					if($cnt > 2){
+					if($cnt > 1){
+						// dd($row);
 						$store = Store::where('store_code',trim($row[1]))->first();
 						$brands = array();
 						if(!empty($store)){
 							$x = 1;
-							for ($i=3; $i < 28; $i++) { 
+							for ($i=3; $i < 29; $i++) { 
 								if($row[$i] == "1.0"){
 									$brands[] = $x;
 								}
