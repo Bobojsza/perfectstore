@@ -60,7 +60,7 @@
                       				}
                       			}
                       		?>
-                      		{!! Form::radio('cat['.$category->id.']', $tag->id, $selected) !!}
+                      		{!! Form::radio('cat['.$category->id.']', $tag->id, $selected, ['class' => 'grp-radio']) !!}
 		                </td>
                       	@endforeach
                       	
@@ -84,3 +84,22 @@
 </section>
 @endsection
 
+@section('page-script')
+
+var allRadios = document.getElementsByClassName('grp-radio');
+var booRadio;
+var x = 0;
+for(x = 0; x < allRadios.length; x++){
+
+        allRadios[x].onclick = function(){
+
+            if(booRadio == this){
+                this.checked = false;
+        booRadio = null;
+            }else{
+            booRadio = this;
+        }
+        };
+
+}
+@endsection

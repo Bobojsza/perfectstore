@@ -46,6 +46,9 @@ class FormCategoryController extends Controller
 
         $category = new FormCategory;
         $category->category = $request->category;
+        $category->secondary_display = ($request->secondary_display) ? 1 : 0;
+        $category->osa_tagging = ($request->osa_tagging) ? 1 : 0;
+        $category->sos_tagging = ($request->sos_tagging) ? 1 : 0;
         $category->save();
 
         Session::flash('flash_message', 'Form Category successfully added!');
@@ -72,7 +75,8 @@ class FormCategoryController extends Controller
      */
     public function edit($id)
     {
-        //
+        $category = FormCategory::findOrFail($id);
+        return view('formcategory.edit', compact('category'));
     }
 
     /**
@@ -84,7 +88,28 @@ class FormCategoryController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $category = FormCategory::findOrFail($id);
+
+        $this->validate($request, [
+            'category' => 'required|max:100|unique_with:form_categories,'.$id
+        ]);
+
+        \DB::beginTransaction();
+        try {
+            $category->category = $request->category;
+            $category->secondary_display = ($request->secondary_display) ? 1 : 0;
+            $category->osa_tagging = ($request->osa_tagging) ? 1 : 0;
+            $category->sos_tagging = ($request->sos_tagging) ? 1 : 0;                          
+            $category->update();
+            \DB::commit();
+
+            Session::flash('flash_message', 'Form Catagory successfully updated!');
+            return redirect()->route("formcategory.edit",[$id]);
+            
+        } catch (Exception $e) {
+            DB::rollBack();
+            return redirect()->back();
+        }
     }
 
     /**

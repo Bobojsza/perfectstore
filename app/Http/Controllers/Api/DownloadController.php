@@ -49,7 +49,7 @@ class DownloadController extends Controller
                 $store_ids[] = $store->id;
                 $data[0] = $store->id;
                 $data[1] = $store->store;
-                $data[2] = $store->grade_matrix_id;
+                $data[2] = $store->gradematrix->passing;
                 $data[3] = $store->audit_template_id;
                 $data[4] = $store->audittemplate->template;
                 $writer->addRow($data); 
@@ -414,6 +414,7 @@ class DownloadController extends Controller
             $writer->close();
         }
 
+        
 
             
 

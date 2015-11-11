@@ -31,9 +31,9 @@
 							<tr>
 								<th>ID</th>
 								<th>Category</th>
-								<th>SOS Tagging</th>
-								<th>OSA Tagging</th>
 								<th>Secondary Display</th>
+								<th>OSA Tagging</th>
+								<th>SOS Tagging</th>
 								<th>Option</th>
 							</tr>
 							@foreach($formcategories as $category)
@@ -41,7 +41,7 @@
 								<td>{{ $category->id }}</td>
 								<td>{{ $category->category }}</td>
 								<td>
-									@if($category->sos_tagging == 1)
+									@if($category->secondary_display == 1)
 									<i class="fa fa-fw fa-check"></i>
 									@endif
 								</td>
@@ -51,11 +51,13 @@
 									@endif
 								</td>
 								<td>
-									@if($category->secondary_display == 1)
+									@if($category->sos_tagging == 1)
 									<i class="fa fa-fw fa-check"></i>
 									@endif
 								</td>
-								<td></td>
+								
+								
+								<td>{!! link_to_action('FormCategoryController@edit', 'Edit', $category->id, ['class' => 'btn btn-xs btn btn-primary']) !!}</td>
 							</tr>
 							@endforeach
 						</tbody>
