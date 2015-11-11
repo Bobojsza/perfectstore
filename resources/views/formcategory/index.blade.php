@@ -55,8 +55,6 @@
 									<i class="fa fa-fw fa-check"></i>
 									@endif
 								</td>
-								
-								
 								<td>{!! link_to_action('FormCategoryController@edit', 'Edit', $category->id, ['class' => 'btn btn-xs btn btn-primary']) !!}</td>
 							</tr>
 							@endforeach

@@ -83,7 +83,8 @@ class GradeMatrixController extends Controller
      */
     public function edit($id)
     {
-        //
+        $matrix = GradeMatrix::findOrFail($id);
+        return view('gradematrix.edit',compact('matrix'));
     }
 
     /**
@@ -95,7 +96,27 @@ class GradeMatrixController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $matrix = GradeMatrix::findOrFail($id);
+
+        $this->validate($request, [
+            'desc' => 'required|max:100|unique_with:grade_matrixs, passing = passing,'.$id,
+            'passing' => 'required|not_in:0'
+        ]);
+
+        \DB::beginTransaction();
+        try {
+            $matrix->desc = $request->desc;
+            $matrix->passing = $request->passing;                          
+            $matrix->update();
+            \DB::commit();
+
+            Session::flash('flash_message', 'Grade Matrix successfully updated!');
+            return redirect()->route("gradematrix.edit",[$id]);
+            
+        } catch (Exception $e) {
+            DB::rollBack();
+            return redirect()->back();
+        }
     }
 
     /**

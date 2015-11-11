@@ -39,7 +39,7 @@
 								<td>{{ $matrix->id }}</td>
 								<td>{{ $matrix->desc }}</td>
 								<td>{{ $matrix->passing }}</td>
-								<td></td>
+								<td>{!! link_to_action('GradeMatrixController@edit', 'Edit', $matrix->id, ['class' => 'btn btn-xs btn btn-primary']) !!}</td>
 							</tr>
 							@endforeach
 						</tbody>
