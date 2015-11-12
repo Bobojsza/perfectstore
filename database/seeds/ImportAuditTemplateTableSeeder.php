@@ -86,16 +86,20 @@ class ImportAuditTemplateTableSeeder extends Seeder
 										$data = DB::table('temp_forms')->where('code',$a)->first();
 										if(!empty($data)){
 											$other_form = FormRepository::insertForm($template,$a,$data->type,$data->required,$data->prompt,$data->choices,$data->expected_answer,null,$image);
+											$index1[$a] = $other_form->id;
+											$index2[$a] = $other_form->prompt.'_'.$other_form->id;
 										}else{
 											$other_form = DB::table('forms')->where('code',$a)->first();
 											// echo $a;
 											// dd($data);
 											// $other_form = FormRepository::insertForm($template,$a,$data->form_type_id,$data->required,$data->prompt,null,$data->expected_answer,null,$image);
+											
+											$index1[$a] = '!'.$other_form->id;
+											$index2[$a] = $other_form->prompt.'_'.$other_form->id;
 
 										}
 
-										$index1[$a] = $other_form->id;
-										$index2[$a] = $other_form->prompt.'_'.$other_form->id;
+										
 										
 									}
 									$formula1 = $row[11];
