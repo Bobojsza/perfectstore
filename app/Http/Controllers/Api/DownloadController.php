@@ -18,6 +18,7 @@ use App\AuditTemplateCategory;
 use App\AuditTemplateGroup;
 use App\OsaLookup;
 use App\SosLookup;
+use DB;
 
 use Box\Spout\Reader\ReaderFactory;
 use Box\Spout\Common\Type;
@@ -394,20 +395,44 @@ class DownloadController extends Controller
 
             $writer->close();
         }
+
+        // if($type == "store_sos"){
+        //     $store_sos = Ste::where('sos', 1)
+        //         ->get();
+
+        //     $writer = WriterFactory::create(Type::CSV); 
+        //     $writer->openToBrowser('sos_keylist.txt');
+        //     $writer->addRow(['id']); 
+        //     foreach ($keylist as $list) {
+        //         $data[0] = $list->id;
+        //         $writer->addRow($data); 
+        //     }
+
+        //     $writer->close();
+        // }
         
         if($type == "sos_lookups"){
             $writer = WriterFactory::create(Type::CSV); 
             $writer->openToBrowser('sos_lookups.txt');
-            $writer->addRow(['id', 'category_id', 'sos_id', 'less', 'value', 'sos_lookup_id']); 
+            $writer->addRow(['store_id', 'category_id', 'sos_id', 'less', 'value', 'sos_lookup_id']); 
             foreach ($storelist as $store) {
                 $lookup = SosLookup::getSosCategory($store->id);
-                foreach ($lookup->categories as $category) {
-                    $data[0] = $store->id;
-                    $data[1] = $category->category_id;
-                    $data[2] = $category->sos_id;
-                    $data[3] = $category->less;
-                    $data[4] = $category->value;
-                    $data[5] = $category->sos_lookup_id;
+                $results = DB::select( DB::raw("select store_id, category_id, sos_id,less,  value,sos_lookup_id from store_sos_tags
+                    join sos_lookup_percentages on sos_lookup_percentages.category_id = store_sos_tags.`form_category_id`
+                    where store_id = :store_id
+                    and sos_lookup_id = :lookup_id
+                    and store_sos_tags.`sos_tag_id` = sos_lookup_percentages.sos_id"), array(
+                   'store_id' => $store->id, 'lookup_id' => $lookup->id
+                 ));
+
+                // dd($results);
+                foreach ($results as $result) {
+                    $data[0] = $result->store_id;
+                    $data[1] = $result->category_id;
+                    $data[2] = $result->sos_id;
+                    $data[3] = $result->less;
+                    $data[4] = $result->value;
+                    $data[5] = $result->sos_lookup_id;
                     $writer->addRow($data); 
                 }
             }
