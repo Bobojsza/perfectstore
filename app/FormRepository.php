@@ -63,7 +63,7 @@ class FormRepository extends Model
 	}
 	
 
-    public static function insertForm($template,$type,$required,$prompt,$choices,$expected_answer,$image,$choices2 = null,$con_datas = null){
+    public static function insertForm($template,$code,$type,$required,$prompt,$choices,$expected_answer,$image,$choices2 = null,$con_datas = null){
     	if(strtoupper($type) == 'DOUBLE'){
 			$form_type = FormType::where('form_type', "NUMERIC")->first();
 		}else{
@@ -95,7 +95,8 @@ class FormRepository extends Model
 				'prompt' => strtoupper($prompt),
 				'required' => $required,
 				'exempt' => 0,
-				'image' => $image
+				'image' => $image,
+				'code' => $code
 			));
 
 

@@ -82,8 +82,18 @@ class ImportAuditTemplateTableSeeder extends Seeder
 									$index2 = array();
 									preg_match_all('/{(.*?)}/', $row[11], $matches);
 									foreach ($matches[1] as $key => $a ){
+										
 										$data = DB::table('temp_forms')->where('code',$a)->first();
-										$other_form = FormRepository::insertForm($template,$data->type,$data->required,$data->prompt,$data->choices,$data->expected_answer,null,$image);
+										if(!empty($data)){
+											$other_form = FormRepository::insertForm($template,$a,$data->type,$data->required,$data->prompt,$data->choices,$data->expected_answer,null,$image);
+										}else{
+											$other_form = DB::table('forms')->where('code',$a)->first();
+											// echo $a;
+											// dd($data);
+											// $other_form = FormRepository::insertForm($template,$a,$data->form_type_id,$data->required,$data->prompt,null,$data->expected_answer,null,$image);
+
+										}
+
 										$index1[$a] = $other_form->id;
 										$index2[$a] = $other_form->prompt.'_'.$other_form->id;
 										
@@ -95,7 +105,7 @@ class ImportAuditTemplateTableSeeder extends Seeder
 										$formula2 = str_replace('{'.$a.'}', ' :'.$index2[$a].': ', $formula2);
 										
 									}
-									$form = FormRepository::insertForm($template,$row[10],$row[9],$row[8],$formula1,null,$image,$formula2);
+									$form = FormRepository::insertForm($template,$row[7],$row[10],$row[9],$row[8],$formula1,null,$image,$formula2);
 									
 								}elseif ($form_type->id == 12) {
 									$options = explode("~", $row[11]);
@@ -115,7 +125,10 @@ class ImportAuditTemplateTableSeeder extends Seeder
 											if(count($codes)> 0){
 												foreach ($codes as $code) {
 													$other_data = DB::table('temp_forms')->where('code',$code)->first();
-													$other_form = FormRepository::insertForm($template,$other_data->type,$other_data->required,$other_data->prompt,$other_data->choices,$other_data->expected_answer,null);
+													if(empty($other_data)){
+														$other_data = DB::table('forms')->where('code',$code)->first();
+													}
+													$other_form = FormRepository::insertForm($template,$code,$other_data->type,$other_data->required,$other_data->prompt,$other_data->choices,$other_data->expected_answer,null);
 													$x1[] = $other_form->id;
 													$x2[] = $other_form->prompt.'_'.$other_form->id;
 													
@@ -135,11 +148,11 @@ class ImportAuditTemplateTableSeeder extends Seeder
 										
 									}
 									// dd($data_con);
-									$form = FormRepository::insertForm($template,$row[10],$row[9],$row[8],$row[11],null,$image,array(),$data_con);
+									$form = FormRepository::insertForm($template,$row[7],$row[10],$row[9],$row[8],$row[11],null,$image,array(),$data_con);
 									
 								}else{
 
-									$form = FormRepository::insertForm($template,$row[10],$row[9],$row[8],$row[11],$row[13],$image);
+									$form = FormRepository::insertForm($template,$row[7],$row[10],$row[9],$row[8],$row[11],$row[13],$image);
 
 								}
 							}
