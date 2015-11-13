@@ -20,7 +20,7 @@ class ImportMappingTableSeeder extends Seeder
 		DB::statement('SET FOREIGN_KEY_CHECKS=0;');
 
 		DB::table('audit_templates')->truncate();
-		Excel::selectSheets('Store Mapping')->load('/database/seeds/seed_files/Store Mapping.xlsx', function($reader) {
+		Excel::selectSheets('Sheet1')->load('/database/seeds/seed_files/Store Mapping.xlsx', function($reader) {
 			$records = $reader->get();
 			$records->each(function($row) {
 				if(!is_null($row->template)){
@@ -36,7 +36,7 @@ class ImportMappingTableSeeder extends Seeder
 		});
 
 		DB::table('grade_matrixs')->truncate();
-		Excel::selectSheets('Store Mapping')->load('/database/seeds/seed_files/Store Mapping.xlsx', function($reader) {
+		Excel::selectSheets('Sheet1')->load('/database/seeds/seed_files/Store Mapping.xlsx', function($reader) {
 			$records = $reader->get();
 			$records->each(function($row) {
 				if(!is_null($row->enrollment_type)){
@@ -52,7 +52,7 @@ class ImportMappingTableSeeder extends Seeder
 
 		DB::table('users')->truncate();	
 		DB::table('role_user')->truncate();	
-		Excel::selectSheets('Store Mapping')->load('/database/seeds/seed_files/Store Mapping.xlsx', function($reader) {
+		Excel::selectSheets('Sheet1')->load('/database/seeds/seed_files/Store Mapping.xlsx', function($reader) {
 			$records = $reader->get();
 			$records->each(function($row) {
 				if(!is_null($row->fullname)){
@@ -98,7 +98,7 @@ class ImportMappingTableSeeder extends Seeder
 
 		DB::table('accounts')->truncate();
 
-		Excel::selectSheets('Store Mapping')->load('/database/seeds/seed_files/Store Mapping.xlsx', function($reader) {
+		Excel::selectSheets('Sheet1')->load('/database/seeds/seed_files/Store Mapping.xlsx', function($reader) {
 			$records = $reader->get();
 			$records->each(function($row) {
 				if(!is_null($row->account)){
@@ -115,7 +115,7 @@ class ImportMappingTableSeeder extends Seeder
 
 		DB::table('customers')->truncate();
 
-		Excel::selectSheets('Store Mapping')->load('/database/seeds/seed_files/Store Mapping.xlsx', function($reader) {
+		Excel::selectSheets('Sheet1')->load('/database/seeds/seed_files/Store Mapping.xlsx', function($reader) {
 			$records = $reader->get();
 			$records->each(function($row) {
 				if(!is_null($row->account)){
@@ -141,7 +141,7 @@ class ImportMappingTableSeeder extends Seeder
 
 		DB::table('areas')->truncate();
 
-		Excel::selectSheets('Store Mapping')->load('/database/seeds/seed_files/Store Mapping.xlsx', function($reader) {
+		Excel::selectSheets('Sheet1')->load('/database/seeds/seed_files/Store Mapping.xlsx', function($reader) {
 			$records = $reader->get();
 			$records->each(function($row) {
 				if(!is_null($row->account)){
@@ -170,7 +170,7 @@ class ImportMappingTableSeeder extends Seeder
 
 		DB::table('regions')->truncate();
 
-		Excel::selectSheets('Store Mapping')->load('/database/seeds/seed_files/Store Mapping.xlsx', function($reader) {
+		Excel::selectSheets('Sheet1')->load('/database/seeds/seed_files/Store Mapping.xlsx', function($reader) {
 			$records = $reader->get();
 			$records->each(function($row) {
 				if(!is_null($row->account)){
@@ -191,7 +191,7 @@ class ImportMappingTableSeeder extends Seeder
 
 		DB::table('distributors')->truncate();
 
-		Excel::selectSheets('Store Mapping')->load('/database/seeds/seed_files/Store Mapping.xlsx', function($reader) {
+		Excel::selectSheets('Sheet1')->load('/database/seeds/seed_files/Store Mapping.xlsx', function($reader) {
 			$records = $reader->get();
 			$records->each(function($row) {
 				if(!is_null($row->account)){
@@ -211,7 +211,7 @@ class ImportMappingTableSeeder extends Seeder
 
 		DB::table('stores')->truncate();
 		DB::table('store_user')->truncate();
-		Excel::selectSheets('Store Mapping')->load('/database/seeds/seed_files/Store Mapping.xlsx', function($reader) {
+		Excel::selectSheets('Sheet1')->load('/database/seeds/seed_files/Store Mapping.xlsx', function($reader) {
 			$records = $reader->get();
 			$records->each(function($row) {
 				if(!is_null($row->account)){
@@ -236,7 +236,7 @@ class ImportMappingTableSeeder extends Seeder
 							if(count($store) == 0){
 								$template = AuditTemplate::where('template',$row->template)->first();
 								$matrix = GradeMatrix::where('desc',$row->enrollment_type)->first();
-
+								
 								$newstore = new Store;
 								$newstore->account_id = $account->id;
 								$newstore->customer_id = $customer->id;

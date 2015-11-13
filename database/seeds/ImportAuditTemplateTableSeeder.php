@@ -91,7 +91,10 @@ class ImportAuditTemplateTableSeeder extends Seeder
 										}else{
 											$other_form = DB::table('forms')->where('code',$a)->first();
 											// echo $a;
-											// dd($data);
+											if(empty($other_form)){
+												dd($a);
+											}
+											
 											// $other_form = FormRepository::insertForm($template,$a,$data->form_type_id,$data->required,$data->prompt,null,$data->expected_answer,null,$image);
 											
 											$index1[$a] = '!'.$other_form->id;
