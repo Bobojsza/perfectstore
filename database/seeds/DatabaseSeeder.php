@@ -22,7 +22,7 @@ class DatabaseSeeder extends Seeder
         $this->call(ImportMappingTableSeeder::class);
         $this->call(SubFormTableSeeder::class);
         $this->call(ImportAuditTemplateTableSeeder::class);
-        $this->call(FormCategoryTaggingTableSeeder::class);
+        // $this->call(FormCategoryTaggingTableSeeder::class);
         
         $this->call(UploadSosLookupTableSeeder::class);
 
@@ -30,6 +30,11 @@ class DatabaseSeeder extends Seeder
         $this->call(UploadSecondaryDisplayLookupTableSeeder::class);
 
         $this->call(UploadOsaTableSeeder::class);
+
+        $this->call(FormCategoryTaggingTableSeeder::class);
+
+         $this->call(UploadStoreSosTableSeeder::class);
+
 
         Model::reguard();
     }
