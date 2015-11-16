@@ -363,9 +363,9 @@ class DownloadController extends Controller
         }
 
         if($type == "osa_lookups"){
-            // $writer = WriterFactory::create(Type::CSV); 
-            // $writer->openToBrowser('osa_lookups.txt');
-            // $writer->addRow(['id', 'category_id', 'target', 'total', 'lookup_id']); 
+            $writer = WriterFactory::create(Type::CSV); 
+            $writer->openToBrowser('osa_lookups.txt');
+            $writer->addRow(['id', 'category_id', 'target', 'total', 'lookup_id']); 
             foreach ($storelist as $store) {
                 $lookup = OsaLookup::getOsaCategory($store->id);
                 foreach ($lookup->categories as $category) {
@@ -377,7 +377,7 @@ class DownloadController extends Controller
                     $writer->addRow($data); 
                 }
             }
-            // $writer->close();
+            $writer->close();
         }
 
         // sos lookup
@@ -396,20 +396,6 @@ class DownloadController extends Controller
             $writer->close();
         }
 
-        // if($type == "store_sos"){
-        //     $store_sos = Ste::where('sos', 1)
-        //         ->get();
-
-        //     $writer = WriterFactory::create(Type::CSV); 
-        //     $writer->openToBrowser('sos_keylist.txt');
-        //     $writer->addRow(['id']); 
-        //     foreach ($keylist as $list) {
-        //         $data[0] = $list->id;
-        //         $writer->addRow($data); 
-        //     }
-
-        //     $writer->close();
-        // }
         
         if($type == "sos_lookups"){
             $writer = WriterFactory::create(Type::CSV); 
