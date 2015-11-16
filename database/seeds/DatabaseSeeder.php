@@ -24,7 +24,7 @@ class DatabaseSeeder extends Seeder
         $this->call(ImportAuditTemplateTableSeeder::class);
         // $this->call(FormCategoryTaggingTableSeeder::class);
         
-        $this->call(UploadSosLookupTableSeeder::class);
+        // $this->call(UploadSosLookupTableSeeder::class);
 
         $this->call(UploadSecondaryDisplayTableSeeder::class);
         $this->call(UploadSecondaryDisplayLookupTableSeeder::class);
@@ -32,6 +32,7 @@ class DatabaseSeeder extends Seeder
         $this->call(UploadOsaTableSeeder::class);
 
         $this->call(FormCategoryTaggingTableSeeder::class);
+        $this->call(UploadSosLookupTableSeeder::class);
 
          $this->call(UploadStoreSosTableSeeder::class);
 
