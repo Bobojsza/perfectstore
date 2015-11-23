@@ -18,6 +18,7 @@ use App\AuditTemplateCategory;
 use App\AuditTemplateGroup;
 use App\OsaLookup;
 use App\SosLookup;
+use App\SurveyImage;
 use DB;
 
 use Box\Spout\Reader\ReaderFactory;
@@ -429,13 +430,10 @@ class DownloadController extends Controller
             $writer = WriterFactory::create(Type::CSV); 
             $writer->openToBrowser('image_lists.txt');
             $writer->addRow(['image_name']); 
+            $results = SurveyImage::all();
+            // dd($results);
             foreach ($results as $result) {
-                $data[0] = $result->store_id;
-                $data[1] = $result->category_id;
-                $data[2] = $result->sos_id;
-                $data[3] = $result->less;
-                $data[4] = $result->value;
-                $data[5] = $result->sos_lookup_id;
+                $data[0] = $result->images;
                 $writer->addRow($data); 
             }
             $writer->close();
