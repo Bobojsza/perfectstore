@@ -1,11 +1,13 @@
 /vendor
 /node_modules
 /database/seeds/seed_files
+/storage/surveyimages/*.*
 Homestead.yaml
 Homestead.json
 .env
 .env.example
 notes.txt
 test.txt
+*.txt
 *.pem
 *.ppk

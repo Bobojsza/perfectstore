@@ -81,4 +81,5 @@ Route::group(array('prefix' => 'api'), function()
    Route::get('auth', 'Api\AuthUserController@auth');
 
    Route::get('download', 'Api\DownloadController@index');
+   Route::get('image', 'Api\DownloadController@image');
 });//

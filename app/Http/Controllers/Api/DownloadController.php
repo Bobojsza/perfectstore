@@ -425,13 +425,33 @@ class DownloadController extends Controller
             $writer->close();
         }
 
-        
+        if($type == "image_lists"){
+            $writer = WriterFactory::create(Type::CSV); 
+            $writer->openToBrowser('image_lists.txt');
+            $writer->addRow(['image_name']); 
+            foreach ($results as $result) {
+                $data[0] = $result->store_id;
+                $data[1] = $result->category_id;
+                $data[2] = $result->sos_id;
+                $data[3] = $result->less;
+                $data[4] = $result->value;
+                $data[5] = $result->sos_lookup_id;
+                $writer->addRow($data); 
+            }
+            $writer->close();
+        }
+   
+    }
 
-            
+    public function image(Request $request){
+        $filename = $request->name;
+        $myfile = storage_path().'/surveyimages/'.$filename;
 
-            
-
-
-        
+        if (!\File::exists($myfile))
+        {
+            echo "File not exists.";
+        }else{
+            return \Response::download($myfile, $filename);
+        }
     }
 }
