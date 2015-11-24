@@ -62,7 +62,9 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        //
+        $user = User::findOrFail($id);
+        $roles = Role::select('id', 'name')->lists('name', 'id');
+        return view('user.edit', compact('user', 'roles'));
     }
 
     /**
@@ -73,8 +75,34 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
-    {
-        //
+    {   
+        $user = User::findorFail($id);
+
+        $this->validate($request, [
+            'name' => 'required|max:100',
+            'email' => 'required|max:100|email',
+            'username' => 'required|max:100',
+        ]);
+
+        \DB::beginTransaction();
+
+        try {
+            $user->name = strtoupper($request->name);
+            $user->email = strtolower($request->email);
+            $user->username = $request->username;
+            $user->active = ($request->active) ? 1 : 0; 
+            $user->update();
+
+
+            \DB::commit();
+
+            Session::flash('flash_message', 'User successfully updated!');
+            return redirect()->route("user.edit",[$id]);
+
+        } catch (Exception $e) {
+            DB::rollBack();
+            return redirect()->back();
+        }
     }
 
     /**

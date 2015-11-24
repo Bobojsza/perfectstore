@@ -146,16 +146,19 @@ class StoreController extends Controller
 
             StoreSosTag::where('store_id', $store->id)->delete();
 
-            foreach ($request->cat as $key => $value) {
-                $data[] = ['store_id' => $store->id, 'form_category_id' => $key, 'sos_tag_id' => $value];
-            }
+            if(!empty($request->cat)){
+                foreach ($request->cat as $key => $value) {
+                    $data[] = ['store_id' => $store->id, 'form_category_id' => $key, 'sos_tag_id' => $value];
+                }
 
-            StoreSosTag::insert($data);
+                StoreSosTag::insert($data);
+            }
+            
 
             \DB::commit();
 
             Session::flash('flash_message', 'Store successfully updated!');
-            return redirect()->back();
+            return redirect()->route("store.edit",[$id]);
 
         } catch (Exception $e) {
             DB::rollBack();

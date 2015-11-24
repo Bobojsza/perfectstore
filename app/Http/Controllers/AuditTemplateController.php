@@ -333,15 +333,19 @@ class AuditTemplateController extends Controller
 	}
 
 	public function deleteform($id){
-		$audit_form = AuditTemplateForm::with('form')
-			->findOrFail($id);
+		$audit_form = AuditTemplateForm::with('form')->findOrFail($id);
 		return view('audittemplate.deleteform',compact('audit_form'));
 
 	}
 
 	public function destroyform($id){
-		$audit_form = AuditTemplateForm::with('form')
-			->findOrFail($id);
+		$audit_form = AuditTemplateForm::findOrFail($id);
+
+		FormFormula::where('form_id',$audit_form->form_id)->delete();
+		FormCondition::where('form_id',$audit_form->form_id)->delete();
+		FormMultiSelect::where('form_id',$audit_form->form_id)->delete();
+		FormSingleSelect::where('form_id',$audit_form->form_id)->delete();
+
 		$audit_form->delete();
 		Form::where('id', $audit_form->form_id)->delete();
 		Session::flash('flash_message', 'Template form succesfully deleted!');
@@ -350,8 +354,8 @@ class AuditTemplateController extends Controller
 	}
 
 	public function duplicate($id){
-		$template = AuditTemplate::findOrFail($id);
-		return view('audittemplate.duplicate', compact('template'));
+		// $template = AuditTemplate::findOrFail($id);
+		// return view('audittemplate.duplicate', compact('template'));
 	}
 
 	public function duplicatetemplate(Request $request, $id){

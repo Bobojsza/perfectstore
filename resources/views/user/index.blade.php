@@ -35,7 +35,7 @@
 								<th>Username</th>
 								<th>Roles</th>
 								<th>Active</th>
-								<th>Action</th>
+								<th colspan="2">Action</th>
 							</tr>
 							@foreach($users as $user)
 							<tr>
@@ -49,6 +49,9 @@
 									@endforeach
 								</td>
 								<td></td>
+								<td>
+									{!! link_to_action('UserController@edit', 'Edit', $user->id, ['class' => 'btn btn-xs btn btn-primary']) !!}
+								</td>
 								<td>
 									{!! link_to_action('UserController@stores', 'Store Mapping', $user->id, ['class' => 'btn btn-xs btn btn-primary']) !!}
 								</td>

@@ -66,7 +66,9 @@
 											</td>
 											<td>{{ $form->form->prompt }}</td>
 											<td></td>
-											<td></td>
+											<td>
+												{!! link_to_action('AuditTemplateController@deleteform', 'Delete', $form->id, ['class' => 'btn btn-xs btn btn-danger']) !!}
+											</td>
 										</tr>
 										@endforeach
 									</tbody>

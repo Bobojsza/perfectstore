@@ -14,9 +14,9 @@ class AuditTemplateForm extends Model
 		return $this->belongsTo('App\FormCategory','form_category_id','id');
 	}
 
-	public function group()
+	public function templategroup()
 	{
-		return $this->belongsTo('App\FormGroup','form_group_id','id');
+		return $this->belongsTo('App\AuditTemplateGroup','audit_template_group_id','id');
 	}
 
 	public function template()
