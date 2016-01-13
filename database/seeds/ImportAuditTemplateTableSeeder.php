@@ -58,8 +58,8 @@ class ImportAuditTemplateTableSeeder extends Seeder
 					$cnt = 0;
 					foreach ($sheet->getRowIterator() as $row) {
 						if($cnt > 0){
-							if(!is_null($row[1])){
-
+							if(!is_null($row[1])){	
+								dd($row);
 								$template = AuditTemplate::firstOrCreate(['template' => $row[1]]);
 								$template->start_date = $row[4];
 								$template->end_date = $row[5];
