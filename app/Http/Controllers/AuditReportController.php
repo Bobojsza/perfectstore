@@ -18,7 +18,7 @@ class AuditReportController extends Controller
      */
     public function index()
     {
-        $audits = StoreAudit::orderBy('last_update')->get();
+        $audits = StoreAudit::orderBy('updated_at')->get();
         return view('auditreport.index',compact('audits'));
     }
 
