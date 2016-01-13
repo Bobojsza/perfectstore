@@ -12,7 +12,7 @@
 */
 
 Route::get('test', function(){
-	echo (((1 * 4) / (2 * 1) + 1) - 1);
+
 });
 
 Route::get('/', 'DashboardController@index');
@@ -84,4 +84,6 @@ Route::group(array('prefix' => 'api'), function()
 
    Route::get('download', 'Api\DownloadController@index');
    Route::get('image', 'Api\DownloadController@image');
+
+   Route::post('storeaudit', 'Api\UploadController@storeaudit');
 });//

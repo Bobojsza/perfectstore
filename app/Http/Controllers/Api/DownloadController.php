@@ -55,7 +55,8 @@ class DownloadController extends Controller
                 $data[3] = $store->audit_template_id;
                 $data[4] = $store->audittemplate->template;
                 $data[5] = $store->audittemplate->start_date;
-                $data[6] = $store->audittemplate->end_date;                
+                $data[6] = $store->audittemplate->end_date;  
+                $data[7] = $store->store_code;              
                 $writer->addRow($data); 
             }
 

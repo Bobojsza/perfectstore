@@ -25,20 +25,30 @@
             <tbody>
               <tr>
                 <th>User</th>
-                <th>Store</th>
-                <th>Date Posted</th>
-                <th>Area</th>
-                <th>Action</th>
+                <th>Store Code</th>
+                <th>Store Name</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>Passed</th>
+                <th></th>
               </tr>
-              @foreach($areas as $area)
+              @if (count($audits) > 0)
+                @foreach($audits as $audit)
+                <tr>
+                  <td>{{ $audit->user_name }}</td>
+                  <td>{{ $audit->store_code }}</td>
+                  <td>{{ $audit->store_name }}</td>
+                  <td>{{ $audit->start_date }}</td>
+                  <td>{{ $audit->end_date }}</td>
+                  <td>{{ $audit->passed }}</td>
+                  <td></td>
+                </tr>
+                @endforeach
+              @else
               <tr>
-                <td>{{ $area->id }}</td>
-                <td>{{ $area->customer->account->account }}</td>
-                <td>{{ $area->customer->customer }}</td>
-                <td>{{ $area->area}}</td>
-                <td></td>
+                <td colspan="7">No record found.</td>
               </tr>
-              @endforeach
+              @endif
             </tbody>
           </table>
         </div><!-- /.box-body -->

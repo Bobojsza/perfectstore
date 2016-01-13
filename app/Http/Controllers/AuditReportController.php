@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
+use App\StoreAudit;
+
 class AuditReportController extends Controller
 {
     /**
@@ -16,8 +18,8 @@ class AuditReportController extends Controller
      */
     public function index()
     {
-        $areas = array();
-        return view('auditreport.index',compact('areas'));
+        $audits = StoreAudit::all();
+        return view('auditreport.index',compact('audits'));
     }
 
     /**
