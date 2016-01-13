@@ -61,6 +61,10 @@ class ImportAuditTemplateTableSeeder extends Seeder
 							if(!is_null($row[1])){
 
 								$template = AuditTemplate::firstOrCreate(['template' => $row[1]]);
+								$template->start_date = $row[4];
+								$template->end_date = $row[5];
+								$template->update();
+								
 								$category = FormCategory::firstOrCreate(['category' => $row[3]]);
 								$group = FormGroup::firstOrCreate(['group_desc' => $row[6]]);
 

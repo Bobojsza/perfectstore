@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class AuditTemplate extends Model
 {
 
-	protected $fillable = ['template'];
+	protected $fillable = ['template', 'start_date', 'end_date'];
 	
     public $timestamps = false;
 

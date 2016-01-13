@@ -34,7 +34,7 @@ class DatabaseSeeder extends Seeder
         $this->call(FormCategoryTaggingTableSeeder::class);
         $this->call(UploadSosLookupTableSeeder::class);
 
-         $this->call(UploadStoreSosTableSeeder::class);
+        $this->call(UploadStoreSosTableSeeder::class);
 
 
         Model::reguard();

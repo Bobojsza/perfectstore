@@ -1,5 +1,9 @@
+body {
+  font-size: 12px;
+}
+
 .container{
-	/*width: 1400px;*/
+	width: 1200px;
 }
 
 table {
