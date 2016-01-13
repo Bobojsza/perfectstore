@@ -46,7 +46,7 @@ class DownloadController extends Controller
         if($type == "stores"){
             $writer = WriterFactory::create(Type::CSV); 
             $writer->openToBrowser('stores.txt');
-            $writer->addRow(['id', 'store', 'grade_matrix_id', 'audit_template_id', 'template', 'start_date', 'end_date']); 
+            $writer->addRow(['id', 'store', 'grade_matrix_id', 'audit_template_id', 'template', 'start_date', 'end_date','store_code']); 
             foreach ($storelist as $store) {
                 $store_ids[] = $store->id;
                 $data[0] = $store->id;
