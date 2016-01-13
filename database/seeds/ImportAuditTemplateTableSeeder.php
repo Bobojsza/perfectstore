@@ -45,7 +45,26 @@ class ImportAuditTemplateTableSeeder extends Seeder
 		DB::table('audit_template_groups')->truncate();
 		DB::table('audit_template_categories')->truncate();
 
-		$files = File::allFiles('database/seeds/seed_files/templates');
+
+
+
+		$folderpath = 'database/seeds/seed_files/templates';
+		$folders = File::directories($folderpath);
+		$latest = '11232015';
+		foreach ($folders as $value) {
+			$_dir = explode("/", $value);
+			$cnt = count($_dir);
+			$name = $_dir[$cnt - 1];
+			$latest_date = DateTime::createFromFormat('mdY', $latest);
+			$now = DateTime::createFromFormat('mdY', $name);
+			if($now > $latest_date){
+				$latest = $name;
+			}
+		}
+		// $this->filename = $folderpath.$latest.'/mtprimarysales.csv';
+		$files = File::allFiles($folderpath."/".$latest."/");
+
+
 		foreach ($files as $file)
 		{
 		    echo (string)$file, "\n";
@@ -59,7 +78,7 @@ class ImportAuditTemplateTableSeeder extends Seeder
 					foreach ($sheet->getRowIterator() as $row) {
 						if($cnt > 0){
 							if(!is_null($row[1])){	
-								dd($row);
+								// dd($row);
 								$template = AuditTemplate::firstOrCreate(['template' => $row[1]]);
 								$template->start_date = $row[4];
 								$template->end_date = $row[5];
