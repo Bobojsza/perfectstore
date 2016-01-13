@@ -30,6 +30,7 @@
                 <th>Start Date</th>
                 <th>End Date</th>
                 <th>Passed</th>
+                <th>Last Update</th>
                 <th></th>
               </tr>
               @if (count($audits) > 0)
@@ -41,6 +42,7 @@
                   <td>{{ $audit->start_date }}</td>
                   <td>{{ $audit->end_date }}</td>
                   <td>{{ $audit->passed }}</td>
+                  <td>{{ $audit->updated_at }}</td>
                   <td></td>
                 </tr>
                 @endforeach

@@ -11,3 +11,5 @@ test.txt
 *.txt
 *.pem
 *.ppk
+*.csv
+storage/uploads
