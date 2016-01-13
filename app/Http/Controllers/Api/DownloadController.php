@@ -54,9 +54,13 @@ class DownloadController extends Controller
                 $data[2] = $store->gradematrix->passing;
                 $data[3] = $store->audit_template_id;
                 $data[4] = $store->audittemplate->template;
-                $data[5] = $store->audittemplate->start_date;
-                $data[6] = $store->audittemplate->end_date;  
-                $data[7] = $store->store_code;              
+                $data[5] = 0;
+                $data[6] = 0;
+                $data[7] = 0;
+                $data[8] = 0;
+                $data[9] = $store->audittemplate->start_date;
+                $data[10] = $store->audittemplate->end_date;  
+                $data[11] = $store->store_code;              
                 $writer->addRow($data); 
             }
 
