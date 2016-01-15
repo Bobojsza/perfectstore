@@ -19,6 +19,7 @@ use App\AuditTemplateGroup;
 use App\OsaLookup;
 use App\SosLookup;
 use App\SurveyImage;
+use App\FormType;
 use DB;
 
 use Box\Spout\Reader\ReaderFactory;
@@ -439,6 +440,20 @@ class DownloadController extends Controller
                     $writer->addRow($data); 
                 }
             }
+            $writer->close();
+        }
+
+        if($type == "form_types"){
+            $form_types = FormType::all();
+            $writer = WriterFactory::create(Type::CSV); 
+            $writer->openToBrowser('form_types.txt');
+            $writer->addRow(['id', 'form_type']); 
+            foreach ($form_types as $type) {
+                $data[0] = $type->id;
+                $data[1] = $type->form_type;
+                $writer->addRow($data); 
+            }
+
             $writer->close();
         }
 
