@@ -31,7 +31,7 @@
                 <th>End Date</th>
                 <th>Passed</th>
                 <th>Last Update</th>
-                <th>Action</th>
+                <th colspan='2' >Action</th>
               </tr>
               @if (count($audits) > 0)
                 @foreach($audits as $audit)
@@ -47,7 +47,10 @@
                     @endif
                   </td>
                   <td>{{ $audit->updated_at }}</td>
-                  <td>{!! link_to_action('AuditReportController@details', 'Download Details', $audit->id, ['class' => 'btn btn-xs btn btn-primary']) !!}</td>
+                  <td style="width:250px;">
+                    {!! link_to_action('AuditReportController@summary', 'Download Summary', $audit->id, ['class' => 'btn btn-xs btn btn-primary']) !!}
+                    {!! link_to_action('AuditReportController@details', 'Download Details', $audit->id, ['class' => 'btn btn-xs btn btn-primary']) !!}
+                  </td>
                 </tr>
                 @endforeach
               @else

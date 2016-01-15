@@ -71,6 +71,7 @@ Route::resource('secondarylookup', 'SecondarylookupController');
 Route::resource('osalookup', 'OsaController');
 
 Route::get('auditreport/{id}/details',['as' => 'auditreport.details', 'uses' => 'AuditReportController@details']);
+Route::get('auditreport/{id}/summary',['as' => 'auditreport.summary', 'uses' => 'AuditReportController@summary']);
 Route::get('auditreport',['as' => 'auditreport.index', 'uses' => 'AuditReportController@index']);
 
 
