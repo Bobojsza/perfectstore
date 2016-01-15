@@ -26,7 +26,7 @@ class AuditReportController extends Controller
     public function details($id){
         $store_audit = StoreAudit::findOrFail($id);
         $details = StoreAuditDetail::getDetails($store_audit->id);
-        \Excel::create("sample", function($excel) use ($details) {
+        \Excel::create($store_audit->store_name . ' - '. $store_audit->template_name, function($excel) use ($details) {
             $excel->sheet('Sheet1', function($sheet) use ($details) {
                 $sheet->fromModel($details,null, 'A1', true);
             })->download('xls');

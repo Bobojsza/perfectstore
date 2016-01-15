@@ -16,6 +16,7 @@ class StoreAuditDetail extends Model
       'created_at', 'category', 'group', 'prompt', 'answer')
       ->join('store_audits', 'store_audits.id', '=', 'store_audit_details.store_audit_id')
       ->where('store_audit_id', $id)
+      ->orderBy('store_audit_details.id')
       ->get();
   }
 }
