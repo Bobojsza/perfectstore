@@ -15,6 +15,7 @@ use DB;
 
 use App\StoreAudit;
 use App\StoreAuditDetail;
+use App\StoreAuditSummary;
 
 class UploadController extends Controller
 {
@@ -40,6 +41,7 @@ class UploadController extends Controller
 		    $reader->open($filePath);
 
 		    $first_row = true;
+		    $summary = false;
 		    $audit_id = 0;
 		    foreach ($reader->getSheetIterator() as $sheet) {
 		        foreach ($sheet->getRowIterator() as $row) {
@@ -76,6 +78,7 @@ class UploadController extends Controller
 		                $audit_id = $audit->id;
 
 		                StoreAuditDetail::where('store_audit_id',  $audit_id)->delete();
+		                StoreAuditSummary::where('store_audit_id',  $audit_id)->delete();
 		            	}else{
 		            		$audit = new StoreAudit;
 		               
@@ -103,14 +106,27 @@ class UploadController extends Controller
 		            	}
 		            	$first_row = false;
 		            }else{
-		            	// dd($row);
-		            	StoreAuditDetail::insert([
-                    'store_audit_id' => $audit_id,
-                    'category' => $row[0],
-                    'group' => $row[1],
-                    'prompt' => $row[2],
-                    'type' => $row[3],
-                    'answer' => $row[4]]);
+
+		            	if($row[0] == 'audit_summary'){
+		            		$summary = true;
+		            		continue;
+		            	}
+		            	if(!$summary){
+		            		StoreAuditDetail::insert([
+	                    'store_audit_id' => $audit_id,
+	                    'category' => $row[0],
+	                    'group' => $row[1],
+	                    'prompt' => $row[2],
+	                    'type' => $row[3],
+	                    'answer' => $row[4]]);
+		            	}else{
+		            		StoreAuditSummary::insert([
+	                    'store_audit_id' => $audit_id,
+	                    'category' => $row[0],
+	                    'group' => $row[1],
+	                    'passed' => $row[2]]);
+		            	}
+		            	
 		            }
 		        }
 		    }
@@ -120,7 +136,7 @@ class UploadController extends Controller
 			
 		    DB::commit();
 		   
-		    return response()->json(array('msg' => 'file uploaded', 'status' => 0));
+		    return response()->json(array('msg' => 'file uploaded',  'status' => 0));
 			
 		} catch (Exception $e) {
 		    DB::rollback();

@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 
 use App\StoreAudit;
 use App\StoreAuditDetail;
+use App\StoreAuditSummary;
 
 class AuditReportController extends Controller
 {
@@ -36,10 +37,10 @@ class AuditReportController extends Controller
 
     public function summary($id){
         $store_audit = StoreAudit::findOrFail($id);
-        $details = StoreAuditDetail::getDetails($store_audit->id);
-        \Excel::create($store_audit->store_name . ' - '. $store_audit->template_name, function($excel) use ($details) {
-            $excel->sheet('Sheet1', function($sheet) use ($details) {
-                $sheet->fromModel($details,null, 'A1', true);
+        $summary = StoreAuditSummary::all();
+        \Excel::create($store_audit->store_name . ' - '. $store_audit->template_name, function($excel) use ($summary) {
+            $excel->sheet('Sheet1', function($sheet) use ($summary) {
+                $sheet->fromModel($summary,null, 'A1', true);
             })->download('xls');
 
         });
