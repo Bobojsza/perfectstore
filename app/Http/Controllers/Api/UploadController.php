@@ -14,8 +14,7 @@ use App\Http\Controllers\Controller;
 use DB;
 
 use App\StoreAudit;
-
-
+use App\StoreAuditDetail;
 
 class UploadController extends Controller
 {
@@ -41,39 +40,77 @@ class UploadController extends Controller
 		    $reader->open($filePath);
 
 		    $first_row = true;
-
+		    $audit_id = 0;
 		    foreach ($reader->getSheetIterator() as $sheet) {
 		        foreach ($sheet->getRowIterator() as $row) {
-		        	// dd($row);
 		            if($first_row){
+		            	$start_date = date_format(date_create($row[11]),"Y-m-d");
+		            	$end_date = date_format(date_create($row[12]),"Y-m-d");
+
 		            	$audit = StoreAudit::where('user_id',$row[0])
-		            		->where('store_code', $row[2])
-		            		->where('start_date', date_format(date_create($row[4]),"Y-m-d"))
-		            		->where('end_date', date_format(date_create($row[5]),"Y-m-d"))
+		            		->where('store_code', $row[9])
+		            		->where('start_date', $start_date)
+		            		->where('end_date', $end_date)
 		            		->first();
 		            	if(!empty($audit)){
 		            		$audit->user_id = $row[0];
-			                $audit->user_name = $row[1];
-			                $audit->store_code = $row[2];
-			                $audit->store_name = $row[3];
-			                $audit->start_date = date_format(date_create($row[4]),"Y-m-d");
-			                $audit->end_date = date_format(date_create($row[5]),"Y-m-d");
-			                $audit->template_name = $row[6];
-			                $audit->passed = 1;
-			                $audit->update();
+		                $audit->user_name = $row[1];
+
+		                $audit->account = $row[2];
+		                $audit->customer_code = $row[3];
+		                $audit->customer = $row[4];
+		                $audit->region_code = $row[5];
+		                $audit->region = $row[6];
+		                $audit->distributor_code = $row[7];
+		                $audit->distributor = $row[8];
+
+		                $audit->store_code = $row[9];
+		                $audit->store_name = $row[10];
+		                $audit->start_date = $start_date;
+		                $audit->end_date = $end_date;
+		                $audit->template_code = $row[13];
+		                $audit->template_name = $row[14];
+		                $audit->passed = $row[15];
+
+		                $audit->update();
+		                $audit_id = $audit->id;
+
+		                StoreAuditDetail::where('store_audit_id',  $audit_id)->delete();
 		            	}else{
 		            		$audit = new StoreAudit;
-			                $audit->user_id = $row[0];
-			                $audit->user_name = $row[1];
-			                $audit->store_code = $row[2];
-			                $audit->store_name = $row[3];
-			                $audit->start_date = date_format(date_create($row[4]),"Y-m-d");
-			                $audit->end_date = date_format(date_create($row[5]),"Y-m-d");
-			                $audit->template_name = $row[6];
-			                $audit->passed = $row[7];
-			                $audit->save();
+		               
+		               	$audit->user_id = $row[0];
+		                $audit->user_name = $row[1];
+
+		                $audit->account = $row[2];
+		                $audit->customer_code = $row[3];
+		                $audit->customer = $row[4];
+		                $audit->region_code = $row[5];
+		                $audit->region = $row[6];
+		                $audit->distributor_code = $row[7];
+		                $audit->distributor = $row[8];
+
+		                $audit->store_code = $row[9];
+		                $audit->store_name = $row[10];
+		                $audit->start_date = $start_date;
+		                $audit->end_date = $end_date;
+		                $audit->template_code = $row[13];
+		                $audit->template_name = $row[14];
+		                $audit->passed = $row[15];
+
+		                $audit->save();
+		                $audit_id = $audit->id;
 		            	}
 		            	$first_row = false;
+		            }else{
+		            	// dd($row);
+		            	StoreAuditDetail::insert([
+                    'store_audit_id' => $audit_id,
+                    'category' => $row[0],
+                    'group' => $row[1],
+                    'prompt' => $row[2],
+                    'type' => $row[3],
+                    'answer' => $row[4]]);
 		            }
 		        }
 		    }
