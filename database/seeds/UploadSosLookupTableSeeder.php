@@ -18,6 +18,23 @@ class UploadSosLookupTableSeeder extends Seeder
 {
     public function run()
 	{
+		$folderpath = 'database/seeds/seed_files';
+		$folders = File::directories($folderpath);
+		$latest = '11232015';
+		foreach ($folders as $value) {
+			$_dir = explode("/", $value);
+			$cnt = count($_dir);
+			$name = $_dir[$cnt - 1];
+			$latest_date = DateTime::createFromFormat('mdY', $latest);
+			$now = DateTime::createFromFormat('mdY', $name);
+			if($now > $latest_date){
+				$latest = $name;
+			}
+		}
+
+		$file_path = $folderpath."/".$latest."/SOS Target.xlsx";
+		echo (string)$file_path, "\n";
+		
 		Model::unguard();
 
 		DB::statement('SET FOREIGN_KEY_CHECKS=0;');
@@ -25,7 +42,7 @@ class UploadSosLookupTableSeeder extends Seeder
 		DB::table('sos_lookup_percentages')->truncate();
 
 		$reader = ReaderFactory::create(Type::XLSX); // for XLSX files
-		$filePath = 'database/seeds/seed_files/SOS Target.xlsx';
+		$filePath = $file_path;
 		$reader->open($filePath);
 
 	   // Accessing the sheet name when reading

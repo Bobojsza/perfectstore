@@ -19,14 +19,31 @@ class UploadOsaTableSeeder extends Seeder
 {
     public function run()
     {
-       Model::unguard();
+    	$folderpath = 'database/seeds/seed_files';
+		$folders = File::directories($folderpath);
+		$latest = '11232015';
+		foreach ($folders as $value) {
+			$_dir = explode("/", $value);
+			$cnt = count($_dir);
+			$name = $_dir[$cnt - 1];
+			$latest_date = DateTime::createFromFormat('mdY', $latest);
+			$now = DateTime::createFromFormat('mdY', $name);
+			if($now > $latest_date){
+				$latest = $name;
+			}
+		}
+
+		$file_path = $folderpath."/".$latest."/OSA Target.xlsx";
+		echo (string)$file_path, "\n";
+		
+       	Model::unguard();
 
 		DB::statement('SET FOREIGN_KEY_CHECKS=0;');
 		DB::table('osa_lookups')->truncate();
 		DB::table('osa_lookup_targets')->truncate();
 
 		$reader = ReaderFactory::create(Type::XLSX); // for XLSX files
-		$filePath = 'database/seeds/seed_files/OSA Target.xlsx';
+		$filePath = $file_path;
 		$reader->open($filePath);
 
 	   // Accessing the sheet name when reading

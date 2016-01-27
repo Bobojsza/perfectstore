@@ -25,11 +25,28 @@ class FormCategoryTaggingTableSeeder extends Seeder
 {
     public function run()
 	{
+		$folderpath = 'database/seeds/seed_files';
+		$folders = File::directories($folderpath);
+		$latest = '11232015';
+		foreach ($folders as $value) {
+			$_dir = explode("/", $value);
+			$cnt = count($_dir);
+			$name = $_dir[$cnt - 1];
+			$latest_date = DateTime::createFromFormat('mdY', $latest);
+			$now = DateTime::createFromFormat('mdY', $name);
+			if($now > $latest_date){
+				$latest = $name;
+			}
+		}
+
+		$file_path = $folderpath."/".$latest."/Category Tagging.xlsx";
+		echo (string)$file_path, "\n";
+		
 		Model::unguard();
 
 		DB::statement('SET FOREIGN_KEY_CHECKS=0;');
 
-		Excel::selectSheets('Sheet1')->load('/database/seeds/seed_files/Category Tagging.xlsx', function($reader) {
+		Excel::selectSheets('Sheet1')->load($file_path, function($reader) {
 			$records = $reader->get();
 			$records->each(function($row) {
 				if(!is_null($row->category)){
