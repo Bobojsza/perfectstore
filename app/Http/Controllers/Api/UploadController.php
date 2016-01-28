@@ -24,7 +24,7 @@ class UploadController extends Controller
 		// dd($request->all());
 		$destinationPath = storage_path().'/uploads/audit/';
 		$fileName = $request->file('data')->getClientOriginalName();
-		
+
 		$request->file('data')->move($destinationPath, $fileName);
 
 		$filePath = storage_path().'/uploads/audit/' . $fileName;
@@ -75,6 +75,8 @@ class UploadController extends Controller
 			                $audit->template_code = $row[13];
 			                $audit->template_name = $row[14];
 			                $audit->passed = $row[15];
+			                $audit->updated_at = date('Y-m-d H:i:s');
+
 
 			                $audit->update();
 			                $audit_id = $audit->id;
