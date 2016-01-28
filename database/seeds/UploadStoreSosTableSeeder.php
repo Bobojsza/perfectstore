@@ -57,7 +57,7 @@ class UploadStoreSosTableSeeder extends Seeder
 							$sos = SosTagging::where('sos_tag',strtoupper($row[3]))->first();
 							// dd($sos);
 							StoreSosTag::insert(array('store_id' => $store->id, 'form_category_id' => $category->id, 'sos_tag_id' => $sos->id));
-							echo (string)$row[0], "\n";
+							// echo (string)$row[0], "\n";
 						}
 						$cnt++;	
 						

@@ -24,6 +24,7 @@ class UploadController extends Controller
 		// dd($request->all());
 		$destinationPath = storage_path().'/uploads/audit/';
 		$fileName = $request->file('data')->getClientOriginalName();
+		
 		$request->file('data')->move($destinationPath, $fileName);
 
 		$filePath = storage_path().'/uploads/audit/' . $fileName;
@@ -54,55 +55,56 @@ class UploadController extends Controller
 		            		->where('start_date', $start_date)
 		            		->where('end_date', $end_date)
 		            		->first();
+
 		            	if(!empty($audit)){
 		            		$audit->user_id = $row[0];
-		                $audit->user_name = $row[1];
+			                $audit->user_name = $row[1];
 
-		                $audit->account = $row[2];
-		                $audit->customer_code = $row[3];
-		                $audit->customer = $row[4];
-		                $audit->region_code = $row[5];
-		                $audit->region = $row[6];
-		                $audit->distributor_code = $row[7];
-		                $audit->distributor = $row[8];
+			                $audit->account = $row[2];
+			                $audit->customer_code = $row[3];
+			                $audit->customer = $row[4];
+			                $audit->region_code = $row[5];
+			                $audit->region = $row[6];
+			                $audit->distributor_code = $row[7];
+			                $audit->distributor = $row[8];
 
-		                $audit->store_code = $row[9];
-		                $audit->store_name = $row[10];
-		                $audit->start_date = $start_date;
-		                $audit->end_date = $end_date;
-		                $audit->template_code = $row[13];
-		                $audit->template_name = $row[14];
-		                $audit->passed = $row[15];
+			                $audit->store_code = $row[9];
+			                $audit->store_name = $row[10];
+			                $audit->start_date = $start_date;
+			                $audit->end_date = $end_date;
+			                $audit->template_code = $row[13];
+			                $audit->template_name = $row[14];
+			                $audit->passed = $row[15];
 
-		                $audit->update();
-		                $audit_id = $audit->id;
+			                $audit->update();
+			                $audit_id = $audit->id;
 
-		                StoreAuditDetail::where('store_audit_id',  $audit_id)->delete();
-		                StoreAuditSummary::where('store_audit_id',  $audit_id)->delete();
+			                StoreAuditDetail::where('store_audit_id',  $audit_id)->delete();
+			                StoreAuditSummary::where('store_audit_id',  $audit_id)->delete();
 		            	}else{
-		            		$audit = new StoreAudit;
+		            		$new_audit = new StoreAudit;
 		               
-		               	$audit->user_id = $row[0];
-		                $audit->user_name = $row[1];
+			               	$new_audit->user_id = $row[0];
+			                $new_audit->user_name = $row[1];
 
-		                $audit->account = $row[2];
-		                $audit->customer_code = $row[3];
-		                $audit->customer = $row[4];
-		                $audit->region_code = $row[5];
-		                $audit->region = $row[6];
-		                $audit->distributor_code = $row[7];
-		                $audit->distributor = $row[8];
+			                $new_audit->account = $row[2];
+			                $new_audit->customer_code = $row[3];
+			                $new_audit->customer = $row[4];
+			                $new_audit->region_code = $row[5];
+			                $new_audit->region = $row[6];
+			                $new_audit->distributor_code = $row[7];
+			                $new_audit->distributor = $row[8];
 
-		                $audit->store_code = $row[9];
-		                $audit->store_name = $row[10];
-		                $audit->start_date = $start_date;
-		                $audit->end_date = $end_date;
-		                $audit->template_code = $row[13];
-		                $audit->template_name = $row[14];
-		                $audit->passed = $row[15];
+			                $new_audit->store_code = $row[9];
+			                $new_audit->store_name = $row[10];
+			                $new_audit->start_date = $start_date;
+			                $new_audit->end_date = $end_date;
+			                $new_audit->template_code = $row[13];
+			                $new_audit->template_name = $row[14];
+			                $new_audit->passed = $row[15];
 
-		                $audit->save();
-		                $audit_id = $audit->id;
+			                $new_audit->save();
+			                $audit_id = $new_audit->id;
 		            	}
 		            	$first_row = false;
 		            }else{
