@@ -74,6 +74,9 @@ Route::get('auditreport/{id}/details',['as' => 'auditreport.details', 'uses' => 
 Route::get('auditreport/{id}/summary',['as' => 'auditreport.summary', 'uses' => 'AuditReportController@summary']);
 Route::get('auditreport',['as' => 'auditreport.index', 'uses' => 'AuditReportController@index']);
 
+Route::get('userreport/summary',['as' => 'userreport.summary', 'uses' => 'UserReportController@summary']);
+Route::get('userreport/{id}/details',['as' => 'userreport.details', 'uses' => 'UserReportController@details']);
+Route::get('userreport/{id}/storesummary',['as' => 'userreport.storesummary', 'uses' => 'UserReportController@storesummary']);
 
 Route::group(array('prefix' => 'api'), function()
 {

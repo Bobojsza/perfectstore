@@ -11,11 +11,14 @@ use App\Store;
 use App\AuditTemplate;
 use App\GradeMatrix;
 use App\User;
+use App\UserMapping;
 
 class ImportMappingTableSeeder extends Seeder
 {
 	public function run()
 	{
+		$start_date = '';
+		$end_date = '';
 		$folderpath = 'database/seeds/seed_files';
 		$folders = File::directories($folderpath);
 		$latest = '11232015';
@@ -29,6 +32,8 @@ class ImportMappingTableSeeder extends Seeder
 				$latest = $name;
 			}
 		}
+
+		
 
 		$file_path = $folderpath."/".$latest."/Store Mapping.xlsx";
 		echo (string)$file_path, "\n";
@@ -50,10 +55,10 @@ class ImportMappingTableSeeder extends Seeder
 						$newtemplate->template = $row->template;
 						$newtemplate->save();
 					}
+					
 				}
 			});
 		});
-
 		DB::table('grade_matrixs')->truncate();
 		Excel::selectSheets('Sheet1')->load($file_path, function($reader) {
 			$records = $reader->get();
@@ -77,6 +82,8 @@ class ImportMappingTableSeeder extends Seeder
 				if(!is_null($row->fullname)){
 					$userlist = explode("/", $row->fullname);
 					$emaillist = explode("/", $row->email);
+
+					// dd($row);
 
 					for ($i=0; $i < count($userlist); $i++) { 
 						$user = User::where('username',$row->username)->first();
@@ -111,7 +118,6 @@ class ImportMappingTableSeeder extends Seeder
 			});
 
 		});
-
 
 
 
@@ -297,6 +303,8 @@ class ImportMappingTableSeeder extends Seeder
 			});
 
 		});
+
+		
 
 		DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 		Model::reguard();

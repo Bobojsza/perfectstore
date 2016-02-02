@@ -37,7 +37,7 @@ class AuditReportController extends Controller
 
     public function summary($id){
         $store_audit = StoreAudit::findOrFail($id);
-        $summaries = StoreAuditSummary::all();
+        $summaries = StoreAuditSummary::where('store_audit_id',$id)->get();
         $categories = StoreAuditSummary::getUniqueCategory($id);
         $groups = StoreAuditSummary::getUniqueGroup($id);
 
@@ -84,7 +84,11 @@ class AuditReportController extends Controller
 
                 $cat_ps_code = '=IF(COUNTIF('.\PHPExcel_Cell::stringFromColumnIndex($col).$first_row.':'.\PHPExcel_Cell::stringFromColumnIndex($col).$last_row.',0),0,IF(COUNTIF('.\PHPExcel_Cell::stringFromColumnIndex($col).$first_row.':'.\PHPExcel_Cell::stringFromColumnIndex($col).$last_row.',1),1,"N/A"))';
                 $sheet->setCellValueByColumnAndRow($col,$row, $cat_ps_code);
-
+                // echo '<pre>';
+                // print_r($x);
+                // print_r($y);
+                //  echo '</pre>';
+                // dd(1);
                 foreach ($summaries as $summary) {
                     $x_point = $x[$summary->category];
                     $y_point = $y[$summary->group];

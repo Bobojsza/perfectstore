@@ -13,6 +13,8 @@ use App\AuditTemplate;
 use App\AuditTemplateForm;
 use App\FormCategory;
 use App\FormFormula;
+use App\User;
+use App\UserMapping;
 
 use App\AuditTemplateCategory;
 use App\AuditTemplateGroup;
@@ -79,9 +81,15 @@ class ImportAuditTemplateTableSeeder extends Seeder
 							if($cnt > 0){
 								if(!is_null($row[1])){	
 									// dd($row);
+									// $start_date = date('Y-m-d',strtotime($row[4]));
+									// $end_date = date('Y-m-d',strtotime($row[5]));
+
+									$start_date = $row[4];
+									$end_date = $row[5];
+
 									$template = AuditTemplate::firstOrCreate(['template' => $row[1]]);
-									$template->start_date = $row[4];
-									$template->end_date = $row[5];
+									$template->start_date = $start_date;
+									$template->end_date = $end_date;
 									$template->update();
 									
 									$category = FormCategory::firstOrCreate(['category' => $row[3]]);
@@ -283,6 +291,24 @@ class ImportAuditTemplateTableSeeder extends Seeder
 				}
 
 				$reader->close();
+			}
+
+			$users = User::all();
+			foreach ($users as $user) {
+				$mapping = UserMapping::where('user_name', $user->name)
+					->where('start_date', $start_date)
+					->where('end_date', $end_date)
+					->first();
+				if(!empty($mapping)){
+					$mapping->mapped_stores = $user->stores->count();
+					$mapping->update();
+				}else{
+					UserMapping::create(['user_name' =>$user->name,
+						'start_date' => $start_date,
+						'end_date' => $end_date,
+						'mapped_stores' => $user->stores->count()]);
+
+				}
 			}
 
 
