@@ -63,7 +63,7 @@ class FormRepository extends Model
 	}
 	
 
-    public static function insertForm($template,$code,$type,$required,$prompt,$choices,$expected_answer,$image,$choices2 = null,$con_datas = null){
+    public static function insertForm($template,$code,$type,$required,$prompt,$choices,$expected_answer,$image,$choices2 = null,$con_datas = null,$default_answer = null){
     	if(strtoupper($type) == 'DOUBLE'){
 			$form_type = FormType::where('form_type', "NUMERIC")->first();
 		}else{
@@ -95,6 +95,7 @@ class FormRepository extends Model
 				'prompt' => strtoupper($prompt),
 				'required' => $required,
 				'exempt' => 0,
+				'default_answer' => $default_answer,
 				'image' => $image,
 				'code' => $code
 			));
@@ -109,6 +110,13 @@ class FormRepository extends Model
 					$sel = MultiSelect::create(array('option' => strtoupper($choice)));
 				}
 				FormMultiSelect::create(array('form_id' => $form->id, 'multi_select_id' => $sel->id));
+			}
+
+			if(!empty($default_answer)){
+				$_form = Form::find($form->id);
+				$ans = MultiSelect::where('option',strtoupper($default_answer))->first();
+				$_form->default_answer = $ans->id;
+				$_form->update();
 			}
 		}
 
@@ -133,6 +141,13 @@ class FormRepository extends Model
 				$_form->expected_answer = $ans->id;
 				$_form->update();
 			}
+
+			if(!empty($default_answer)){
+				$_form = Form::find($form->id);
+				$ans = SingleSelect::where('option',strtoupper($default_answer))->first();
+				$_form->default_answer = $ans->id;
+				$_form->update();
+			}
 			
 		}
 
@@ -150,6 +165,7 @@ class FormRepository extends Model
 					'condition_desc' => $con_data['condition_desc']]);	
 			}
 		}
+
 		return $form;
     }
 }

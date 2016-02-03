@@ -44,7 +44,8 @@ group by store_audits.user_name');
 
     public function storesummary($id){
     	$store_auidit = StoreAudit::findOrFail($id);
-    	$summaries = StoreAuditSummary::where('store_audit_id',$store_auidit->id)	
+    	$summaries = StoreAuditSummary::raw("SELECT category,min(passed) as passed")
+            ->where('store_audit_id',$store_auidit->id)	
     		->groupBy('category')
     		->get();
     	return view('userreport.storesummary',compact('summaries'));
