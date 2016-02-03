@@ -202,7 +202,7 @@ class ImportAuditTemplateTableSeeder extends Seeder
 											
 										}
 										// dd($data_con);
-										$form = FormRepository::insertForm($template,$row[7],$row[10],$row[9],$row[8],$row[11],null,$image,array(),$data_con);
+										$form = FormRepository::insertForm($template,$row[7],$row[10],$row[9],$row[8],$row[11],$row[13],$image,array(),$data_con);
 										
 									}else{
 

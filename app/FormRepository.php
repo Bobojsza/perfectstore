@@ -164,6 +164,24 @@ class FormRepository extends Model
 					'condition' => $con_data['condition'], 
 					'condition_desc' => $con_data['condition_desc']]);	
 			}
+
+			if(!empty($expected_answer)){
+				$_form = Form::find($form->id);
+				$ans = FormCondition::where('option',strtoupper($expected_answer))
+					->where('form_id',$form->id)
+					->first();
+				$_form->expected_answer = $ans->id;
+				$_form->update();
+			}
+
+			// if(!empty($default_answer)){
+			// 	$_form = Form::find($form->id);
+			// 	$ans = FormCondition::where('option',strtoupper($default_answer))
+			// 		->where('form_id',)
+			// 		->first();
+			// 	$_form->default_answer = $ans->id;
+			// 	$_form->update();
+			// }
 		}
 
 		return $form;
