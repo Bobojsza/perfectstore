@@ -176,7 +176,7 @@ class DownloadController extends Controller
                 $data[5] = $form->form_type_id;
                 $prompt = "null";
                 if(!empty($form->prompt)){
-                    $prompt = $form->prompt;
+                    $prompt = preg_replace("/[\\n\\r]+/", " ", $form->prompt);
                 }
                 $data[6] = $prompt;
                 $data[7] = $form->required;
@@ -203,7 +203,7 @@ class DownloadController extends Controller
                 $data[0] = $form->id;
                 $data[1] = $form->audit_template_id;
                 $data[2] = $form->form_type_id;
-                $data[3] = $form->prompt;
+                $data[3] = preg_replace("/[\\n\\r]+/", " ", $form->prompt);
                 $data[4] = $form->required;
                 $data[5] = $form->expected_answer;
                 $data[6] = $form->exempt;
