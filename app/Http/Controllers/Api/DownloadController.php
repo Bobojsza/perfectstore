@@ -309,7 +309,7 @@ class DownloadController extends Controller
                 $form_ids[] = $form->id;
             }
 
-            $conditions = FormCondition::select('form_conditions.form_id', 'option', 'condition')->get();
+            $conditions = FormCondition::select('form_conditions.form_id', 'option', 'condition', 'id')->get();
             $writer = WriterFactory::create(Type::CSV); 
             $writer->openToBrowser('conditions.txt');
             $writer->addRow(['form_id', 'option', 'condition']); 
@@ -317,6 +317,7 @@ class DownloadController extends Controller
                 $data[0] = $condition->form_id;
                 $data[1] = $condition->option;
                 $data[2] = $condition->condition;
+                $data[3] = $condition->id;
                 $writer->addRow($data); 
             }
 
