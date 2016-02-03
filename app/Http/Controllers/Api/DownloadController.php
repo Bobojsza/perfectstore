@@ -155,7 +155,8 @@ class DownloadController extends Controller
             $forms = AuditTemplateForm::select('audit_template_forms.id', 
                 'audit_template_forms.order',
                 'audit_template_forms.audit_template_group_id', 'audit_template_forms.audit_template_id',
-                'audit_template_forms.form_id', 'forms.form_type_id', 'forms.prompt', 'forms.required', 'forms.expected_answer', 'forms.exempt', 'forms.image')
+                'audit_template_forms.form_id', 'forms.form_type_id', 'forms.prompt', 'forms.required', 'forms.expected_answer', 'forms.exempt', 'forms.image',
+                'forms.default_answer')
                 ->join('audit_template_groups', 'audit_template_groups.id', '=', 'audit_template_forms.audit_template_group_id')
                 ->join('audit_template_categories', 'audit_template_categories.id', '=', 'audit_template_groups.audit_template_category_id')
                 ->join('forms', 'forms.id', '=', 'audit_template_forms.form_id')
@@ -166,7 +167,7 @@ class DownloadController extends Controller
             // dd($forms);
             $writer = WriterFactory::create(Type::CSV); 
             $writer->openToBrowser('questions.txt');
-            $writer->addRow(['id', 'order', 'audit_template_group_id', 'audit_template_id', 'form_id', 'form_type_id', 'prompt', 'required', 'expected_answer', 'exempt', 'image']); 
+            $writer->addRow(['id', 'order', 'audit_template_group_id', 'audit_template_id', 'form_id', 'form_type_id', 'prompt', 'required', 'expected_answer', 'exempt', 'image', 'default_answer']); 
             foreach ($forms as $form) {
                 $data[0] = $form->id;
                 $data[1] = $form->order;
@@ -183,7 +184,7 @@ class DownloadController extends Controller
                 $data[8] = $form->expected_answer;
                 $data[9] = $form->exempt;
                 $data[10] = $form->form->image;
-                // $data[14] = $form->group_order;
+                $data[11] = $form->default_answer;
                 // var_dump($data);
                 $writer->addRow($data); 
             }
@@ -198,7 +199,7 @@ class DownloadController extends Controller
             
             $writer = WriterFactory::create(Type::CSV); 
             $writer->openToBrowser('forms.txt');
-            $writer->addRow(['id', 'audit_template_id', 'form_type_id', 'prompt', 'required', 'expected_answer', 'exempt', 'image']); 
+            $writer->addRow(['id', 'audit_template_id', 'form_type_id', 'prompt', 'required', 'expected_answer', 'exempt', 'image','default_answer']); 
             foreach ($forms as $form) {
                 $data[0] = $form->id;
                 $data[1] = $form->audit_template_id;
@@ -208,6 +209,7 @@ class DownloadController extends Controller
                 $data[5] = $form->expected_answer;
                 $data[6] = $form->exempt;
                 $data[7] = $form->image;
+                $data[8] = $form->default_answer;
                 $writer->addRow($data); 
             }
 

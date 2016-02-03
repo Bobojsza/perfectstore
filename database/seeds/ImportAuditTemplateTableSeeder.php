@@ -123,7 +123,18 @@ class ImportAuditTemplateTableSeeder extends Seeder
 											
 											$data = DB::table('temp_forms')->where('code',$a)->first();
 											if(!empty($data)){
-												$other_form = FormRepository::insertForm($template,$a,$data->type,$data->required,$data->prompt,$data->choices,$data->expected_answer,null,$image);
+												$other_form = FormRepository::insertForm(
+													$template,
+													$a,
+													$data->type,
+													$data->required,
+													$data->prompt,
+													$data->choices,
+													$data->expected_answer,
+													$image,
+													null,
+													null,
+													null);
 												$index1[$a] = $other_form->id;
 												$index2[$a] = $other_form->prompt.'_'.$other_form->id;
 											}else{
@@ -150,7 +161,18 @@ class ImportAuditTemplateTableSeeder extends Seeder
 											$formula2 = str_replace('{'.$a.'}', ' :'.$index2[$a].': ', $formula2);
 											
 										}
-										$form = FormRepository::insertForm($template,$row[7],$row[10],$row[9],$row[8],$formula1,null,$image,$formula2);
+										$form = FormRepository::insertForm(
+											$template,
+											$row[7],
+											$row[10],
+											$row[9],
+											$row[8],
+											$formula1,
+											null,
+											$image,
+											$formula2,
+											null,
+											null);
 										
 									}elseif ($form_type->id == 12) {
 										$options = explode("~", $row[11]);
@@ -178,7 +200,18 @@ class ImportAuditTemplateTableSeeder extends Seeder
 															$other_data = DB::table('forms')->where('code',$code)->first();
 														}
 
-														$other_form = FormRepository::insertForm($template,$code,$other_data->type,$other_data->required,$other_data->prompt,$other_data->choices,$other_data->expected_answer,null);
+														$other_form = FormRepository::insertForm(
+															$template,
+															$code,
+															$other_data->type,
+															$other_data->required,
+															$other_data->prompt,
+															$other_data->choices,
+															$other_data->expected_answer,
+															null,
+															null,
+															null,
+															null);
 
 														
 														$x1[] = $other_form->id;
@@ -202,11 +235,33 @@ class ImportAuditTemplateTableSeeder extends Seeder
 											
 										}
 										// dd($data_con);
-										$form = FormRepository::insertForm($template,$row[7],$row[10],$row[9],$row[8],$row[11],$row[13],$image,array(),$data_con);
+										$form = FormRepository::insertForm(
+											$template,
+											$row[7],
+											$row[10],
+											$row[9],
+											$row[8],
+											$row[11],
+											$row[13],
+											$image,
+											array(),
+											$data_con,
+											$row[15]);
 										
 									}else{
 
-										$form = FormRepository::insertForm($template,$row[7],$row[10],$row[9],$row[8],$row[11],$row[13],$image);
+										$form = FormRepository::insertForm(
+											$template,
+											$row[7],
+											$row[10],
+											$row[9],
+											$row[8],
+											$row[11],
+											$row[13],
+											$image,
+											null,
+											null,
+											$row[15]);
 
 									}
 								}

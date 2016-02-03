@@ -27,6 +27,7 @@ class FormRepository extends Model
 				'prompt' => $form->prompt,
 				'required' => $form->required,
 				'expected_answer' => $form->expected_answer,
+				'default_answer' => $form->default_answer,
 				'exempt' => $form->exempt,
 			));
 
@@ -63,7 +64,18 @@ class FormRepository extends Model
 	}
 	
 
-    public static function insertForm($template,$code,$type,$required,$prompt,$choices,$expected_answer,$image,$choices2 = null,$con_datas = null,$default_answer = null){
+    public static function insertForm(
+    	$template,
+    	$code,
+    	$type,
+    	$required,
+    	$prompt,
+    	$choices,
+    	$expected_answer,
+    	$image,
+    	$choices2 = null,
+    	$con_datas = null,
+    	$default_answer = null){
     	if(strtoupper($type) == 'DOUBLE'){
 			$form_type = FormType::where('form_type', "NUMERIC")->first();
 		}else{
@@ -174,14 +186,14 @@ class FormRepository extends Model
 				$_form->update();
 			}
 
-			// if(!empty($default_answer)){
-			// 	$_form = Form::find($form->id);
-			// 	$ans = FormCondition::where('option',strtoupper($default_answer))
-			// 		->where('form_id',)
-			// 		->first();
-			// 	$_form->default_answer = $ans->id;
-			// 	$_form->update();
-			// }
+			if(!empty($default_answer)){
+				$_form = Form::find($form->id);
+				$ans = FormCondition::where('option',strtoupper($default_answer))
+					->where('form_id',$form->id)
+					->first();
+				$_form->default_answer = $ans->id;
+				$_form->update();
+			}
 		}
 
 		return $form;
