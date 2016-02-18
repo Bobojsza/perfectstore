@@ -69,6 +69,7 @@ Route::resource('secondarydisplay', 'SecondarydisplayController');
 Route::resource('secondarylookup', 'SecondarylookupController');
 
 Route::resource('osalookup', 'OsaController');
+Route::resource('customized', 'CustomizedlookupController');
 
 Route::get('auditreport/{id}/details',['as' => 'auditreport.details', 'uses' => 'AuditReportController@details']);
 Route::get('auditreport/{id}/summary',['as' => 'auditreport.summary', 'uses' => 'AuditReportController@summary']);
@@ -91,4 +92,5 @@ Route::group(array('prefix' => 'api'), function()
    Route::get('image', 'Api\DownloadController@image');
 
    Route::post('storeaudit', 'Api\UploadController@storeaudit');
+   Route::post('uploadimage', 'Api\UploadController@uploadimage');
 });//

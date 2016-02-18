@@ -21,7 +21,6 @@ class UploadController extends Controller
 {
 	public function storeaudit(Request $request)
 	{
-		// dd($request->all());
 		$destinationPath = storage_path().'/uploads/audit/';
 		$fileName = $request->file('data')->getClientOriginalName();
 
@@ -33,7 +32,6 @@ class UploadController extends Controller
 		$user_id = $filename_data[0];
 		$store_code = $filename_data[1];
 	   
-
 		DB::beginTransaction();
 		try {
 			
@@ -136,11 +134,9 @@ class UploadController extends Controller
 		    }
 		   
 		    $reader->close();
-
-			
 		    DB::commit();
 		   
-		    return response()->json(array('msg' => 'file uploaded',  'status' => 0));
+		    return response()->json(array('msg' => 'file uploaded',  'status' => 0, 'audit_id' => $audit_id));
 			
 		} catch (Exception $e) {
 		    DB::rollback();
@@ -148,4 +144,12 @@ class UploadController extends Controller
 		}
 		
 	}
+
+	public function uploadimage(Request $request){
+        $destinationPath = storage_path().'/uploads/image/'.$request->audit_id."/";
+        $fileName = $request->file('data')->getClientOriginalName();
+        $request->file('data')->move($destinationPath, $fileName);
+
+        return response()->json(array('msg' => 'file uploaded', 'status' => 0, 'audit_id' => $request->audit_id));
+    }
 }

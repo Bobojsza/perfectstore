@@ -49,6 +49,8 @@ class FormCategoryController extends Controller
         $category->secondary_display = ($request->secondary_display) ? 1 : 0;
         $category->osa_tagging = ($request->osa_tagging) ? 1 : 0;
         $category->sos_tagging = ($request->sos_tagging) ? 1 : 0;
+        $category->custom = ($request->custom) ? 1 : 0;
+        $category->perfect_store = ($request->perfect_store) ? 1 : 0;
         $category->save();
 
         Session::flash('flash_message', 'Form Category successfully added!');
@@ -99,7 +101,9 @@ class FormCategoryController extends Controller
             $category->category = $request->category;
             $category->secondary_display = ($request->secondary_display) ? 1 : 0;
             $category->osa_tagging = ($request->osa_tagging) ? 1 : 0;
-            $category->sos_tagging = ($request->sos_tagging) ? 1 : 0;                          
+            $category->sos_tagging = ($request->sos_tagging) ? 1 : 0;    
+            $category->custom = ($request->custom) ? 1 : 0;
+            $category->perfect_store = ($request->perfect_store) ? 1 : 0;                      
             $category->update();
             \DB::commit();
 

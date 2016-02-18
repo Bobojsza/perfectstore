@@ -35,6 +35,12 @@
 		                  	{!! Form::checkbox('sos', 1) !!} SOS Tag
 		                  </label>
 		                </div>
+
+		                <div class="checkbox">
+		                  <label>
+		                  	{!! Form::checkbox('custom', 1) !!} Customized Tag
+		                  </label>
+		                </div>
 				  	</div><!-- /.box-body -->
 
 				 	<div class="box-footer">

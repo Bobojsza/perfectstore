@@ -20,19 +20,31 @@
 
 						<div class="checkbox">
 		                  <label>
-		                  	{!! Form::checkbox('secondary_display', 1) !!} Secondary Display Tag
+		                  	{!! Form::checkbox('secondary_display', 1) !!} With Secondary Display
 		                  </label>
 		                </div>
 
 		                <div class="checkbox">
 		                  <label>
-		                  	{!! Form::checkbox('osa_tagging', 1) !!} OSA Tag
+		                  	{!! Form::checkbox('osa_tagging', 1) !!} With On Stock Availibility
 		                  </label>
 		                </div>
 
 		                <div class="checkbox">
 		                  <label>
-		                  	{!! Form::checkbox('sos_tagging', 1) !!} SOS Tag
+		                  	{!! Form::checkbox('sos_tagging', 1) !!} With Share of Shelves
+		                  </label>
+		                </div>
+
+		                <div class="checkbox">
+		                  <label>
+		                  	{!! Form::checkbox('custom', 1) !!}With Customized SKU
+		                  </label>
+		                </div>
+
+		                <div class="checkbox">
+		                  <label>
+		                  	{!! Form::checkbox('perfect_store', 1) !!} Used on Perfect Store
 		                  </label>
 		                </div>
 

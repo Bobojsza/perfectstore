@@ -96,8 +96,6 @@ class ImportAuditTemplateTableSeeder extends Seeder
 
 									// dd($category);
 
-									
-									
 									$group = FormGroup::firstOrCreate(['group_desc' => $row[6]]);
 
 									$type = $row[10];
@@ -112,8 +110,6 @@ class ImportAuditTemplateTableSeeder extends Seeder
 									if(!empty($row[14])){
 										$image = $row[14];
 									}
-
-
 
 									if($form_type->id == 11){
 										$index1 = array();

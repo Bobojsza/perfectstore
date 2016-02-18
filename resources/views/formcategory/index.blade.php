@@ -31,9 +31,11 @@
 							<tr>
 								<th>ID</th>
 								<th>Category</th>
-								<th>Secondary Display</th>
-								<th>OSA Tagging</th>
-								<th>SOS Tagging</th>
+								<th>With Secondary Display</th>
+								<th>With On Stock Availibility</th>
+								<th>With Share of Shelves</th>
+								<th>With Customized SKU</th>
+								<th>Used on Perfect Store</th>
 								<th>Option</th>
 							</tr>
 							@foreach($formcategories as $category)
@@ -52,6 +54,16 @@
 								</td>
 								<td>
 									@if($category->sos_tagging == 1)
+									<i class="fa fa-fw fa-check"></i>
+									@endif
+								</td>
+								<td>
+									@if($category->custom == 1)
+									<i class="fa fa-fw fa-check"></i>
+									@endif
+								</td>
+								<td>
+									@if($category->perfect_store == 1)
 									<i class="fa fa-fw fa-check"></i>
 									@endif
 								</td>
