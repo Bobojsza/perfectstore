@@ -11,6 +11,9 @@ use App\StoreAudit;
 use App\StoreAuditDetail;
 use App\StoreAuditSummary;
 
+use Box\Spout\Writer\WriterFactory;
+use Box\Spout\Common\Type;
+
 class AuditReportController extends Controller
 {
     /**
@@ -27,6 +30,16 @@ class AuditReportController extends Controller
     public function details($id){
         $store_audit = StoreAudit::findOrFail($id);
         $details = StoreAuditDetail::getDetails($store_audit->id);
+
+        foreach ($details as $key => $value) {
+            $img = explode(".", $value->answer);
+            if((isset($img[1])) && (strtolower($img[1]) == "jpg")){
+                $link = url('api/auditimage/'.$id.'/'.$value->answer);
+                $value->answer = $link;
+            }
+            
+        }
+        
         \Excel::create($store_audit->store_name . ' - '. $store_audit->template_name, function($excel) use ($details) {
             $excel->sheet('Sheet1', function($sheet) use ($details) {
                 $sheet->fromModel($details,null, 'A1', true);

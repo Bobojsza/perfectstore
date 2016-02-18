@@ -93,4 +93,6 @@ Route::group(array('prefix' => 'api'), function()
 
    Route::post('storeaudit', 'Api\UploadController@storeaudit');
    Route::post('uploadimage', 'Api\UploadController@uploadimage');
+
+   Route::get('auditimage/{folder}/{filename}', 'Api\DownloadController@auditimage');
 });//
