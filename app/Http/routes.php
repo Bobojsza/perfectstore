@@ -79,6 +79,7 @@ Route::get('userreport/summary',['as' => 'userreport.summary', 'uses' => 'UserRe
 Route::get('userreport/{id}/details',['as' => 'userreport.details', 'uses' => 'UserReportController@details']);
 Route::get('userreport/{id}/storesummary',['as' => 'userreport.storesummary', 'uses' => 'UserReportController@storesummary']);
 
+Route::get('auditimage/{folder}/{filename}', 'Api\DownloadController@auditimage');
 Route::group(array('prefix' => 'api'), function()
 {
    Route::get('form/inputs', 'Api\FormsController@inputs');
@@ -92,7 +93,7 @@ Route::group(array('prefix' => 'api'), function()
    Route::get('image', 'Api\DownloadController@image');
 
    Route::post('storeaudit', 'Api\UploadController@storeaudit');
-   Route::post('uploadimage', 'Api\UploadController@uploadimage');
+   Route::post('uploadimage/{audit_id}', 'Api\UploadController@uploadimage');
 
-   Route::get('auditimage/{folder}/{filename}', 'Api\DownloadController@auditimage');
+
 });//

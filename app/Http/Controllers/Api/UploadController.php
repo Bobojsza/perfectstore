@@ -149,7 +149,7 @@ class UploadController extends Controller
 		
 	}
 
-	public function uploadimage(Request $request){
+	public function uploadimage($audit_id, Request $request){
 		if ($request->hasFile('data'))
 		{
 	        $destinationPath = storage_path().'/uploads/image/'.$request->audit_id."/";

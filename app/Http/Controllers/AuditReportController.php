@@ -34,7 +34,7 @@ class AuditReportController extends Controller
         foreach ($details as $key => $value) {
             $img = explode(".", $value->answer);
             if((isset($img[1])) && (strtolower($img[1]) == "jpg")){
-                $link = url('api/auditimage/'.$id.'/'.$value->answer);
+                $link = url('auditimage/'.$id.'/'.$value->answer);
                 $value->answer = $link;
             }
             
