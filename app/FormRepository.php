@@ -149,16 +149,39 @@ class FormRepository extends Model
 
 			if(!empty($expected_answer)){
 				$_form = Form::find($form->id);
-				$ans = SingleSelect::where('option',strtoupper($expected_answer))->first();
-				$_form->expected_answer = $ans->id;
-				$_form->update();
+				// $ans = SingleSelect::where('option',strtoupper($expected_answer))->first();
+				// $_form->expected_answer = $ans->id;
+				// $_form->update();
+
+				$ans = explode("^", $expected_answer);
+				$pos_ans = [];
+				foreach ($ans as $value) {
+					$_ans = SingleSelect::where('option',strtoupper($value))->first();
+					$pos_ans[] = $_ans->id;
+				}
+				if(!empty($pos_ans)){
+					$_form->expected_answer = implode("^", $pos_ans);
+					$_form->update();
+				}
 			}
+
+
 
 			if(!empty($default_answer)){
 				$_form = Form::find($form->id);
-				$ans = SingleSelect::where('option',strtoupper($default_answer))->first();
-				$_form->default_answer = $ans->id;
-				$_form->update();
+				// $ans = SingleSelect::where('option',strtoupper($default_answer))->first();
+				// $_form->default_answer = $ans->id;
+				// $_form->update();
+				$ans = explode("^", $default_answer);
+				$pos_ans = [];
+				foreach ($ans as $value) {
+					$_ans = SingleSelect::where('option',strtoupper($value))->first();
+					$pos_ans[] = $_ans->id;
+				}
+				if(!empty($pos_ans)){
+					$_form->default_answer = implode("^", $pos_ans);
+					$_form->update();
+				}
 			}
 			
 		}
@@ -179,20 +202,35 @@ class FormRepository extends Model
 
 			if(!empty($expected_answer)){
 				$_form = Form::find($form->id);
-				$ans = FormCondition::where('option',strtoupper($expected_answer))
-					->where('form_id',$form->id)
-					->first();
-				$_form->expected_answer = $ans->id;
-				$_form->update();
+
+				$ans = explode("^", $expected_answer);
+				$pos_ans = [];
+				foreach ($ans as $value) {
+					$_ans = FormCondition::where('option',strtoupper($value))
+						->where('form_id',$form->id)
+						->first();
+					$pos_ans[] = $_ans->id;
+				}
+				if(!empty($pos_ans)){
+					$_form->expected_answer = implode("^", $pos_ans);
+					$_form->update();
+				}
+				
 			}
 
 			if(!empty($default_answer)){
-				$_form = Form::find($form->id);
-				$ans = FormCondition::where('option',strtoupper($default_answer))
-					->where('form_id',$form->id)
-					->first();
-				$_form->default_answer = $ans->id;
-				$_form->update();
+				if(!empty($default_answer)){
+					$_form = Form::find($form->id);
+					$ans = FormCondition::where('option',strtoupper($default_answer))
+						->where('form_id',$form->id)
+						->first();
+					if(!empty($ans)){
+						$_form->default_answer = $ans->id;
+						$_form->update();
+					}
+				}
+				
+				
 			}
 		}
 

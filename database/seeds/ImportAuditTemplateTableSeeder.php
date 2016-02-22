@@ -98,7 +98,7 @@ class ImportAuditTemplateTableSeeder extends Seeder
 
 									$group = FormGroup::firstOrCreate(['group_desc' => $row[6]]);
 
-									$type = $row[10];
+									$type = $row[11];
 
 									if(strtoupper($type) == 'DOUBLE'){
 										$form_type = FormType::where('form_type', "NUMERIC")->first();
@@ -107,14 +107,14 @@ class ImportAuditTemplateTableSeeder extends Seeder
 									}
 
 									$image = "";
-									if(!empty($row[14])){
-										$image = $row[14];
+									if(!empty($row[15])){
+										$image = $row[15];
 									}
 
 									if($form_type->id == 11){
 										$index1 = array();
 										$index2 = array();
-										preg_match_all('/{(.*?)}/', $row[11], $matches);
+										preg_match_all('/{(.*?)}/', $row[12], $matches);
 										foreach ($matches[1] as $key => $a ){
 											
 											$data = DB::table('temp_forms')->where('code',$a)->first();
@@ -150,8 +150,8 @@ class ImportAuditTemplateTableSeeder extends Seeder
 											
 											
 										}
-										$formula1 = $row[11];
-										$formula2 = $row[11];
+										$formula1 = $row[12];
+										$formula2 = $row[12];
 										foreach ($matches[1] as $key => $a ){
 											$formula1 = str_replace('{'.$a.'}',$index1[$a], $formula1);
 											$formula2 = str_replace('{'.$a.'}', ' :'.$index2[$a].': ', $formula2);
@@ -160,9 +160,9 @@ class ImportAuditTemplateTableSeeder extends Seeder
 										$form = FormRepository::insertForm(
 											$template,
 											$row[7],
+											$row[11],
 											$row[10],
 											$row[9],
-											$row[8],
 											$formula1,
 											null,
 											$image,
@@ -171,12 +171,12 @@ class ImportAuditTemplateTableSeeder extends Seeder
 											null);
 										
 									}elseif ($form_type->id == 12) {
-										$options = explode("~", $row[11]);
+										$options = explode("~", $row[12]);
 
 
-										preg_match_all('/(.*?){(.*?)}/', $row[11], $matches);
+										preg_match_all('/(.*?){(.*?)}/', $row[12], $matches);
 										$data_con = array();
-										$options = explode("~", $row[11]);
+										$options = explode("~", $row[12]);
 
 
 										foreach ($options as $option) {
@@ -234,30 +234,30 @@ class ImportAuditTemplateTableSeeder extends Seeder
 										$form = FormRepository::insertForm(
 											$template,
 											$row[7],
+											$row[11],
 											$row[10],
 											$row[9],
-											$row[8],
-											$row[11],
-											$row[13],
+											$row[12],
+											$row[14],
 											$image,
 											array(),
 											$data_con,
-											$row[15]);
+											$row[16]);
 										
 									}else{
 
 										$form = FormRepository::insertForm(
 											$template,
 											$row[7],
+											$row[11],
 											$row[10],
 											$row[9],
-											$row[8],
-											$row[11],
-											$row[13],
+											$row[12],
+											$row[14],
 											$image,
 											null,
 											null,
-											$row[15]);
+											$row[16]);
 
 									}
 								}
@@ -361,19 +361,6 @@ class ImportAuditTemplateTableSeeder extends Seeder
 
 				}
 			}
-
-
-		// $reader->close();
-
-        // } catch (Exception $e) {
-        //     DB::rollBack();
-        //     print_r($e);
-        //     dd(1);
-        // }
-
-		
-
-
 
 
 		DB::statement('SET FOREIGN_KEY_CHECKS=1;');
