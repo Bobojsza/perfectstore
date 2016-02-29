@@ -1,4 +1,4 @@
-	<?php
+<?php
 
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Eloquent\Model;
@@ -79,11 +79,7 @@ class ImportAuditTemplateTableSeeder extends Seeder
 						$cnt = 0;
 						foreach ($sheet->getRowIterator() as $row) {
 							if($cnt > 0){
-								if(!is_null($row[1])){	
-									// dd($row);
-									// $start_date = date('Y-m-d',strtotime($row[4]));
-									// $end_date = date('Y-m-d',strtotime($row[5]));
-
+								if($row[1] != ''){	
 									$start_date = $row[4];
 									$end_date = $row[5];
 
@@ -190,28 +186,31 @@ class ImportAuditTemplateTableSeeder extends Seeder
 												
 												if(count($codes)> 0){
 													foreach ($codes as $code) {
-														$other_data = DB::table('temp_forms')->where('code',$code)->first();
+														if($code != ''){
+															$other_data = DB::table('temp_forms')->where('code',$code)->first();
 
-														if(empty($other_data)){
-															$other_data = DB::table('forms')->where('code',$code)->first();
+															if(empty($other_data)){
+																$other_data = DB::table('forms')->where('code',$code)->first();
+															}
+
+															$other_form = FormRepository::insertForm(
+																$template,
+																$code,
+																$other_data->type,
+																$other_data->required,
+																$other_data->prompt,
+																$other_data->choices,
+																$other_data->expected_answer,
+																null,
+																null,
+																null,
+																null);
+
+															
+															$x1[] = $other_form->id;
+															$x2[] = $other_form->prompt.'_'.$other_form->id;
 														}
-
-														$other_form = FormRepository::insertForm(
-															$template,
-															$code,
-															$other_data->type,
-															$other_data->required,
-															$other_data->prompt,
-															$other_data->choices,
-															$other_data->expected_answer,
-															null,
-															null,
-															null,
-															null);
-
 														
-														$x1[] = $other_form->id;
-														$x2[] = $other_form->prompt.'_'.$other_form->id;
 														
 													}
 													
@@ -322,23 +321,23 @@ class ImportAuditTemplateTableSeeder extends Seeder
 									));
 							}
 							$cnt++;
-					  
 						}
-					}elseif($sheet->getName() == 'Others') {
-						$cnt = 0;
-						foreach ($sheet->getRowIterator() as $row) {
-							if($cnt > 0){
-								if(!is_null($row[2])){
-									$prompt = addslashes($row[1]);
-									DB::statement('INSERT INTO temp_forms (code, prompt, required, type, choices) VALUES ("'.$row[0].'","'.$prompt.'","'.$row[2].'","'.$row[3].'","'.$row[4].'");');
-								}
-							}
-							$cnt++;
-					  
-						}
-					}else{
-
 					}
+					// }elseif($sheet->getName() == 'Others') {
+					// 	// $cnt = 0;
+					// 	// foreach ($sheet->getRowIterator() as $row) {
+					// 	// 	if($cnt > 0){
+					// 	// 		if(!is_null($row[2])){
+					// 	// 			$prompt = addslashes($row[1]);
+					// 	// 			DB::statement('INSERT INTO temp_forms (code, prompt, required, type, choices) VALUES ("'.$row[0].'","'.$prompt.'","'.$row[2].'","'.$row[3].'","'.$row[4].'");');
+					// 	// 		}
+					// 	// 	}
+					// 	// 	$cnt++;
+					  
+					// 	// }
+					// }else{
+
+					// }
 				}
 
 				$reader->close();

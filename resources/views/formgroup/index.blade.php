@@ -35,6 +35,7 @@
 								<th>OSA Tag</th>
 								<th>SOS Tag</th>
 								<th>Customized Tag</th>
+								<th>Used on Perfect Store</th>
 								<th>Action</th>
 							</tr>
 							@foreach($formgroups as $group)
@@ -53,6 +54,11 @@
 								</td>
 								<td>
 									@if($group->sos == 1)
+									<i class="fa fa-fw fa-check"></i>
+									@endif
+								</td>
+								<td>
+									@if($group->custom == 1)
 									<i class="fa fa-fw fa-check"></i>
 									@endif
 								</td>
