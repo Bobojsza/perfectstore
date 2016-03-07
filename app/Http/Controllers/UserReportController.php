@@ -30,7 +30,7 @@ left join (
 left join (
 	select user_name, count(*) as store_visited from store_audits group by user_name
 ) as store_visited on store_audits.user_name = store_visited.user_name
-group by store_audits.user_name');
+group by store_audits.user_name,user_mapping.end_date ');
         // dd($users);
         return view('userreport.index',compact('users'));
     }

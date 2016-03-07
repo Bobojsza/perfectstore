@@ -259,10 +259,9 @@ class ImportAuditTemplateTableSeeder extends Seeder
 											$row[16]);
 
 									}
-								}
 
 
-								$cat_order = 1;
+									$cat_order = 1;
 								$a_cat_id = 0;
 								$clast_cnt = AuditTemplateCategory::getLastOrder($template->id);
 								if(empty($clast_cnt)){
@@ -319,6 +318,10 @@ class ImportAuditTemplateTableSeeder extends Seeder
 									'audit_template_id' => $template->id, 
 									'form_id' => $form->id
 									));
+								}
+
+
+								
 							}
 							$cnt++;
 						}
