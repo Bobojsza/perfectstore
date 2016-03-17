@@ -51,8 +51,8 @@ class AuditReportController extends Controller
     public function summary($id){
         $store_audit = StoreAudit::findOrFail($id);
         $summaries = StoreAuditSummary::where('store_audit_id',$id)->get();
-        $categories = StoreAuditSummary::getUniqueCategory($id);
-        $groups = StoreAuditSummary::getUniqueGroup($id);
+        $categories = StoreAuditSummary::getUniqueCategoryForPerpectStore($id);
+        $groups = StoreAuditSummary::getUniqueGroupForPerpectStore($id);
 
 
         \Excel::create($store_audit->store_name . ' - '. $store_audit->template_name, function($excel) use ($summaries, $categories, $groups) {

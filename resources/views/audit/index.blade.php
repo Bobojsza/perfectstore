@@ -7,7 +7,7 @@
 <section class="content">
 	<div class="row menu pull-right">
 		<div class="col-xs-12">
-			{!! link_to_route('audit.create','New Audit',array(),['class' => 'btn btn-primary']) !!}
+			{!! link_to_route('audits.create','New Audit',array(),['class' => 'btn btn-primary']) !!}
 		</div>
 	</div>
 
@@ -33,7 +33,6 @@
 								<th>Description</th>
 								<th>Start Date</th>
 								<th>End Date</th>
-								<th>Status</th>
 								<th>Action</th>
 							</tr>
 							@foreach($audits as $audit)
@@ -42,8 +41,9 @@
 								<td>{{ $audit->description}}</td>
 								<td>{{ date_format(date_create($audit->start_date),'m/d/Y')  }}</td>
 								<td>{{ date_format(date_create($audit->end_date),'m/d/Y')  }}</td>
-								<td></td>
-								<td></td>
+								<td>
+									{!! link_to_action('AuditController@show', 'Audit Details', $audit->id, ['class' => 'btn btn-xs btn btn-primary']) !!}
+								</td>
 							</tr>
 							@endforeach
 						</tbody>

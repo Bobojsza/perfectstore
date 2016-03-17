@@ -51,7 +51,8 @@ class FormGroupController extends Controller
             $group->secondary_display = ($request->secondary_display) ? 1 : 0;
             $group->osa = ($request->osa) ? 1 : 0;  
             $group->sos = ($request->sos) ? 1 : 0;    
-            $group->custom = ($request->custom) ? 1 : 0;                     
+            $group->custom = ($request->custom) ? 1 : 0;  
+            $group->perfect_store = ($request->perfect_store) ? 1 : 0;                     
             $group->save();
 
             \DB::commit();
@@ -111,7 +112,8 @@ class FormGroupController extends Controller
             $group->secondary_display = ($request->secondary_display) ? 1 : 0;
             $group->osa = ($request->osa) ? 1 : 0;    
             $group->sos = ($request->sos) ? 1 : 0;  
-            $group->custom = ($request->custom) ? 1 : 0;                              
+            $group->custom = ($request->custom) ? 1 : 0;    
+            $group->perfect_store = ($request->perfect_store) ? 1 : 0;                           
             $group->update();
             \DB::commit();
 

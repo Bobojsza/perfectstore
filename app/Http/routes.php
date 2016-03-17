@@ -19,6 +19,11 @@ Route::get('/', 'DashboardController@index');
 
 Route::resource('dashboard', 'DashboardController');
 
+Route::resource('audits','AuditController');
+
+
+
+
 Route::resource('form','FormsController');
 
 Route::resource('multiselect','MultiSelectController');
@@ -39,7 +44,7 @@ Route::resource('formcategory','FormCategoryController');
 
 Route::resource('formgroup','FormGroupController');
 
-Route::resource('audit','AuditController');
+
 
 Route::resource('account','AccountController');
 

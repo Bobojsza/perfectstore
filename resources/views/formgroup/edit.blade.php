@@ -41,6 +41,12 @@
 		                  	{!! Form::checkbox('custom', 1, $formgroup->custom) !!} Customized Tag
 		                  </label>
 		                </div>
+
+		                <div class="checkbox">
+		                  <label>
+		                  	{!! Form::checkbox('perfect_store', 1, $formgroup->perfect_store) !!} Used on Perfect Store
+		                  </label>
+		                </div>
 				  	</div><!-- /.box-body -->
 
 				 	<div class="box-footer">

@@ -34,11 +34,7 @@ class AuditController extends Controller
      */
     public function create()
     {
-        $customers = Customer::getLists();
-        $regions = Region::getLists();
-        $distributors = Distributor::getLists();
-        $templates = AuditTemplate::getLists();
-        return view('audit.create',compact('customers', 'regions', 'distributors', 'templates'));
+        return view('audit.create');
     }
 
     /**
@@ -63,7 +59,7 @@ class AuditController extends Controller
 
         Session::flash('flash_message', 'Audit successfully added!');
 
-        return redirect()->route("audit.index");
+        return redirect()->route("audits.index");
     }
 
     /**
@@ -74,7 +70,8 @@ class AuditController extends Controller
      */
     public function show($id)
     {
-        //
+        $audit = Audit::findOrFail($id);
+        return view('audit.show',compact('audit'));
     }
 
     /**

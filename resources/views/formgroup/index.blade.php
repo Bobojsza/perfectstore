@@ -63,7 +63,7 @@
 									@endif
 								</td>
 								<td>
-									@if($group->custom == 1)
+									@if($group->perfect_store == 1)
 									<i class="fa fa-fw fa-check"></i>
 									@endif
 								</td>

@@ -11,7 +11,7 @@
 				<div class="box-header with-border">
 				  	<h3 class="box-title">New Audit</h3>
 				</div>
-				{!! Form::open(array('route' => 'audit.store')) !!}
+				{!! Form::open(array('route' => 'audits.store')) !!}
 				  	<div class="box-body">
 				  		<div class="row">
 				  			<div class="form-group col-md-6">
@@ -31,43 +31,12 @@
 		                    	{!! Form::text('end_date',null,['class' => 'form-control', 'id' => 'end_date']) !!}
 							</div>
 				  		</div>
-
-				  		<div class="row">
-				  			<div class="form-group col-md-6">
-						   		{!! Form::label('customers', 'Customer'); !!}
-		                    	{!! Form::select('customers', $customers, null,['class' => 'form-control', 'id' => 'customers', 'multiple' => 'multiple']) !!}
-							</div>
-				  		</div>
-				  		
-				  		<div class="row">
-
-							<div class="form-group col-md-6">
-						   		{!! Form::label('regions', 'Region'); !!}
-		                    	{!! Form::select('regions', $regions, null,['class' => 'form-control', 'id' => 'regions', 'multiple' => 'multiple']) !!}
-							</div>
-				  		</div>
-
-				  		<div class="row">
-				  			<div class="form-group col-md-6">
-						   		{!! Form::label('distributors', 'Distributor'); !!}
-		                    	{!! Form::select('distributors', $distributors, null,['class' => 'form-control', 'id' => 'distributors', 'multiple' => 'multiple']) !!}
-							</div>
-
-				  		</div>
-
-				  		<div class="row">
-				  			<div class="form-group col-md-6">
-						   		{!! Form::label('templates', 'Templates'); !!}
-		                    	{!! Form::select('templates', $templates, null,['class' => 'form-control', 'id' => 'templates', 'multiple' => 'multiple']) !!}
-							</div>
-
-				  		</div>
 						
 				  	</div>
 
 				 	<div class="box-footer">
 						<button type="submit" class="btn btn-success">Submit</button>
-						{!! link_to_route('audit.index','Back',array(),['class' => 'btn btn-default']) !!}
+						{!! link_to_route('audits.index','Back',array(),['class' => 'btn btn-default']) !!}
 				  	</div>
 
 
@@ -76,6 +45,7 @@
 		</div>
 	</div>
 </section>
+
 @endsection
 @section('page-script')
 	$("#start_date,#end_date").inputmask("mm/dd/yyyy", {"placeholder": "mm/dd/yyyy"});
@@ -85,16 +55,4 @@
 	    autoclose: true,
 	    todayHighlight: true
 	});
-
-	$('#customers,#regions,#distributors,#templates').multiselect({
-		maxHeight: 200,
-		includeSelectAllOption: true,
-		enableCaseInsensitiveFiltering: true,
-		enableFiltering: true,
-		buttonWidth: '100%',
-		buttonClass: 'form-control'
-	});
-
-	
-
 @endsection

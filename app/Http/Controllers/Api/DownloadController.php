@@ -81,7 +81,8 @@ class DownloadController extends Controller
         if($type == "temp_categories"){
             $categories = AuditTemplateCategory::select('audit_template_categories.id',
                     'audit_template_categories.audit_template_id', 
-                    'audit_template_categories.category_id', 'form_categories.category', 'audit_template_categories.category_order')
+                    'audit_template_categories.category_id', 'form_categories.category', 'audit_template_categories.category_order',
+                    'form_categories.perfect_store')
                     ->join('form_categories', 'form_categories.id' , '=', 'audit_template_categories.category_id')
                     ->whereIn('audit_template_id',$list)
                     ->orderBy('audit_template_id')
@@ -90,14 +91,14 @@ class DownloadController extends Controller
 
             $writer = WriterFactory::create(Type::CSV); 
             $writer->openToBrowser('temp_category.txt');
-            $writer->addRow(['id', 'audit_template_id', 'category_order', 'category_id', 'category']); 
+            $writer->addRow(['id', 'audit_template_id', 'category_id', 'category', 'category_order', 'perfect_store']); 
             foreach ($categories as $category) {
                 $data[0] = $category->id;
                 $data[1] = $category->audit_template_id;
                 $data[2] = $category->category_order;
                 $data[3] = $category->category_id;
                 $data[4] = $category->category;
-
+                $data[5] = $category->perfect_store;
                 $writer->addRow($data); 
             }
 
@@ -119,10 +120,8 @@ class DownloadController extends Controller
                 $c_list[] = $category->id;
             }
 
-            // dd($c_list);
-
             $groups = AuditTemplateGroup::select('audit_template_groups.id', 'audit_template_groups.form_group_id', 'form_groups.group_desc',
-                'audit_template_categories.audit_template_id', 'audit_template_groups.group_order', 'audit_template_groups.audit_template_category_id')
+                'audit_template_categories.audit_template_id', 'audit_template_groups.group_order', 'audit_template_groups.audit_template_category_id', 'form_groups.perfect_store')
                 ->join('audit_template_categories', 'audit_template_categories.id' , '=', 'audit_template_groups.audit_template_category_id')
                 ->join('form_groups', 'form_groups.id' , '=', 'audit_template_groups.form_group_id')
                 ->whereIn('audit_template_category_id',$c_list)
@@ -130,11 +129,10 @@ class DownloadController extends Controller
                 ->orderBy('audit_template_category_id')
                 ->orderBy('group_order')
                 ->get();
-            // dd($groups);
 
             $writer = WriterFactory::create(Type::CSV); 
             $writer->openToBrowser('temp_group.txt');
-            $writer->addRow(['id', 'audit_template_id', 'audit_template_category_id', 'group_order', 'form_group_id','group_desc']); 
+            $writer->addRow(['id', 'audit_template_id', 'audit_template_category_id', 'group_order', 'form_group_id','group_desc','perfect_store']); 
             foreach ($groups as $group) {
                 $data[0] = $group->id;
                 $data[1] = $group->audit_template_id;
@@ -142,7 +140,7 @@ class DownloadController extends Controller
                 $data[3] = $group->group_order;
                 $data[4] = $group->form_group_id;
                 $data[5] = $group->group_desc;
-
+                $data[6] = $group->perfect_store;
                 $writer->addRow($data); 
             }
 

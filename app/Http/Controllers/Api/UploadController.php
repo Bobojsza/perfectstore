@@ -117,18 +117,18 @@ class UploadController extends Controller
 			            	}
 			            	if(!$summary){
 			            		StoreAuditDetail::insert([
-		                    'store_audit_id' => $audit_id,
-		                    'category' => $row[0],
-		                    'group' => $row[1],
-		                    'prompt' => $row[2],
-		                    'type' => $row[3],
-		                    'answer' => $row[4]]);
+				                    'store_audit_id' => $audit_id,
+				                    'category' => $row[0],
+				                    'group' => $row[1],
+				                    'prompt' => $row[2],
+				                    'type' => $row[3],
+				                    'answer' => $row[4]]);
 			            	}else{
 			            		StoreAuditSummary::insert([
-		                    'store_audit_id' => $audit_id,
-		                    'category' => $row[0],
-		                    'group' => $row[1],
-		                    'passed' => $row[2]]);
+				                    'store_audit_id' => $audit_id,
+				                    'category' => $row[0],
+				                    'group' => $row[1],
+				                    'passed' => $row[2]]);
 			            	}
 			            	
 			            }
