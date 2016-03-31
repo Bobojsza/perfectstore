@@ -42,7 +42,7 @@
 								<td>{{ date_format(date_create($audit->start_date),'m/d/Y')  }}</td>
 								<td>{{ date_format(date_create($audit->end_date),'m/d/Y')  }}</td>
 								<td>
-									{!! link_to_action('AuditController@show', 'Audit Details', $audit->id, ['class' => 'btn btn-xs btn btn-primary']) !!}
+									{!! link_to_action('AuditController@stores', 'Audit Details', $audit->id, ['class' => 'btn btn-xs btn btn-primary']) !!}
 								</td>
 							</tr>
 							@endforeach

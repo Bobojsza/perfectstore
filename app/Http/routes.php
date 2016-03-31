@@ -19,6 +19,10 @@ Route::get('/', 'DashboardController@index');
 
 Route::resource('dashboard', 'DashboardController');
 
+
+Route::get('audits',['as' => 'audits.index', 'uses' => 'AuditController@index']);
+Route::get('audits/{id}/stores',['as' => 'audits.stores', 'uses' => 'AuditController@stores']);
+
 Route::resource('audits','AuditController');
 
 

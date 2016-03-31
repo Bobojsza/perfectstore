@@ -14,14 +14,9 @@ class AuthUserController extends Controller
 
         $field = filter_var($usernameinput, FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
 
-
-
-        // return response()->json(['email' => $email, 'password' => $password]);
-
         if (\Auth::attempt(array($field => $usernameinput, 'password' => $password), false))
         {
             $user = \Auth::user();
-            // return response()->json(['user' => $user, 'stores' => $user->stores()->orderBy('store')->get()]);
             return response()->json($user);
         }else{
         	return response()->json(array('msg' => 'user not found', 'status' => 0));
